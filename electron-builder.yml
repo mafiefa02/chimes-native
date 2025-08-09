@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: ${npm_package_config_appId}
 productName: chimes-native
 directories:
   buildResources: build
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: chimes-native
+  executableName: ${npm_package_name}
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

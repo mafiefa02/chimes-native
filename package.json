@@ -1,5 +1,5 @@
 {
-  "name": "chimes-native",
+  "name": "chimes",
   "version": "1.0.0",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
@@ -20,6 +20,9 @@
     "build:mac": "electron-vite --config ./vite.config.ts build && electron-builder --mac",
     "build:linux": "electron-vite --config ./vite.config.ts build && electron-builder --linux"
   },
+  "config": {
+    "appId": "com.chimes.app"
+  },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
@@ -27,8 +30,8 @@
     "clsx": "^2.1.1",
     "electron-updater": "^6.3.9",
     "lucide-react": "^0.539.0",
-    "tailwind-merge": "^3.3.1",
-    "radix-ui": "latest"
+    "radix-ui": "latest",
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
@@ -47,6 +50,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.11",
