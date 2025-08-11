@@ -26,10 +26,13 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
+    "@radix-ui/react-popover": "^1.1.14",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
     "electron-updater": "^6.3.9",
     "lucide-react": "^0.539.0",
+    "motion": "^12.23.12",
     "radix-ui": "latest",
     "tailwind-merge": "^3.3.1"
   },

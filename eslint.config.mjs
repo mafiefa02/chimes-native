@@ -9,13 +9,7 @@ export default tseslint.config(
   tseslint.configs.recommended,
   eslintPluginReact.configs.flat.recommended,
   eslintPluginReact.configs.flat['jsx-runtime'],
-  {
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
-  },
+  { settings: { react: { version: 'detect' } } },
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {
