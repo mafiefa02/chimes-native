@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'motion/react';
+import { cn } from '../../lib/utils';
 import {
   Select,
   SelectContent,
@@ -8,9 +8,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { CalendarIcon } from 'lucide-react';
 import { useSidebar } from './hooks/use-sidebar';
-import { cn } from '@renderer/lib/utils';
+import { CalendarIcon } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export const SidebarAction = () => {
   const { isSidebarOpen } = useSidebar();

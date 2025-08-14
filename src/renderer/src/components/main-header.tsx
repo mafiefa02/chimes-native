@@ -1,5 +1,5 @@
-import { HomeIcon, LogInIcon } from 'lucide-react';
 import { Button } from './ui/button';
+import { HomeIcon, LogInIcon } from 'lucide-react';
 
 export const MainHeader = () => {
   return (

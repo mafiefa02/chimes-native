@@ -1,9 +1,9 @@
-import { motion } from 'motion/react';
+import { useSidebar } from './hooks/use-sidebar';
+import { SidebarAction } from './sidebar-action';
 import { SidebarLogo } from './sidebar-logo';
 import { SidebarMenu } from './sidebar-menu';
-import { SidebarAction } from './sidebar-action';
 import { SidebarToggle } from './sidebar-toggle';
-import { useSidebar } from './hooks/use-sidebar';
+import { motion } from 'motion/react';
 
 export const Sidebar = () => {
   const { isSidebarOpen } = useSidebar();

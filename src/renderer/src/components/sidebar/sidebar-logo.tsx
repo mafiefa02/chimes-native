@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from 'motion/react';
 import { useSidebar } from './hooks/use-sidebar';
+import { motion, AnimatePresence } from 'motion/react';
 
 export const SidebarLogo = () => {
   const { isSidebarOpen } = useSidebar();

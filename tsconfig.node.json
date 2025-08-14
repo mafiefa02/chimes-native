@@ -4,11 +4,6 @@
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"],
-    "baseUrl": ".",
-    "paths": {
-      "@renderer/*": ["./src/renderer/src/*"],
-      "@resources/*": ["./resources/*"]
-    },
     "moduleResolution": "bundler"
   }
 }

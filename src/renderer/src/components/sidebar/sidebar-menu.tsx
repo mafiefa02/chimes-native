@@ -1,4 +1,3 @@
-import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '../ui/button';
 import { useSidebar } from './hooks/use-sidebar';
 import {
@@ -8,6 +7,7 @@ import {
   MusicIcon,
   SettingsIcon,
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export const SidebarMenu = () => {
   const { isSidebarOpen } = useSidebar();

@@ -1,7 +1,7 @@
-import { ChevronRight } from 'lucide-react';
+import { cn } from '../../lib/utils';
 import { Button } from '../ui/button';
-import { cn } from '@renderer/lib/utils';
 import { useSidebar } from './hooks/use-sidebar';
+import { ChevronRight } from 'lucide-react';
 
 export const SidebarToggle = () => {
   const { isSidebarOpen, setIsSidebarOpen } = useSidebar();
