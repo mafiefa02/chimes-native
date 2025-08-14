@@ -1,6 +1,6 @@
 import icon from '../../resources/icon.png?asset';
 import { APP_ID, APP_NAME } from '../shared/contants';
-import { initDatabase } from './lib/database';
+import { database } from './lib/database';
 import { notes } from './lib/schema';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
@@ -44,7 +44,7 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
-  const db = initDatabase();
+  const db = database();
 
   // Set app user model id for windows
   electronApp.setAppUserModelId(APP_ID);
