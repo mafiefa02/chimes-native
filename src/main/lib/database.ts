@@ -1,7 +1,7 @@
 import * as schema from '../../shared/schema';
 import { createClient } from '@libsql/client';
 import { count } from 'drizzle-orm';
-import { drizzle, LibSQLDatabase } from 'drizzle-orm/libsql';
+import { drizzle } from 'drizzle-orm/libsql';
 import { migrate } from 'drizzle-orm/libsql/migrator';
 import { app } from 'electron';
 import path from 'path';
