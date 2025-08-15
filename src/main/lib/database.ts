@@ -8,7 +8,7 @@ import path from 'path';
 
 const dbPath = path.join(app.getPath('userData'), 'chimes.db');
 const client = createClient({ url: `file:${dbPath}` });
-export const db: LibSQLDatabase<typeof schema> = drizzle(client, { schema });
+export const db = drizzle(client, { schema });
 
 export const initializeDatabase = async () => {
   // Run migrations on startup.
