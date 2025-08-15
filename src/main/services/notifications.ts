@@ -28,7 +28,7 @@ export const updateNotification = async (
     .returning();
 };
 
-export const deleteSchedule = async (
+export const deleteNotification = async (
   id: Pick<Notification, 'id'>['id'],
 ): Promise<Pick<Notification, 'id'>[]> => {
   return db
