@@ -104,3 +104,23 @@ export const scheduleHistory = sqliteTable(
     index('schedule_history_triggered_at_idx').on(table.triggeredAt),
   ],
 );
+
+export const notifications = sqliteTable(
+  'notifications',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    userId: text('user_id').references(() => userProfiles.id, {
+      onDelete: 'cascade',
+    }),
+    title: text('title'),
+    content: text('content'),
+    deliveryTime: integer('delivery_time', { mode: 'timestamp' }).default(
+      sql`(current_timestamp)`,
+    ),
+    isRead: integer('is_read', { mode: 'boolean' }).default(false),
+  },
+  (table) => [
+    index('notifications_user_id_idx').on(table.userId),
+    index('notifications_is_read_idx').on(table.isRead),
+  ],
+);

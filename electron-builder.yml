@@ -1,5 +1,5 @@
 appId: ${npm_package_config_appId}
-productName: chimes-native
+productName: ${npm_package_name}
 directories:
   buildResources: build
 files:
