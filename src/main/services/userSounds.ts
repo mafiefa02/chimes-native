@@ -3,7 +3,9 @@ import { NewUserSound, UserSound } from '../../shared/types';
 import { db } from '../lib/database';
 import { and, eq } from 'drizzle-orm';
 
-export const getUserSounds = async (userId: string): Promise<UserSound[]> => {
+export const getUserSounds = async (
+  userId: UserSound['userId'],
+): Promise<UserSound[]> => {
   return db.query.userSounds.findMany({ where: eq(userSounds.userId, userId) });
 };
 
@@ -14,8 +16,8 @@ export const createUserSound = async (
 };
 
 export const updateUserSound = async (
-  id: number,
-  userId: string,
+  id: UserSound['id'],
+  userId: UserSound['userId'],
   data: Partial<NewUserSound>,
 ): Promise<UserSound[]> => {
   return db
@@ -26,9 +28,9 @@ export const updateUserSound = async (
 };
 
 export const deleteUserSound = async (
-  id: number,
-  userId: string,
-): Promise<{ id: number }[]> => {
+  id: UserSound['id'],
+  userId: UserSound['userId'],
+): Promise<Pick<UserSound, 'id'>[]> => {
   return db
     .delete(userSounds)
     .where(and(eq(userSounds.id, id), eq(userSounds.userId, userId)))

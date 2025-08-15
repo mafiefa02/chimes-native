@@ -4,7 +4,7 @@ import { db } from '../lib/database';
 import { eq } from 'drizzle-orm';
 
 export const getHistoryBySchedule = async (
-  scheduleId: string,
+  scheduleId: ScheduleHistory['scheduleId'],
 ): Promise<ScheduleHistory[]> => {
   return db.query.scheduleHistory.findMany({
     where: eq(scheduleHistory.scheduleId, scheduleId),

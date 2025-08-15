@@ -4,6 +4,7 @@ import type {
   userSounds,
   schedules,
   scheduleHistory,
+  notifications,
 } from './schema';
 
 export type UserProfile = typeof userProfiles.$inferSelect;
@@ -20,3 +21,6 @@ export type NewSchedule = typeof schedules.$inferInsert;
 
 export type ScheduleHistory = typeof scheduleHistory.$inferSelect;
 export type NewScheduleHistory = typeof scheduleHistory.$inferInsert;
+
+export type Notification = typeof notifications.$inferSelect;
+export type NewNotification = typeof notifications.$inferInsert;

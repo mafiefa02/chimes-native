@@ -8,7 +8,7 @@ export const getAllProfiles = async (): Promise<UserProfile[]> => {
 };
 
 export const getProfileById = async (
-  id: string,
+  id: UserProfile['id'],
 ): Promise<UserProfile | undefined> => {
   return db.query.userProfiles.findFirst({ where: eq(userProfiles.id, id) });
 };
@@ -20,7 +20,7 @@ export const createProfile = async (
 };
 
 export const updateProfile = async (
-  id: string,
+  id: UserProfile['id'],
   data: Partial<NewUserProfile>,
 ): Promise<UserProfile[]> => {
   return db
@@ -30,7 +30,9 @@ export const updateProfile = async (
     .returning();
 };
 
-export const deleteProfile = async (id: string): Promise<{ id: string }[]> => {
+export const deleteProfile = async (
+  id: UserProfile['id'],
+): Promise<Pick<UserProfile, 'id'>[]> => {
   return db
     .delete(userProfiles)
     .where(eq(userProfiles.id, id))

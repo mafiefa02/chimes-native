@@ -4,7 +4,7 @@ import { db } from '../lib/database';
 import { eq } from 'drizzle-orm';
 
 export const getScheduleProfilesByUser = async (
-  userId: string,
+  userId: ScheduleProfile['userId'],
 ): Promise<ScheduleProfile[]> => {
   return db.query.scheduleProfiles.findMany({
     where: eq(scheduleProfiles.userId, userId),
@@ -18,7 +18,7 @@ export const createScheduleProfile = async (
 };
 
 export const updateScheduleProfile = async (
-  id: string,
+  id: ScheduleProfile['id'],
   data: Partial<NewScheduleProfile>,
 ): Promise<ScheduleProfile[]> => {
   return db
@@ -29,8 +29,8 @@ export const updateScheduleProfile = async (
 };
 
 export const deleteScheduleProfile = async (
-  id: string,
-): Promise<{ id: string }[]> => {
+  id: ScheduleProfile['id'],
+): Promise<Pick<ScheduleProfile, 'id'>[]> => {
   return db
     .delete(scheduleProfiles)
     .where(eq(scheduleProfiles.id, id))
