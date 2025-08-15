@@ -1,7 +1,11 @@
 import icon from '../../resources/icon.png?asset';
 import { APP_ID, APP_NAME } from '../shared/contants';
 import { initializeDatabase } from './lib/database';
-import { getAllProfiles } from './services/profiles';
+import * as profileServices from './services/profiles';
+import * as scheduleHistoryServices from './services/scheduleHistory';
+import * as scheduleProfileServices from './services/scheduleProfiles';
+import * as scheduleServices from './services/schedules';
+import * as userSoundServices from './services/userSounds';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
@@ -59,7 +63,65 @@ app.whenReady().then(async () => {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'));
 
-  ipcMain.handle('profiles:getAll', () => getAllProfiles());
+  ipcMain.handle('profiles:getAll', () => profileServices.getAllProfiles());
+  ipcMain.handle('profiles:getById', (_, id) =>
+    profileServices.getProfileById(id),
+  );
+  ipcMain.handle('profiles:create', (_, data) =>
+    profileServices.createProfile(data),
+  );
+  ipcMain.handle('profiles:update', (_, id, data) =>
+    profileServices.updateProfile(id, data),
+  );
+  ipcMain.handle('profiles:delete', (_, id) =>
+    profileServices.deleteProfile(id),
+  );
+
+  ipcMain.handle('scheduleProfiles:getByUser', (_, userId) =>
+    scheduleProfileServices.getScheduleProfilesByUser(userId),
+  );
+  ipcMain.handle('scheduleProfiles:create', (_, data) =>
+    scheduleProfileServices.createScheduleProfile(data),
+  );
+  ipcMain.handle('scheduleProfiles:update', (_, id, data) =>
+    scheduleProfileServices.updateScheduleProfile(id, data),
+  );
+  ipcMain.handle('scheduleProfiles:delete', (_, id) =>
+    scheduleProfileServices.deleteScheduleProfile(id),
+  );
+
+  ipcMain.handle('userSounds:getByUser', (_, userId) =>
+    userSoundServices.getUserSounds(userId),
+  );
+  ipcMain.handle('userSounds:create', (_, data) =>
+    userSoundServices.createUserSound(data),
+  );
+  ipcMain.handle('userSounds:update', (_, id, userId, data) =>
+    userSoundServices.updateUserSound(id, userId, data),
+  );
+  ipcMain.handle('userSounds:delete', (_, id, userId) =>
+    userSoundServices.deleteUserSound(id, userId),
+  );
+
+  ipcMain.handle('schedules:getByProfile', (_, profileId) =>
+    scheduleServices.getSchedulesByProfile(profileId),
+  );
+  ipcMain.handle('schedules:create', (_, data) =>
+    scheduleServices.createSchedule(data),
+  );
+  ipcMain.handle('schedules:update', (_, id, data) =>
+    scheduleServices.updateSchedule(id, data),
+  );
+  ipcMain.handle('schedules:delete', (_, id) =>
+    scheduleServices.deleteSchedule(id),
+  );
+
+  ipcMain.handle('scheduleHistory:getBySchedule', (_, scheduleId) =>
+    scheduleHistoryServices.getHistoryBySchedule(scheduleId),
+  );
+  ipcMain.handle('scheduleHistory:create', (_, data) =>
+    scheduleHistoryServices.createScheduleHistoryEntry(data),
+  );
 
   createWindow();
 

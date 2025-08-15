@@ -1,0 +1,32 @@
+import { schedules } from '../../shared/schema';
+import { NewSchedule, Schedule } from '../../shared/types';
+import { db } from '../lib/database';
+import { eq } from 'drizzle-orm';
+
+export const getSchedulesByProfile = async (
+  profileId: string,
+): Promise<Schedule[]> => {
+  return db.query.schedules.findMany({
+    where: eq(schedules.profileId, profileId),
+  });
+};
+
+export const createSchedule = async (
+  data: NewSchedule,
+): Promise<Schedule[]> => {
+  return db.insert(schedules).values(data).returning();
+};
+
+export const updateSchedule = async (
+  id: string,
+  data: Partial<NewSchedule>,
+): Promise<Schedule[]> => {
+  return db.update(schedules).set(data).where(eq(schedules.id, id)).returning();
+};
+
+export const deleteSchedule = async (id: string): Promise<{ id: string }[]> => {
+  return db
+    .delete(schedules)
+    .where(eq(schedules.id, id))
+    .returning({ id: schedules.id });
+};
