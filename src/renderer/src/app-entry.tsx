@@ -1,35 +1,34 @@
 import { MainLayout } from './components/main-layout';
 import { useQuery } from '@tanstack/react-query';
 
-const fetchNotes = async () => {
-  const { data, error } = await window.api.notes.getAll();
-  if (error) {
-    throw new Error(error);
-  }
-  return data;
+const fetchProfiles = async () => {
+  const query = await window.services.profiles.getAll();
+  return query;
 };
 
 export const AppEntry = () => {
   const {
-    data: notes,
-    error,
-    isLoading,
-  } = useQuery({ queryKey: ['notes'], queryFn: fetchNotes });
+    data: profiles,
+    error: profilesError,
+    isLoading: profilesLoading,
+  } = useQuery({ queryKey: ['profiles'], queryFn: fetchProfiles });
 
   return (
     <MainLayout>
       <div className="p-4">
-        <h1 className="mb-4 text-2xl font-bold">Notes</h1>
-        {isLoading && <p>Loading...</p>}
-        {error && <p className="text-red-500">{error.message}</p>}
+        <h1 className="mt-8 mb-4 text-2xl font-bold">Profiles</h1>
+        {profilesLoading && <p>Loading profiles...</p>}
+        {profilesError && (
+          <p className="text-red-500">{profilesError.message}</p>
+        )}
         <ul>
-          {notes?.map((note) => (
+          {profiles?.map((profile) => (
             <li
-              key={note.id}
+              key={profile.id}
               className="border-b p-2"
             >
-              <h2 className="font-bold">{note.title}</h2>
-              <p>{note.content}</p>
+              <h2 className="font-bold">{profile.displayName}</h2>
+              <p>{profile.avatar ?? 'Default'}</p>
             </li>
           ))}
         </ul>

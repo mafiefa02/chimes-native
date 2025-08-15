@@ -1,5 +1,5 @@
-import { INote } from '../../shared/types';
+import { UserProfile } from '../../shared/types';
 
-export interface ICustomAPI {
-  notes: { getAll: () => Promise<{ data?: INote[]; error?: string }> };
+export interface IServices {
+  profiles: { getAll: () => Promise<UserProfile[]> };
 }

@@ -1,11 +1,28 @@
+import * as schema from '../../shared/schema';
 import { createClient } from '@libsql/client';
-import { drizzle } from 'drizzle-orm/libsql';
+import { count } from 'drizzle-orm';
+import { drizzle, LibSQLDatabase } from 'drizzle-orm/libsql';
+import { migrate } from 'drizzle-orm/libsql/migrator';
 import { app } from 'electron';
 import path from 'path';
 
-export const database = () => {
-  const dbPath = path.join(app.getPath('userData'), 'chimes.db');
-  const client = createClient({ url: `file:${dbPath}` });
-  const db = drizzle(client);
-  return db;
+const dbPath = path.join(app.getPath('userData'), 'chimes.db');
+const client = createClient({ url: `file:${dbPath}` });
+export const db: LibSQLDatabase<typeof schema> = drizzle(client, { schema });
+
+export const initializeDatabase = async () => {
+  // Run migrations on startup.
+  await migrate(db, { migrationsFolder: 'drizzle' });
+
+  // Check if the default user profile exists, and create it if it doesn't.
+  const [{ value: userProfilesCount }] = await db
+    .select({ value: count() })
+    .from(schema.userProfiles);
+
+  if (userProfilesCount === 0) {
+    await db
+      .insert(schema.userProfiles)
+      .values({ displayName: 'Default', avatar: null });
+    console.info('Default user profile created.');
+  }
 };

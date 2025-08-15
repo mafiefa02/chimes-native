@@ -1,11 +1,6 @@
-import { ICustomAPI } from './lib/types';
+import { services } from './services';
 import { electronAPI } from '@electron-toolkit/preload';
-import { contextBridge, ipcRenderer } from 'electron';
-
-// Custom APIs for renderer
-const api: ICustomAPI = {
-  notes: { getAll: () => ipcRenderer.invoke('notes:getAll') },
-};
+import { contextBridge } from 'electron';
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
@@ -13,7 +8,7 @@ const api: ICustomAPI = {
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI);
-    contextBridge.exposeInMainWorld('api', api);
+    contextBridge.exposeInMainWorld('services', services);
   } catch (error) {
     console.error(error);
   }
@@ -21,5 +16,5 @@ if (process.contextIsolated) {
   // @ts-ignore (define in dts)
   window.electron = electronAPI;
   // @ts-ignore (define in dts)
-  window.api = api;
+  window.services = services;
 }

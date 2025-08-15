@@ -1,9 +1,9 @@
-import { ICustomAPI } from './lib/types';
+import { IServices } from './lib/types';
 import { ElectronAPI } from '@electron-toolkit/preload';
 
 declare global {
   interface Window {
     electron: ElectronAPI;
-    api: ICustomAPI;
+    services: IServices;
   }
 }

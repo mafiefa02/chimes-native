@@ -1,7 +1,7 @@
 import icon from '../../resources/icon.png?asset';
 import { APP_ID, APP_NAME } from '../shared/contants';
-import { database } from './lib/database';
-import { notes } from './lib/schema';
+import { initializeDatabase } from './lib/database';
+import { getAllProfiles } from './services/profiles';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
@@ -44,7 +44,7 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
-  const db = database();
+  await initializeDatabase();
 
   // Set app user model id for windows
   electronApp.setAppUserModelId(APP_ID);
@@ -59,14 +59,7 @@ app.whenReady().then(async () => {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'));
 
-  ipcMain.handle('notes:getAll', async () => {
-    try {
-      const allNotes = await db.select().from(notes);
-      return { data: allNotes };
-    } catch (error) {
-      return { error: (error as Error).message };
-    }
-  });
+  ipcMain.handle('profiles:getAll', () => getAllProfiles());
 
   createWindow();
 
