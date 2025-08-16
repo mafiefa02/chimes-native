@@ -1,12 +1,21 @@
+import { useMediaQuery } from '../../../hooks/use-media-query';
 import { SidebarContext } from './sidebar';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 type SidebarProviderProps = { children: ReactNode };
 
 export const SidebarProvider = ({ children }: SidebarProviderProps) => {
+  const isSmallScreen = useMediaQuery('(max-width: 768px)');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    setIsSidebarOpen(!isSmallScreen);
+  }, [isSmallScreen]);
+
   return (
-    <SidebarContext.Provider value={{ isSidebarOpen, setIsSidebarOpen }}>
+    <SidebarContext.Provider
+      value={{ isSidebarOpen, setIsSidebarOpen, isSmallScreen }}
+    >
       {children}
     </SidebarContext.Provider>
   );

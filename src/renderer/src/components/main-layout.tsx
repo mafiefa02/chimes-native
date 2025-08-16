@@ -1,18 +1,29 @@
-import { MainHeader } from './main-header';
+import { Header } from './header';
 import { Sidebar } from './sidebar';
 import { SidebarProvider } from './sidebar/contexts/sidebar-context';
+import { cn } from '@/lib/utils';
+import { Outlet } from 'react-router';
 
-export const MainLayout = ({
-  children,
-}: Readonly<{ children: React.ReactNode }>) => {
+interface MainLayoutProps {
+  className?: string;
+}
+
+export const MainLayout = ({ className }: Readonly<MainLayoutProps>) => {
   return (
     <div className="grid h-[100dvh] grid-cols-[auto_1fr] bg-zinc-50">
       <SidebarProvider>
         <Sidebar />
       </SidebarProvider>
       <div className="grid grid-rows-[auto_1fr]">
-        <MainHeader />
-        <main className="rounded-tl-4xl border bg-white p-6">{children}</main>
+        <Header />
+        <main
+          className={cn(
+            'rounded-tl-4xl border bg-white py-8 px-10 inset-shadow-primary-50 inset-shadow-sm',
+            className,
+          )}
+        >
+          <Outlet />
+        </main>
       </div>
     </div>
   );

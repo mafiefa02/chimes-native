@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 export const SidebarLogo = () => {
   const { isSidebarOpen } = useSidebar();
   return (
-    <h1 className="px-2.5 py-4 text-xl font-bold">
+    <h1 className="px-3 py-4 text-xl font-bold">
       C
       <AnimatePresence initial={false}>
         {isSidebarOpen && (

@@ -12,6 +12,7 @@ import { useSidebar } from './hooks/use-sidebar';
 import { CalendarIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
+/** TODO: polish the sidebar exit animation */
 export const SidebarAction = () => {
   const { isSidebarOpen } = useSidebar();
   return (
@@ -32,7 +33,6 @@ export const SidebarAction = () => {
           >
             <div className={'flex items-center gap-2 text-sm'}>
               <CalendarIcon />
-              {/* TODO: polish the exit animation */}
               <AnimatePresence initial={false}>
                 {isSidebarOpen && (
                   <motion.div

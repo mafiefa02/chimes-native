@@ -6,7 +6,7 @@ import { SidebarToggle } from './sidebar-toggle';
 import { motion } from 'motion/react';
 
 export const Sidebar = () => {
-  const { isSidebarOpen } = useSidebar();
+  const { isSidebarOpen, isSmallScreen } = useSidebar();
   return (
     <motion.nav
       initial={false}
@@ -17,7 +17,7 @@ export const Sidebar = () => {
       <SidebarLogo />
       <SidebarMenu />
       <SidebarAction />
-      <SidebarToggle />
+      {!isSmallScreen && <SidebarToggle />}
     </motion.nav>
   );
 };
