@@ -5,7 +5,7 @@ import { ReactNode, useEffect, useState } from 'react';
 type SidebarProviderProps = { children: ReactNode };
 
 export const SidebarProvider = ({ children }: SidebarProviderProps) => {
-  const isSmallScreen = useMediaQuery('(max-width: 768px)');
+  const isSmallScreen = useMediaQuery('(max-width: 1024px)');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
