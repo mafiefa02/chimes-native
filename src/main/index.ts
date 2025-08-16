@@ -1,6 +1,7 @@
 import icon from '../../resources/icon.png?asset';
 import { APP_ID, APP_NAME } from '../shared/contants';
 import { initializeDatabase } from './lib/database';
+import * as notificationServices from './services/notifications';
 import * as profileServices from './services/profiles';
 import * as scheduleHistoryServices from './services/scheduleHistory';
 import * as scheduleProfileServices from './services/scheduleProfiles';
@@ -121,6 +122,19 @@ app.whenReady().then(async () => {
   );
   ipcMain.handle('scheduleHistory:create', (_, data) =>
     scheduleHistoryServices.createScheduleHistoryEntry(data),
+  );
+
+  ipcMain.handle('notifications:getByUser', (_, userId) =>
+    notificationServices.getNotificationsByUser(userId),
+  );
+  ipcMain.handle('notifications:create', (_, data) =>
+    notificationServices.createNotification(data),
+  );
+  ipcMain.handle('notifications:update', (_, id, data) =>
+    notificationServices.updateNotification(id, data),
+  );
+  ipcMain.handle('notifications:delete', (_, id) =>
+    notificationServices.deleteNotification(id),
   );
 
   createWindow();

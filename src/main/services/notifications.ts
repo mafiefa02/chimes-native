@@ -3,11 +3,11 @@ import { NewNotification, Notification } from '../../shared/types';
 import { db } from '../lib/database';
 import { eq } from 'drizzle-orm';
 
-export const getNotificationsByProfile = async (
-  profileId: string,
+export const getNotificationsByUser = async (
+  userId: Notification['userId'],
 ): Promise<Notification[]> => {
   return db.query.notifications.findMany({
-    where: eq(notifications.userId, profileId),
+    where: eq(notifications.userId, userId),
   });
 };
 

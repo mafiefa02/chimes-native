@@ -115,9 +115,9 @@ export const notifications = sqliteTable(
   'notifications',
   {
     id: integer('id').primaryKey({ autoIncrement: true }),
-    userId: text('user_id').references(() => userProfiles.id, {
-      onDelete: 'cascade',
-    }),
+    userId: text('user_id')
+      .references(() => userProfiles.id, { onDelete: 'cascade' })
+      .notNull(),
     title: text('title').notNull(),
     content: text('content').notNull(),
     deliveryTime: integer('delivery_time', { mode: 'timestamp' }).default(
