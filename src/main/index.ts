@@ -14,7 +14,7 @@ import { join } from 'path';
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
+    width: 1025,
     height: 670,
     show: false,
     autoHideMenuBar: true,
