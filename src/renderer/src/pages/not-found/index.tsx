@@ -1,5 +1,5 @@
-import { PageLayout } from '@/components/page-layout';
-import { buttonVariants } from '@/lib/utils';
+import { PageLayout } from '../../components/page-layout';
+import { buttonVariants } from '../../lib/utils';
 import { Link } from 'react-router';
 
 export const NotFoundPage = () => {

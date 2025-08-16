@@ -1,6 +1,6 @@
+import { parentRoutes } from '../../lib/constants';
+import { buttonVariants } from '../../lib/utils';
 import { useSidebar } from './hooks/use-sidebar';
-import { parentRoutes } from '@/lib/constants';
-import { buttonVariants } from '@/lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 import { NavLink } from 'react-router';
 

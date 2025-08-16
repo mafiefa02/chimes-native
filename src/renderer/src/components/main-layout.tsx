@@ -1,7 +1,7 @@
+import { cn } from '../lib/utils';
 import { Header } from './header';
 import { Sidebar } from './sidebar';
 import { SidebarProvider } from './sidebar/contexts/sidebar-context';
-import { cn } from '@/lib/utils';
 import { Outlet } from 'react-router';
 
 interface MainLayoutProps {

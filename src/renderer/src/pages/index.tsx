@@ -1,8 +1,8 @@
 import { InsetShadowCard } from '../components/inset-shadow-card';
 import { PageHeader } from '../components/page-header';
+import { PageLayout } from '../components/page-layout';
 import { PageTitle } from '../components/page-title';
 import { Button } from '../components/ui/button';
-import { PageLayout } from '@/components/page-layout';
 import { format } from 'date-fns';
 import { ChevronDownIcon, PlusIcon } from 'lucide-react';
 
