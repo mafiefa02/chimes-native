@@ -73,16 +73,16 @@ export const schedules = sqliteTable(
       .default(sql`(json_array(0, 1, 2, 3, 4, 5, 6))`),
     triggerTime: integer('trigger_time').notNull(), // Stores minutes since midnight
     soundId: integer('sound_id').references(() => userSounds.id, {
-      onDelete: 'set null',
+      onDelete: 'restrict',
     }),
     repeat: text('repeat', {
-      enum: ['once', 'weekly', 'biweekly', 'monthly', 'yearly'],
+      enum: ['once', 'daily', 'weekly', 'biweekly', 'monthly', 'yearly'],
     })
       .notNull()
       .default('once'),
     repeatStart: integer('repeat_start', { mode: 'timestamp' }).notNull(),
     repeatEnd: integer('repeat_end', { mode: 'timestamp' }),
-    isActive: integer('is_active', { mode: 'boolean' }).default(true),
+    isActive: integer('is_active', { mode: 'boolean' }).default(true).notNull(),
   },
   (table) => [
     index('schedules_profile_id_idx').on(table.profileId),

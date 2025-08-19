@@ -1,4 +1,5 @@
 import {
+  AppConfig,
   UserProfile,
   NewUserProfile,
   ScheduleProfile,
@@ -12,6 +13,13 @@ import {
 } from '../../shared/types';
 
 export interface IServices {
+  appConfig: {
+    get: <K extends keyof AppConfig>(key: K) => AppConfig[K];
+    set: <K extends keyof AppConfig, V extends AppConfig[K]>(
+      key: K,
+      value: V,
+    ) => Promise<void>;
+  };
   profiles: {
     getAll: () => Promise<UserProfile[]>;
     getById: (id: string) => Promise<UserProfile | undefined>;

@@ -1,5 +1,6 @@
 {
   "name": "chimes",
+  "productName": "Chimes",
   "version": "1.0.0",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
@@ -30,7 +31,9 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
+    "@hookform/resolvers": "^5.2.1",
     "@libsql/client": "^0.15.11",
+    "@radix-ui/react-slot": "^1.2.3",
     "@tanstack/react-query": "^5.85.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -40,10 +43,16 @@
     "electron-updater": "^6.6.2",
     "lucide-react": "^0.539.0",
     "motion": "^12.23.12",
+    "next-themes": "^0.4.6",
+    "nuqs": "^2.4.3",
     "radix-ui": "latest",
+    "react-day-picker": "^9.9.0",
+    "react-hook-form": "^7.62.0",
     "react-router": "^7.8.1",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zod": "^4.0.17"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",

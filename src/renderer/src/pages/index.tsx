@@ -2,9 +2,12 @@ import { InsetShadowCard } from '../components/inset-shadow-card';
 import { PageHeader } from '../components/page-header';
 import { PageLayout } from '../components/page-layout';
 import { PageTitle } from '../components/page-title';
+import { AddNewScheduleDialog } from '../components/pages/home/add-new-schedule-dialog';
+import { ScheduleList } from '../components/pages/home/schedule-list';
 import { Button } from '../components/ui/button';
+import { ScrollArea } from '../components/ui/scroll-area';
 import { format } from 'date-fns';
-import { ChevronDownIcon, PlusIcon } from 'lucide-react';
+import { ChevronDownIcon } from 'lucide-react';
 
 export const HomePage = () => {
   return (
@@ -16,13 +19,14 @@ export const HomePage = () => {
             <p>{format(new Date(), 'PPP')}</p>
             <ChevronDownIcon />
           </Button>
-          <Button>
-            <PlusIcon />
-            <p>Add New</p>
-          </Button>
+          <AddNewScheduleDialog />
         </div>
       </PageHeader>
-      <InsetShadowCard>/</InsetShadowCard>
+      <InsetShadowCard className="overflow-y-auto">
+        <ScrollArea className="h-full">
+          <ScheduleList />
+        </ScrollArea>
+      </InsetShadowCard>
     </PageLayout>
   );
 };

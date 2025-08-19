@@ -5,8 +5,22 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1755316739447,
-      "tag": "0000_long_exiles",
+      "when": 1755425423798,
+      "tag": "0000_fixed_mesmero",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1755566907464,
+      "tag": "0001_windy_vulture",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1755572954599,
+      "tag": "0002_short_tomorrow_man",
       "breakpoints": true
     }
   ]

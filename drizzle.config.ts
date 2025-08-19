@@ -4,5 +4,5 @@ export default defineConfig({
   schema: './src/shared/schema.ts',
   out: './drizzle',
   dialect: 'sqlite',
-  dbCredentials: { url: 'db/chimes.db' },
+  dbCredentials: { url: 'data/chimes.db' },
 });

@@ -1,13 +1,14 @@
 import { schedules } from '../../shared/schema';
 import { NewSchedule, Schedule } from '../../shared/types';
 import { db } from '../lib/database';
-import { eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 
 export const getSchedulesByProfile = async (
   profileId: Schedule['profileId'],
 ): Promise<Schedule[]> => {
   return db.query.schedules.findMany({
     where: eq(schedules.profileId, profileId),
+    orderBy: [asc(schedules.triggerTime)],
   });
 };
 

@@ -2,6 +2,10 @@ import { IServices } from '../lib/types';
 import { ipcRenderer } from 'electron/renderer';
 
 export const services: IServices = {
+  appConfig: {
+    get: (key) => ipcRenderer.sendSync('appConfig:getSync', key),
+    set: (key, value) => ipcRenderer.invoke('appConfig:set', key, value),
+  },
   profiles: {
     getAll: () => ipcRenderer.invoke('profiles:getAll'),
     getById: (id) => ipcRenderer.invoke('profiles:getById', id),

@@ -1,4 +1,5 @@
-import { badgeVariants, cn } from '../../lib/utils';
+import { cn } from '../../../lib/utils';
+import { badgeVariants } from './badge-variants';
 import { type VariantProps } from 'class-variance-authority';
 import { Slot as SlotPrimitive } from 'radix-ui';
 import * as React from 'react';

@@ -1,6 +1,9 @@
 import icon from '../../resources/icon.png?asset';
 import { APP_ID, APP_NAME } from '../shared/contants';
-import { initializeDatabase } from './lib/database';
+import { ensureDirExists } from '../shared/utils';
+import { initializeConfigAndDatabase } from './lib/bootstrap';
+import { appDataPath } from './lib/constants';
+import * as appConfigServices from './services/appConfig';
 import * as notificationServices from './services/notifications';
 import * as profileServices from './services/profiles';
 import * as scheduleHistoryServices from './services/scheduleHistory';
@@ -9,20 +12,22 @@ import * as scheduleServices from './services/schedules';
 import * as userSoundServices from './services/userSounds';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
-import { join } from 'path';
+import path from 'path';
 
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1025,
     height: 670,
+    minWidth: 720,
+    minHeight: 560,
     show: false,
     autoHideMenuBar: true,
     title: APP_NAME,
     frame: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
+      preload: path.join(__dirname, '../preload/index.js'),
       sandbox: false,
     },
   });
@@ -41,7 +46,7 @@ function createWindow(): void {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL']);
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
+    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
   }
 }
 
@@ -49,7 +54,8 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
-  await initializeDatabase();
+  ensureDirExists(appDataPath);
+  await initializeConfigAndDatabase();
 
   // Set app user model id for windows
   electronApp.setAppUserModelId(APP_ID);
@@ -63,6 +69,14 @@ app.whenReady().then(async () => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'));
+
+  ipcMain.on('appConfig:getSync', (event, key) => {
+    event.returnValue = appConfigServices.getAppConfigProperty(key);
+  });
+
+  ipcMain.handle('appConfig:set', (_, key, value) => {
+    appConfigServices.setAppConfigProperty(key, value);
+  });
 
   ipcMain.handle('profiles:getAll', () => profileServices.getAllProfiles());
   ipcMain.handle('profiles:getById', (_, id) =>

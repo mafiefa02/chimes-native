@@ -1,4 +1,5 @@
-import { cn } from '../../lib/utils';
+import { useGetProfileSchedules } from '../../hooks/queries/use-get-schedule-profiles';
+import { cn, getAppConfigProperty } from '../../lib/utils';
 import {
   Select,
   SelectContent,
@@ -8,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import { Skeleton } from '../ui/skeleton';
 import { useSidebar } from './hooks/use-sidebar';
 import { CalendarIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -15,11 +17,19 @@ import { motion, AnimatePresence } from 'motion/react';
 /** TODO: polish the sidebar exit animation */
 export const SidebarAction = () => {
   const { isSidebarOpen } = useSidebar();
+  const { data: profileSchedules, isLoading } = useGetProfileSchedules();
+  const activeProfileSchedule = getAppConfigProperty('activeProfileSchedule');
+
+  /** We can be sure there'd be atleast one schedule profile,
+   * so if it is undefined, it is still getting the data. */
+  if (isLoading || !profileSchedules)
+    return <Skeleton className="w-full h-8" />;
+
   return (
     <div
       className={cn('flex flex-col gap-2', isSidebarOpen ? 'w-full' : 'w-fit')}
     >
-      <Select defaultValue="active-profile">
+      <Select defaultValue={activeProfileSchedule ?? undefined}>
         <motion.div
           layout
           transition={{ type: 'spring', stiffness: 600, damping: 35 }}
@@ -44,7 +54,7 @@ export const SidebarAction = () => {
                     }}
                     exit={{ opacity: 0 }}
                   >
-                    <SelectValue placeholder="Active Profile" />
+                    <SelectValue />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -54,7 +64,14 @@ export const SidebarAction = () => {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Profiles</SelectLabel>
-            <SelectItem value="active-profile">Active Profile</SelectItem>
+            {profileSchedules.map((profile) => (
+              <SelectItem
+                key={profile.id}
+                value={profile.id}
+              >
+                {profile.name}
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>

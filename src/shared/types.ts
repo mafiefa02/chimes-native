@@ -24,3 +24,9 @@ export type NewScheduleHistory = typeof scheduleHistory.$inferInsert;
 
 export type Notification = typeof notifications.$inferSelect;
 export type NewNotification = typeof notifications.$inferInsert;
+
+export type AppConfig = {
+  activeProfile: UserProfile['id'];
+  activeProfileSchedule: ScheduleProfile['id'];
+  firstDayOfweek: number;
+};

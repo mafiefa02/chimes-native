@@ -1,4 +1,5 @@
-import { cn, buttonVariants } from '../../lib/utils';
+import { cn } from '../../../lib/utils';
+import { buttonVariants } from './button-variants';
 import { type VariantProps } from 'class-variance-authority';
 import { Slot as SlotPrimitive } from 'radix-ui';
 import * as React from 'react';
