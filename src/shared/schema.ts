@@ -26,7 +26,6 @@ export const scheduleProfiles = sqliteTable(
       .references(() => userProfiles.id, { onDelete: 'cascade' })
       .notNull(),
     name: text('name').notNull(),
-    timezone: text('timezone').notNull().default('UTC'), // IANA timezone name (ex. 'Asia/Jakarta')
   },
   (table) => [
     index('schedule_profiles_user_id_idx').on(table.userId),
@@ -44,7 +43,7 @@ export const userSounds = sqliteTable(
     userId: text('user_id')
       .references(() => userProfiles.id, { onDelete: 'cascade' })
       .notNull(),
-    name: text('name'),
+    name: text('name').notNull(),
     filePath: text('file_path').notNull(),
   },
   (table) => [
@@ -71,10 +70,10 @@ export const schedules = sqliteTable(
       .notNull()
       .$type<number[]>()
       .default(sql`(json_array(0, 1, 2, 3, 4, 5, 6))`),
-    triggerTime: integer('trigger_time').notNull(), // Stores minutes since midnight
-    soundId: integer('sound_id').references(() => userSounds.id, {
-      onDelete: 'restrict',
-    }),
+    triggerTime: text('trigger_time').notNull(), // Stores "HH:mm" in UTC
+    soundId: integer('sound_id')
+      .references(() => userSounds.id, { onDelete: 'restrict' })
+      .notNull(),
     repeat: text('repeat', {
       enum: ['once', 'daily', 'weekly', 'biweekly', 'monthly', 'yearly'],
     })

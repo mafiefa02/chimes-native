@@ -6,3 +6,4 @@ import path from 'path';
 export const appDataPath = path.join(app.getPath('appData'), APP_NAME);
 export const dbPath = getDbPath(appDataPath);
 export const appConfigPath = getAppConfigPath(appDataPath);
+export const defaultSoundPath = 'data/default-sound.wav';

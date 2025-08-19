@@ -2,10 +2,12 @@ import { Schedule } from '../../../../../../shared/types';
 import { useUpdateSchedule } from '../../../../hooks/mutations/use-update-schedule';
 import { useGetSchedules } from '../../../../hooks/queries/use-get-schedules';
 import { useTime } from '../../../../hooks/use-time';
+import { parseDateStringAsUTC } from '../../../../lib/utils';
+import { isAfter, isBefore } from 'date-fns';
 import { useMemo } from 'react';
 
-export const useSchedules = () => {
-  const { data: schedules, isPending, isError } = useGetSchedules();
+export const useSchedules = (date: Date) => {
+  const { data: schedules, isPending, isError } = useGetSchedules(date);
   const { mutate: updateSchedule } = useUpdateSchedule();
   const { time: now } = useTime();
 
@@ -15,19 +17,27 @@ export const useSchedules = () => {
 
   const processedSchedules = useMemo(() => {
     if (!schedules || !now) return [];
-
-    const nowInMinutes = now.getHours() * 60 + now.getMinutes();
-
     const upcomingSchedule = schedules
-      .filter((s) => s.triggerTime > nowInMinutes && s.isActive)
-      .sort((a, b) => a.triggerTime - b.triggerTime)[0];
+      .filter(
+        (s) =>
+          isAfter(parseDateStringAsUTC(s.triggerTime, 'HH:mm'), now) &&
+          s.isActive,
+      )
+      .sort(
+        (a, b) =>
+          parseDateStringAsUTC(a.triggerTime, 'HH:mm').getTime() -
+          parseDateStringAsUTC(b.triggerTime, 'HH:mm').getTime(),
+      )[0];
 
     return schedules.map((schedule) => ({
       ...schedule,
       isUpcoming: upcomingSchedule
         ? schedule.id === upcomingSchedule.id
         : false,
-      isPast: schedule.triggerTime <= nowInMinutes,
+      isPast: isBefore(
+        parseDateStringAsUTC(schedule.triggerTime, 'HH:mm'),
+        now,
+      ),
     }));
   }, [schedules, now]);
 

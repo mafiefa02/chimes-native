@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "5e626903-b69b-4b6b-a3b3-00b7410f0478",
-  "prevId": "7a5af279-409f-443e-ae2d-210f153c8e25",
+  "id": "a40c4ff0-507a-421b-84e8-a6bc1be6726f",
+  "prevId": "42675f77-fd22-41ac-ae8a-fc73575a44d9",
   "tables": {
     "notifications": {
       "name": "notifications",
@@ -179,14 +179,6 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
-        },
-        "timezone": {
-          "name": "timezone",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'UTC'"
         }
       },
       "indexes": {
@@ -259,7 +251,7 @@
         },
         "trigger_time": {
           "name": "trigger_time",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -350,7 +342,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "set null",
+          "onDelete": "restrict",
           "onUpdate": "no action"
         }
       },
@@ -410,7 +402,7 @@
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "file_path": {

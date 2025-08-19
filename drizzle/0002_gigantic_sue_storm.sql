@@ -4,14 +4,14 @@ CREATE TABLE `__new_schedules` (
 	`profile_id` text NOT NULL,
 	`name` text NOT NULL,
 	`trigger_days` text DEFAULT (json_array(0, 1, 2, 3, 4, 5, 6)) NOT NULL,
-	`trigger_time` integer NOT NULL,
-	`sound_id` integer,
+	`trigger_time` text NOT NULL,
+	`sound_id` integer NOT NULL,
 	`repeat` text DEFAULT 'once' NOT NULL,
 	`repeat_start` integer NOT NULL,
 	`repeat_end` integer,
 	`is_active` integer DEFAULT true NOT NULL,
 	FOREIGN KEY (`profile_id`) REFERENCES `schedule_profiles`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`sound_id`) REFERENCES `user_sounds`(`id`) ON UPDATE no action ON DELETE set null
+	FOREIGN KEY (`sound_id`) REFERENCES `user_sounds`(`id`) ON UPDATE no action ON DELETE restrict
 );
 --> statement-breakpoint
 INSERT INTO `__new_schedules`("id", "profile_id", "name", "trigger_days", "trigger_time", "sound_id", "repeat", "repeat_start", "repeat_end", "is_active") SELECT "id", "profile_id", "name", "trigger_days", "trigger_time", "sound_id", "repeat", "repeat_start", "repeat_end", "is_active" FROM `schedules`;--> statement-breakpoint

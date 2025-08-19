@@ -108,6 +108,9 @@ app.whenReady().then(async () => {
   ipcMain.handle('userSounds:getByUser', (_, userId) =>
     userSoundServices.getUserSounds(userId),
   );
+  ipcMain.handle('userSounds:getBySoundId', (_, userId, soundId) =>
+    userSoundServices.getUserSoundById(userId, soundId),
+  );
   ipcMain.handle('userSounds:create', (_, data) =>
     userSoundServices.createUserSound(data),
   );

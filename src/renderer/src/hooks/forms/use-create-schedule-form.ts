@@ -15,13 +15,12 @@ export const formSchema = z
       .min(1, { message: 'At least one trigger day must be selected.' })
       .default([getDay(new Date())])
       .nonoptional(),
-    // Represents minutes since midnight (0 to 1439)
     triggerTime: z
-      .number({ error: 'Trigger time is required.' })
-      .int()
-      .min(0, { message: 'Time cannot be before midnight (0).' })
-      .max(1439, { message: 'Time cannot be after 23:59 (1439).' }),
-    soundId: z.number().int().positive().optional().nullable(),
+      .string({ error: 'Trigger time is required.' })
+      .regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, {
+        message: 'Invalid time format. Please use HH:mm.',
+      }),
+    soundId: z.number({ message: 'Sound is required.' }).int().positive(),
     repeat: z
       .enum(['once', 'daily', 'weekly', 'biweekly', 'monthly', 'yearly'])
       .default('once')
@@ -61,8 +60,8 @@ export const useCreateScheduleForm = ({
       profileId: activeProfileId,
       name: '',
       triggerDays: [getDay(new Date())],
-      triggerTime: 540, // Default to 9:00 AM
-      soundId: null,
+      triggerTime: '09:00',
+      soundId: undefined,
       repeat: 'once',
       repeatStart: new Date(),
       repeatEnd: null,

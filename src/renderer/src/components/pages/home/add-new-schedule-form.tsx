@@ -1,5 +1,6 @@
 import { useCreateScheduleForm } from '../../../hooks/forms/use-create-schedule-form';
-import { cn, minutesToTime, timeToMinutes } from '../../../lib/utils';
+import { useGetSounds } from '../../../hooks/queries/use-get-sounds';
+import { cn } from '../../../lib/utils';
 import { Button } from '../../ui/button';
 import { Calendar } from '../../ui/calendar';
 import {
@@ -47,6 +48,9 @@ export const AddNewScheduleForm = ({
       toast.error('Failed to save schedule!', { description: error.message }),
   });
 
+  const { data: sounds, isPending, isError } = useGetSounds();
+  const soundsAreAvailable = !isPending && !isError;
+
   return (
     <Form {...form}>
       <form
@@ -81,11 +85,9 @@ export const AddNewScheduleForm = ({
                   <FormControl>
                     <Input
                       type="time"
-                      value={minutesToTime(field.value)}
+                      value={field.value}
                       className="w-full"
-                      onChange={(e) =>
-                        field.onChange(timeToMinutes(e.target.value))
-                      }
+                      onChange={field.onChange}
                     />
                   </FormControl>
                   <FormMessage />
@@ -101,11 +103,8 @@ export const AddNewScheduleForm = ({
                   <FormLabel>Notification Sound</FormLabel>
                   <Select
                     onValueChange={(value) =>
-                      field.onChange(
-                        value || value !== '0' ? parseInt(value) : null,
-                      )
+                      field.onChange(value ? parseInt(value) : null)
                     }
-                    defaultValue="0"
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -115,7 +114,16 @@ export const AddNewScheduleForm = ({
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Available Sounds</SelectLabel>
-                        <SelectItem value="0">Default</SelectItem>
+                        {soundsAreAvailable
+                          ? sounds.map((sound) => (
+                              <SelectItem
+                                key={sound.id}
+                                value={sound.id.toString()}
+                              >
+                                {sound.name}
+                              </SelectItem>
+                            ))
+                          : null}
                       </SelectGroup>
                     </SelectContent>
                   </Select>

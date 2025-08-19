@@ -22,41 +22,57 @@ export interface IServices {
   };
   profiles: {
     getAll: () => Promise<UserProfile[]>;
-    getById: (id: string) => Promise<UserProfile | undefined>;
+    getById: (id: UserProfile['id']) => Promise<UserProfile | undefined>;
     create: (data: NewUserProfile) => Promise<UserProfile[]>;
     update: (
-      id: string,
+      id: UserProfile['id'],
       data: Partial<NewUserProfile>,
     ) => Promise<UserProfile[]>;
-    delete: (id: string) => Promise<{ id: string }[]>;
+    delete: (id: UserProfile['id']) => Promise<{ id: UserProfile['id'] }[]>;
   };
   scheduleProfiles: {
-    getByUser: (userId: string) => Promise<ScheduleProfile[]>;
+    getByUser: (
+      userId: ScheduleProfile['userId'],
+    ) => Promise<ScheduleProfile[]>;
     create: (data: NewScheduleProfile) => Promise<ScheduleProfile[]>;
     update: (
-      id: string,
+      id: ScheduleProfile['id'],
       data: Partial<NewScheduleProfile>,
     ) => Promise<ScheduleProfile[]>;
-    delete: (id: string) => Promise<{ id: string }[]>;
+    delete: (
+      id: ScheduleProfile['id'],
+    ) => Promise<{ id: ScheduleProfile['id'] }[]>;
   };
   userSounds: {
-    getByUser: (userId: string) => Promise<UserSound[]>;
+    getByUser: (userId: UserSound['userId']) => Promise<UserSound[]>;
+    getBySoundId: (
+      userId: UserSound['userId'],
+      soundId: UserSound['id'],
+    ) => Promise<UserSound | undefined>;
     create: (data: NewUserSound) => Promise<UserSound[]>;
     update: (
-      id: number,
-      userId: string,
+      id: UserSound['id'],
+      userId: UserSound['userId'],
       data: Partial<NewUserSound>,
     ) => Promise<UserSound[]>;
-    delete: (id: number, userId: string) => Promise<{ id: number }[]>;
+    delete: (
+      id: UserSound['id'],
+      userId: UserSound['userId'],
+    ) => Promise<{ id: UserSound['id'] }[]>;
   };
   schedules: {
-    getByProfile: (profileId: string) => Promise<Schedule[]>;
+    getByProfile: (profileId: Schedule['profileId']) => Promise<Schedule[]>;
     create: (data: NewSchedule) => Promise<Schedule[]>;
-    update: (id: string, data: Partial<NewSchedule>) => Promise<Schedule[]>;
-    delete: (id: string) => Promise<{ id: string }[]>;
+    update: (
+      id: Schedule['id'],
+      data: Partial<NewSchedule>,
+    ) => Promise<Schedule[]>;
+    delete: (id: Schedule['id']) => Promise<{ id: Schedule['id'] }[]>;
   };
   scheduleHistory: {
-    getBySchedule: (scheduleId: string) => Promise<ScheduleHistory[]>;
+    getBySchedule: (
+      scheduleId: ScheduleHistory['scheduleId'],
+    ) => Promise<ScheduleHistory[]>;
     create: (data: NewScheduleHistory) => Promise<ScheduleHistory[]>;
   };
 }

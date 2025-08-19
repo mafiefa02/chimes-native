@@ -1,10 +1,14 @@
-import { scheduleProfiles, userProfiles } from '../../shared/schema';
+import {
+  scheduleProfiles,
+  userProfiles,
+  userSounds,
+} from '../../shared/schema';
 import { AppConfig } from '../../shared/types';
 import {
   getAppConfigProperty,
   setAppConfigProperty,
 } from '../services/appConfig';
-import { appConfigPath } from './constants';
+import { appConfigPath, defaultSoundPath } from './constants';
 import { db, runMigrations } from './database';
 import { count } from 'drizzle-orm';
 import fs from 'fs';
@@ -15,6 +19,7 @@ export const initializeConfigAndDatabase = async (): Promise<void> => {
       activeProfile: '',
       activeProfileSchedule: 'null',
       firstDayOfweek: 0,
+      userTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     };
     fs.writeFileSync(appConfigPath, JSON.stringify(defaultConfig, null, 2));
     console.info(
@@ -63,20 +68,34 @@ export const initializeConfigAndDatabase = async (): Promise<void> => {
     }
   }
 
+  const currentActiveUserProfileId = getAppConfigProperty('activeProfile');
+
+  // Check if there is a default sound
+  const [{ value: soundCount }] = await db
+    .select({ value: count() })
+    .from(userSounds);
+
+  if (soundCount === 0) {
+    await db
+      .insert(userSounds)
+      .values({
+        name: 'Default',
+        userId: currentActiveUserProfileId,
+        filePath: defaultSoundPath,
+      });
+    console.info(
+      'INFO: Default sound data not found, creating a default sound information.',
+    );
+  }
+
   const [{ value: scheduleProfileCount }] = await db
     .select({ value: count() })
     .from(scheduleProfiles);
 
   if (scheduleProfileCount === 0) {
-    const currentActiveUserProfileId = getAppConfigProperty('activeProfile');
-
     const [{ id }] = await db
       .insert(scheduleProfiles)
-      .values({
-        name: 'Default',
-        userId: currentActiveUserProfileId,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      })
+      .values({ name: 'Default', userId: currentActiveUserProfileId })
       .returning({ id: scheduleProfiles.id });
 
     await setAppConfigProperty('activeProfileSchedule', id);

@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "ea916bb9-3a9e-4a52-aecc-50ce5b0d6562",
-  "prevId": "5e626903-b69b-4b6b-a3b3-00b7410f0478",
+  "id": "596a8b85-4e60-4fdd-be5f-aede3a0426c8",
+  "prevId": "a40c4ff0-507a-421b-84e8-a6bc1be6726f",
   "tables": {
     "notifications": {
       "name": "notifications",
@@ -179,14 +179,6 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
-        },
-        "timezone": {
-          "name": "timezone",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'UTC'"
         }
       },
       "indexes": {
@@ -259,7 +251,7 @@
         },
         "trigger_time": {
           "name": "trigger_time",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -268,7 +260,7 @@
           "name": "sound_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "repeat": {
@@ -410,7 +402,7 @@
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "file_path": {

@@ -9,6 +9,15 @@ export const getUserSounds = async (
   return db.query.userSounds.findMany({ where: eq(userSounds.userId, userId) });
 };
 
+export const getUserSoundById = async (
+  userId: UserSound['userId'],
+  soundId: UserSound['id'],
+): Promise<UserSound | undefined> => {
+  return db.query.userSounds.findFirst({
+    where: and(eq(userSounds.userId, userId), eq(userSounds.id, soundId)),
+  });
+};
+
 export const createUserSound = async (
   data: NewUserSound,
 ): Promise<UserSound[]> => {

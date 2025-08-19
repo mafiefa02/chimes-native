@@ -3,30 +3,25 @@ import { PageHeader } from '../components/page-header';
 import { PageLayout } from '../components/page-layout';
 import { PageTitle } from '../components/page-title';
 import { AddNewScheduleDialog } from '../components/pages/home/add-new-schedule-dialog';
+import { ScheduleDateProvider } from '../components/pages/home/contexts/schedule-date-provider';
+import { ScheduleDatePicker } from '../components/pages/home/schedule-date-picker';
 import { ScheduleList } from '../components/pages/home/schedule-list';
-import { Button } from '../components/ui/button';
-import { ScrollArea } from '../components/ui/scroll-area';
-import { format } from 'date-fns';
-import { ChevronDownIcon } from 'lucide-react';
 
 export const HomePage = () => {
   return (
-    <PageLayout>
-      <PageHeader>
-        <PageTitle title="Today's Schedule" />
-        <div className="flex items-center gap-4">
-          <Button variant="outline">
-            <p>{format(new Date(), 'PPP')}</p>
-            <ChevronDownIcon />
-          </Button>
-          <AddNewScheduleDialog />
-        </div>
-      </PageHeader>
-      <InsetShadowCard className="overflow-y-auto">
-        <ScrollArea className="h-full">
+    <ScheduleDateProvider>
+      <PageLayout>
+        <PageHeader>
+          <PageTitle title="Daily Schedule" />
+          <div className="flex items-center gap-4">
+            <ScheduleDatePicker />
+            <AddNewScheduleDialog />
+          </div>
+        </PageHeader>
+        <InsetShadowCard className="overflow-y-auto no-scrollbar">
           <ScheduleList />
-        </ScrollArea>
-      </InsetShadowCard>
-    </PageLayout>
+        </InsetShadowCard>
+      </PageLayout>
+    </ScheduleDateProvider>
   );
 };
