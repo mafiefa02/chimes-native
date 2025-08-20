@@ -24,7 +24,7 @@ export const AddNewScheduleDialog = () => {
       <DialogTrigger asChild>
         <Button>
           <PlusIcon />
-          <p>Add New</p>
+          <p className="hidden md:block">Add New</p>
         </Button>
       </DialogTrigger>
       <DialogContent>

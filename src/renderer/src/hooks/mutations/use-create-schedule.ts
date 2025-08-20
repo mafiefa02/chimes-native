@@ -1,4 +1,5 @@
 import { NewSchedule } from '../../../../shared/types';
+import { queryKeys } from '../../lib/query-keys';
 import { tz } from '@date-fns/tz';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format, parse } from 'date-fns';
@@ -15,8 +16,10 @@ export const useCreateSchedule = () => {
           { in: tz('Etc/UTC') },
         ),
       }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['schedule'] });
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.schedules.all(data[0].repeatStart),
+      });
     },
   });
 };

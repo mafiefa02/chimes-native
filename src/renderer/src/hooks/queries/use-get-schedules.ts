@@ -1,6 +1,7 @@
 import { Schedule } from '../../../../shared/types';
+import { queryKeys } from '../../lib/query-keys';
 import { getAppConfigProperty } from '../../lib/utils';
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { getDay, isSameDay, isWithinInterval } from 'date-fns';
 
 const filterActiveSchedules = (schedule: Schedule, date: Date) => {
@@ -23,7 +24,8 @@ export const useGetSchedules = (date: Date | undefined = new Date()) => {
   const activeProfileScheduleId = getAppConfigProperty('activeProfileSchedule');
   return useQuery({
     enabled: !!activeProfileScheduleId,
-    queryKey: ['schedule', activeProfileScheduleId, date],
+    placeholderData: keepPreviousData,
+    queryKey: queryKeys.schedules.all(date),
     queryFn: async () =>
       await window.services.schedules
         .getByProfile(activeProfileScheduleId)

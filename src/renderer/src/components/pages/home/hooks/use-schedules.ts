@@ -8,7 +8,7 @@ import { useMemo } from 'react';
 
 export const useSchedules = (date: Date) => {
   const { data: schedules, isPending, isError } = useGetSchedules(date);
-  const { mutate: updateSchedule } = useUpdateSchedule();
+  const { mutate: updateSchedule } = useUpdateSchedule(date);
   const { time: now } = useTime();
 
   const onToggle = (id: Schedule['id'], newIsActive: Schedule['isActive']) => {
