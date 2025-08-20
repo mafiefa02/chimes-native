@@ -10,6 +10,7 @@ import { Button } from '../../ui/button';
 import { Skeleton } from '../../ui/skeleton';
 import { Switch } from '../../ui/switch';
 import { EditIcon, MusicIcon, RepeatIcon } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 export interface ScheduleWithStatus extends Schedule {
   isPast: boolean;
@@ -48,11 +49,21 @@ export const ScheduleCard = ({
         <div className="flex flex-col items-start justify-center gap-1">
           <div className="flex items-center gap-3">
             <span className="font-bold text-lg">{schedule.name}</span>
-            {schedule.isUpcoming && (
-              <Badge className="bg-primary font-bold text-primary-foreground text-xs">
-                Upcoming
-              </Badge>
-            )}
+            <AnimatePresence initial={false}>
+              {schedule.isUpcoming && (
+                <motion.span
+                  key={schedule.id}
+                  initial={{ x: 20, opacity: 0 }}
+                  exit={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.3, ease: 'backInOut' }}
+                >
+                  <Badge className="bg-primary font-bold text-primary-foreground text-xs">
+                    Upcoming
+                  </Badge>
+                </motion.span>
+              )}
+            </AnimatePresence>
           </div>
           <div className="flex items-center gap-4 text-sm">
             <div className="flex items-center gap-2">

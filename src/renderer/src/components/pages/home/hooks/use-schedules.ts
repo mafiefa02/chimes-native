@@ -3,7 +3,7 @@ import { useUpdateSchedule } from '../../../../hooks/mutations/use-update-schedu
 import { useGetSchedules } from '../../../../hooks/queries/use-get-schedules';
 import { useTime } from '../../../../hooks/use-time';
 import { parseDateStringAsUTC } from '../../../../lib/utils';
-import { isAfter, isBefore } from 'date-fns';
+import { isAfter, isBefore, isFuture, isPast, isToday } from 'date-fns';
 import { useMemo } from 'react';
 
 export const useSchedules = (date: Date) => {
@@ -17,6 +17,7 @@ export const useSchedules = (date: Date) => {
 
   const processedSchedules = useMemo(() => {
     if (!schedules || !now) return [];
+
     const upcomingSchedule = schedules
       .filter(
         (s) =>
@@ -31,15 +32,14 @@ export const useSchedules = (date: Date) => {
 
     return schedules.map((schedule) => ({
       ...schedule,
-      isUpcoming: upcomingSchedule
-        ? schedule.id === upcomingSchedule.id
-        : false,
-      isPast: isBefore(
-        parseDateStringAsUTC(schedule.triggerTime, 'HH:mm'),
-        now,
-      ),
+      isUpcoming: isToday(date)
+        ? upcomingSchedule?.id === schedule.id
+        : isFuture(date),
+      isPast: isToday(date)
+        ? isBefore(parseDateStringAsUTC(schedule.triggerTime, 'HH:mm'), now)
+        : isPast(date),
     }));
-  }, [schedules, now]);
+  }, [schedules, now, date]);
 
   return { schedules: processedSchedules, isPending, isError, onToggle };
 };

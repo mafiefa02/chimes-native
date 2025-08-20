@@ -7,12 +7,18 @@ import { AnimatePresence, motion, Variants } from 'motion/react';
 import { useMemo } from 'react';
 
 const containerAnimation: Variants = {
-  animate: { transition: { staggerChildren: 0.07 } },
-  exit: { transition: { staggerChildren: 0.001, staggerDirection: -1 } },
+  animate: { transition: { staggerChildren: 0.08, ease: 'easeIn' } },
+  exit: {
+    transition: {
+      staggerChildren: 0.035,
+      staggerDirection: -1,
+      ease: 'easeOut',
+    },
+  },
 };
 
 const itemAnimation: Variants = {
-  initial: { opacity: 0, y: 20 },
+  initial: { opacity: 0, y: -20 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.2, ease: 'easeOut' } },
   exit: { opacity: 0, y: -20, transition: { duration: 0.15, ease: 'easeIn' } },
 };
@@ -27,7 +33,18 @@ export const ScheduleList = () => {
       mode="wait"
       initial={false}
     >
-      {isPending && <LoadingScheduleList key="loading" />}
+      {isPending && (
+        <motion.div
+          key="loading"
+          className="space-y-2"
+          variants={containerAnimation}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+        >
+          <LoadingSkeletons />
+        </motion.div>
+      )}
       {isError && <p key="error">Error!</p>}
       {schedulesAreAvailable && (
         <motion.div
@@ -55,28 +72,18 @@ export const ScheduleList = () => {
   );
 };
 
-const LoadingScheduleList = () => {
+const LoadingSkeletons = () => {
   const RANDOM_NUMBER_OF_DUMMIES = useMemo(
-    () => Math.max(3, Math.floor(Math.random() * 6)),
+    () => Math.max(5, Math.floor(Math.random() * 10)),
     [],
   );
 
-  return (
+  return new Array(RANDOM_NUMBER_OF_DUMMIES).fill(0).map((_, idx) => (
     <motion.div
-      className="space-y-2"
-      variants={containerAnimation}
-      initial="initial"
-      animate="animate"
-      exit="exit"
+      key={`loading-${idx}`}
+      variants={itemAnimation}
     >
-      {new Array(RANDOM_NUMBER_OF_DUMMIES).fill(0).map((_, idx) => (
-        <motion.div
-          key={`loading-${idx}`}
-          variants={itemAnimation}
-        >
-          <Skeleton className="w-full h-24 bg-primary/5 rounded-3xl" />
-        </motion.div>
-      ))}
+      <Skeleton className="w-full h-24 bg-primary/5 rounded-3xl" />
     </motion.div>
-  );
+  ));
 };
