@@ -7,6 +7,7 @@ import * as appConfigServices from './services/appConfig';
 import * as notificationServices from './services/notifications';
 import * as profileServices from './services/profiles';
 import * as scheduleHistoryServices from './services/scheduleHistory';
+import * as schedulePlayer from './services/schedulePlayer';
 import * as scheduleProfileServices from './services/scheduleProfiles';
 import * as scheduleServices from './services/schedules';
 import * as userSoundServices from './services/userSounds';
@@ -153,6 +154,8 @@ app.whenReady().then(async () => {
   ipcMain.handle('notifications:delete', (_, id) =>
     notificationServices.deleteNotification(id),
   );
+
+  schedulePlayer.start();
 
   createWindow();
 

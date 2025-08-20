@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "42675f77-fd22-41ac-ae8a-fc73575a44d9",
+  "id": "0165cb2f-db4b-48d7-9efb-8370c3510185",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "notifications": {
@@ -260,7 +260,7 @@
           "name": "sound_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "repeat": {
@@ -402,7 +402,7 @@
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "file_path": {

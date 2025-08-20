@@ -30,6 +30,12 @@ export const getDbPath = (appDataPath: string) => {
   return dbPath;
 };
 
+export const getDefaultSoundPath = (appDataPath: string) => {
+  const configFileName = 'bell.mp3';
+  const soundPath = path.join(getDataPath(appDataPath), configFileName);
+  return soundPath;
+};
+
 export const capitalize = (sentence: string) => {
   if (!sentence) return '';
   return sentence

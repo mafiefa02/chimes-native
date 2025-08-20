@@ -35,7 +35,7 @@ CREATE TABLE `schedules` (
 	`name` text NOT NULL,
 	`trigger_days` text DEFAULT (json_array(0, 1, 2, 3, 4, 5, 6)) NOT NULL,
 	`trigger_time` text NOT NULL,
-	`sound_id` integer,
+	`sound_id` integer NOT NULL,
 	`repeat` text DEFAULT 'once' NOT NULL,
 	`repeat_start` integer NOT NULL,
 	`repeat_end` integer,
@@ -56,7 +56,7 @@ CREATE TABLE `user_profiles` (
 CREATE TABLE `user_sounds` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`user_id` text NOT NULL,
-	`name` text,
+	`name` text NOT NULL,
 	`file_path` text NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user_profiles`(`id`) ON UPDATE no action ON DELETE cascade
 );

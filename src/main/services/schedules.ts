@@ -1,7 +1,18 @@
 import { schedules } from '../../shared/schema';
 import { NewSchedule, Schedule } from '../../shared/types';
 import { db } from '../lib/database';
-import { asc, eq } from 'drizzle-orm';
+import { and, asc, eq } from 'drizzle-orm';
+
+export const getAllActiveSchedules = async (
+  profileId: Schedule['profileId'],
+): Promise<Schedule[]> => {
+  return db.query.schedules.findMany({
+    where: and(
+      eq(schedules.isActive, true),
+      eq(schedules.profileId, profileId),
+    ),
+  });
+};
 
 export const getSchedulesByProfile = async (
   profileId: Schedule['profileId'],

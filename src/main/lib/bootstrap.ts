@@ -11,9 +11,22 @@ import {
 import { appConfigPath, defaultSoundPath } from './constants';
 import { db, runMigrations } from './database';
 import { count } from 'drizzle-orm';
+import { app } from 'electron';
 import fs from 'fs';
+import path from 'path';
+
+const copyInitialSounds = (): void => {
+  const sourceSoundPath = app.isPackaged
+    ? path.join(process.resourcesPath, 'app.asar', 'resources', 'bell.mp3')
+    : path.join(app.getAppPath(), 'resources', 'bell.mp3');
+
+  if (!fs.existsSync(defaultSoundPath)) {
+    fs.copyFileSync(sourceSoundPath, defaultSoundPath);
+  }
+};
 
 export const initializeConfigAndDatabase = async (): Promise<void> => {
+  copyInitialSounds();
   if (!fs.existsSync(appConfigPath)) {
     const defaultConfig: AppConfig = {
       activeProfile: '',
@@ -103,7 +116,7 @@ export const initializeConfigAndDatabase = async (): Promise<void> => {
       'INFO: Default user schedule profile created and set as current active schedule profile.',
     );
   } else {
-    const currentActiveProfile = getAppConfigProperty('activeProfile');
+    const currentActiveProfile = getAppConfigProperty('activeProfileSchedule');
     // Check available schedule profiles in database
     // if current active scedule profile's id is not in database
     // set to anything that's available in db

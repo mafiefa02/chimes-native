@@ -9,8 +9,10 @@ import { Badge } from '../../ui/badge';
 import { Button } from '../../ui/button';
 import { Skeleton } from '../../ui/skeleton';
 import { Switch } from '../../ui/switch';
+import { EditScheduleDialog } from './edit-schedule-dialog';
 import { EditIcon, MusicIcon, RepeatIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useState } from 'react';
 
 export interface ScheduleWithStatus extends Schedule {
   isPast: boolean;
@@ -30,6 +32,8 @@ export const ScheduleCard = ({
 }: Readonly<ScheduleCardProps>) => {
   const { data: sound, isPending, isError } = useGetSoundById(schedule.soundId);
   const soundDataIsAvailable = sound && !isPending && !isError;
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
   return (
     <div
       className={cn(
@@ -86,13 +90,21 @@ export const ScheduleCard = ({
         </div>
         <div className="flex items-center gap-4">
           {!schedule.isPast && schedule.isActive && (
-            <Button
-              className="hidden group-hover:inline-flex"
-              size="icon"
-              variant="ghost"
-            >
-              <EditIcon />
-            </Button>
+            <>
+              <Button
+                className="hidden group-hover:inline-flex"
+                size="icon"
+                variant="ghost"
+                onClick={() => setIsEditDialogOpen(true)}
+              >
+                <EditIcon />
+              </Button>
+              <EditScheduleDialog
+                schedule={schedule}
+                isDialogOpen={isEditDialogOpen}
+                setIsDialogOpen={setIsEditDialogOpen}
+              />
+            </>
           )}
           <Switch
             checked={schedule.isActive}

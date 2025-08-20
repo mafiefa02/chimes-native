@@ -1,6 +1,8 @@
 import { NewSchedule, Schedule } from '../../../../shared/types';
 import { queryKeys } from '../../lib/query-keys';
+import { tz } from '@date-fns/tz';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { format, parse } from 'date-fns';
 
 export const useUpdateSchedule = (date: Date) => {
   const queryClient = useQueryClient();
@@ -8,15 +10,21 @@ export const useUpdateSchedule = (date: Date) => {
 
   return useMutation({
     mutationFn: async (data: Partial<NewSchedule> & { id: Schedule['id'] }) =>
-      await window.services.schedules.update(data.id, data),
+      await window.services.schedules.update(data.id, {
+        ...data,
+        triggerTime: data.triggerTime
+          ? format(parse(data.triggerTime, 'HH:mm', new Date()), 'HH:mm', {
+              in: tz('Etc/UTC'),
+            })
+          : undefined,
+      }),
     onMutate: async (schedule) => {
       await queryClient.cancelQueries({ queryKey });
       const previousSchedules = queryClient.getQueryData(queryKey);
-      queryClient.setQueryData(queryKey, (oldSchedules: Schedule[]) => {
-        if (!oldSchedules) return [];
+      queryClient.setQueryData(queryKey, (oldSchedules: Schedule[] = []) => {
         return oldSchedules.map((oldSchedule) => {
           if (oldSchedule.id === schedule.id) {
-            return { ...oldSchedule, isActive: schedule.isActive };
+            return { ...oldSchedule, ...schedule };
           }
           return oldSchedule;
         });

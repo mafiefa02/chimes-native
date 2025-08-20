@@ -1,11 +1,9 @@
-import { Button } from '../ui/button';
 import { HeaderBreadcrumbs } from './header-breadcrumbs';
-import { LogInIcon } from 'lucide-react';
+import { HeaderLocalTime } from './header-local-time';
 import { HTMLProps } from 'react';
 
 interface HeaderProps extends HTMLProps<HTMLElement> {}
 
-/** TODO: implement login action */
 export const Header = ({ ref, ...props }: HeaderProps) => {
   return (
     <header
@@ -15,13 +13,7 @@ export const Header = ({ ref, ...props }: HeaderProps) => {
     >
       <div className="flex items-center justify-between gap-2">
         <HeaderBreadcrumbs />
-        <Button
-          variant="outline"
-          size="sm"
-        >
-          <LogInIcon />
-          <p>Sign In</p>
-        </Button>
+        <HeaderLocalTime />
       </div>
     </header>
   );

@@ -1,4 +1,5 @@
-import { useCreateScheduleForm } from '../../../hooks/forms/use-create-schedule-form';
+import { Schedule } from '../../../../../shared/types';
+import { useEditScheduleForm } from '../../../hooks/forms/use-edit-schedule-form';
 import { useGetSounds } from '../../../hooks/queries/use-get-sounds';
 import { cn } from '../../../lib/utils';
 import { Button } from '../../ui/button';
@@ -28,21 +29,24 @@ import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
-interface AddNewScheduleFormProps {
+interface EditScheduleFormProps {
+  schedule: Schedule;
   formAction: React.ReactNode;
   closeDialog: () => void;
 }
 
-export const AddNewScheduleForm = ({
+export const EditScheduleForm = ({
+  schedule,
   formAction,
   closeDialog,
-}: Readonly<AddNewScheduleFormProps>) => {
-  const { form, onSubmit } = useCreateScheduleForm({
-    onSubmitSuccess: (values) => {
+}: Readonly<EditScheduleFormProps>) => {
+  const { form, onSubmit } = useEditScheduleForm({
+    schedule,
+    onSubmitSuccess: () => {
       closeDialog();
       toast.success('Schedule saved!', {
         closeButton: true,
-        description: `The schedule "${values[0].name}" has been successfully created.`,
+        description: `The schedule "${schedule.name}" has been successfully updated.`,
       });
     },
     onSubmitError: (error) =>
@@ -108,6 +112,7 @@ export const AddNewScheduleForm = ({
                     <FormMessage />
                   </div>
                   <Select
+                    defaultValue={field.value?.toString()}
                     onValueChange={(value) =>
                       field.onChange(value ? parseInt(value) : null)
                     }
@@ -186,7 +191,7 @@ export const AddNewScheduleForm = ({
                             )}
                           >
                             {field.value ? (
-                              format(field.value, 'PPP')
+                              format(new Date(field.value), 'PPP')
                             ) : (
                               <span>Pick a date</span>
                             )}
@@ -200,7 +205,7 @@ export const AddNewScheduleForm = ({
                       >
                         <Calendar
                           mode="single"
-                          selected={field.value}
+                          selected={new Date(field.value)}
                           onSelect={field.onChange}
                         />
                       </PopoverContent>
@@ -226,7 +231,7 @@ export const AddNewScheduleForm = ({
                             )}
                           >
                             {field.value ? (
-                              format(field.value, 'PPP')
+                              format(new Date(field.value), 'PPP')
                             ) : (
                               <span>Pick a date</span>
                             )}
@@ -240,10 +245,12 @@ export const AddNewScheduleForm = ({
                       >
                         <Calendar
                           mode="single"
-                          selected={field.value ?? undefined}
+                          selected={
+                            field.value ? new Date(field.value) : undefined
+                          }
                           onSelect={field.onChange}
                           disabled={(date) =>
-                            date < form.getValues('repeatStart')
+                            date < new Date(form.getValues('repeatStart'))
                           }
                         />
                       </PopoverContent>

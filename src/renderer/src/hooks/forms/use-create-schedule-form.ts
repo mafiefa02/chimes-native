@@ -1,4 +1,5 @@
 import { NewSchedule } from '../../../../shared/types';
+import { useScheduleDate } from '../../components/pages/home/hooks/use-schedule-date';
 import { getAppConfigProperty } from '../../lib/utils';
 import { useCreateSchedule } from '../mutations/use-create-schedule';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,11 +17,11 @@ export const formSchema = z
       .default([getDay(new Date())])
       .nonoptional(),
     triggerTime: z
-      .string({ error: 'Trigger time is required.' })
+      .string({ error: 'Required' })
       .regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, {
-        message: 'Invalid time format. Please use HH:mm.',
+        message: 'Invalid time format.',
       }),
-    soundId: z.number({ message: 'Sound is required.' }).int().positive(),
+    soundId: z.number({ message: 'Required' }).int().positive(),
     repeat: z
       .enum(['once', 'daily', 'weekly', 'biweekly', 'monthly', 'yearly'])
       .default('once')
@@ -52,6 +53,7 @@ export const useCreateScheduleForm = ({
   onSubmitSuccess,
   onSubmitError,
 }: useCreateScheduleFormProps) => {
+  const { date } = useScheduleDate();
   const { mutate } = useCreateSchedule();
   const activeProfileId = getAppConfigProperty('activeProfileSchedule');
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,11 +61,11 @@ export const useCreateScheduleForm = ({
     defaultValues: {
       profileId: activeProfileId,
       name: '',
-      triggerDays: [getDay(new Date())],
+      triggerDays: [getDay(date)],
       triggerTime: '09:00',
       soundId: undefined,
       repeat: 'once',
-      repeatStart: new Date(),
+      repeatStart: date,
       repeatEnd: null,
       isActive: true,
     },
