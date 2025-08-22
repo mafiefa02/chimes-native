@@ -1,7 +1,10 @@
 import { AppConfig } from '../../shared/types';
-import { appConfigPath } from '../lib/constants';
+import { appConfigFile } from '../lib/constants';
+import { app } from 'electron';
 import fs from 'fs-extra';
+import path from 'path';
 
+const configFilePath = path.join(app.getPath('userData'), appConfigFile);
 const createDefaultConfig = (): AppConfig => ({
   activeProfile: '',
   activeProfileSchedule: '',
@@ -11,7 +14,7 @@ const createDefaultConfig = (): AppConfig => ({
 
 const getConfig = (): AppConfig => {
   try {
-    const config = fs.readJSONSync(appConfigPath, { encoding: 'utf-8' });
+    const config = fs.readJSONSync(configFilePath, { encoding: 'utf-8' });
     return config as AppConfig;
   } catch (error: unknown) {
     console.warn(
@@ -19,7 +22,7 @@ const getConfig = (): AppConfig => {
     );
     // If reading or parsing fails, create a new default config
     const defaultConfig = createDefaultConfig();
-    fs.writeJSONSync(appConfigPath, defaultConfig, { spaces: 2 });
+    fs.writeJSONSync(configFilePath, defaultConfig, { spaces: 2 });
     return defaultConfig;
   }
 };
@@ -40,5 +43,5 @@ export const setAppConfigProperty = async <
 ): Promise<void> => {
   const config = getConfig();
   config[key] = value;
-  await fs.writeJSON(appConfigPath, config, { spaces: 2 });
+  await fs.writeJSON(configFilePath, config, { spaces: 2 });
 };
