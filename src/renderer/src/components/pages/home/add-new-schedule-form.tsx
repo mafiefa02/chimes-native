@@ -1,4 +1,4 @@
-import { useCreateScheduleForm } from '../../../hooks/forms/use-create-schedule-form';
+import { useCreateScheduleForm } from '../../../forms/schedule/hooks/use-create-schedule-form';
 import { useGetSounds } from '../../../hooks/queries/use-get-sounds';
 import { cn } from '../../../lib/utils';
 import { Button } from '../../ui/button';
@@ -51,6 +51,7 @@ export const AddNewScheduleForm = ({
 
   const { data: sounds, isPending, isError } = useGetSounds();
   const soundsAreAvailable = !isPending && !isError;
+  const repeat = form.watch('repeat');
 
   return (
     <Form {...form}>
@@ -178,7 +179,6 @@ export const AddNewScheduleForm = ({
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
-                            disabled
                             variant={'outline'}
                             className={cn(
                               'w-full pl-3 text-left font-normal',
@@ -224,6 +224,7 @@ export const AddNewScheduleForm = ({
                               'w-full pl-3 text-left font-normal',
                               !field.value && 'text-muted-foreground',
                             )}
+                            disabled={repeat === 'once'}
                           >
                             {field.value ? (
                               format(field.value, 'PPP')

@@ -1,5 +1,5 @@
 import { Schedule } from '../../../../../shared/types';
-import { useEditScheduleForm } from '../../../hooks/forms/use-edit-schedule-form';
+import { useEditScheduleForm } from '../../../forms/schedule/hooks/use-edit-schedule-form';
 import { useGetSounds } from '../../../hooks/queries/use-get-sounds';
 import { cn } from '../../../lib/utils';
 import { Button } from '../../ui/button';
@@ -55,6 +55,7 @@ export const EditScheduleForm = ({
 
   const { data: sounds, isPending, isError } = useGetSounds();
   const soundsAreAvailable = !isPending && !isError;
+  const repeat = form.watch('repeat');
 
   return (
     <Form {...form}>
@@ -183,7 +184,6 @@ export const EditScheduleForm = ({
                       <PopoverTrigger asChild>
                         <FormControl>
                           <Button
-                            disabled
                             variant={'outline'}
                             className={cn(
                               'w-full pl-3 text-left font-normal',
@@ -229,6 +229,7 @@ export const EditScheduleForm = ({
                               'w-full pl-3 text-left font-normal',
                               !field.value && 'text-muted-foreground',
                             )}
+                            disabled={repeat === 'once'}
                           >
                             {field.value ? (
                               format(new Date(field.value), 'PPP')
