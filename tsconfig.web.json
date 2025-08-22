@@ -7,8 +7,5 @@
     "src/shared/**/*",
     "src/preload/*.d.ts"
   ],
-  "compilerOptions": {
-    "composite": true,
-    "jsx": "react-jsx"
-  }
+  "compilerOptions": { "composite": true, "jsx": "react-jsx" }
 }

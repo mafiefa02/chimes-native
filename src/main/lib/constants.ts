@@ -1,13 +1,6 @@
-import { APP_NAME } from '../../shared/contants';
-import {
-  getAppConfigPath,
-  getDbPath,
-  getDefaultSoundPath,
-} from '../../shared/utils';
 import { app } from 'electron';
 import path from 'path';
 
-export const appDataPath = path.join(app.getPath('appData'), APP_NAME);
-export const dbPath = getDbPath(appDataPath);
-export const appConfigPath = getAppConfigPath(appDataPath);
-export const defaultSoundPath = getDefaultSoundPath(appDataPath);
+const userData = app.getPath('userData');
+export const defaultSoundFile = 'bell.mp3';
+export const appConfigPath = path.join(userData, 'config.json');

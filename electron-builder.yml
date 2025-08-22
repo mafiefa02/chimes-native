@@ -1,8 +1,15 @@
-appId: ${npm_package_config_appId}
-productName: ${productName}
+appId: 'com.electron.chimes'
+productName: Chimes
 directories:
   buildResources: build
+extraResources:
+  - from: './public/drizzle'
+    to: 'public/drizzle'
+  - from: './public/sounds/bell.mp3'
+    to: 'public/sounds/bell.mp3'
 files:
+  - '!dist/*'
+  - 'out/**'
   - '!**/.vscode/*'
   - '!src/*'
   - '!vite.config.{js,ts,mjs,cjs}'
@@ -21,8 +28,6 @@ nsis:
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
-    - NSCameraUsageDescription: Application requests access to the device's camera.
-    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
     - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false

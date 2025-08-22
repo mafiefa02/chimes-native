@@ -8,136 +8,111 @@ import {
   getAppConfigProperty,
   setAppConfigProperty,
 } from '../services/appConfig';
-import { appConfigPath, defaultSoundPath } from './constants';
+import { defaultSoundFile } from './constants';
 import { db, runMigrations } from './database';
 import { count } from 'drizzle-orm';
-import { app } from 'electron';
-import fs from 'fs';
-import path from 'path';
+import { app, dialog } from 'electron';
 
-const copyInitialSounds = (): void => {
-  const sourceSoundPath = app.isPackaged
-    ? path.join(process.resourcesPath, 'app.asar', 'resources', 'bell.mp3')
-    : path.join(app.getAppPath(), 'resources', 'bell.mp3');
-
-  if (!fs.existsSync(defaultSoundPath)) {
-    fs.copyFileSync(sourceSoundPath, defaultSoundPath);
+export const initializeApp = async (): Promise<void> => {
+  try {
+    await initializeDatabase();
+    console.log('✅ INFO: Application initialization complete.');
+  } catch (error: unknown) {
+    console.error('❌ FATAL: Failed to initialize the application.', error);
+    dialog.showErrorBox('Initialization Error', (error as Error).message);
+    app.quit();
   }
 };
 
-export const initializeConfigAndDatabase = async (): Promise<void> => {
-  copyInitialSounds();
-  if (!fs.existsSync(appConfigPath)) {
-    const defaultConfig: AppConfig = {
-      activeProfile: '',
-      activeProfileSchedule: 'null',
-      firstDayOfweek: 0,
-      userTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    };
-    fs.writeFileSync(appConfigPath, JSON.stringify(defaultConfig, null, 2));
-    console.info(
-      `INFO: Config file is not found. Default config file created at ${appConfigPath}.`,
-    );
-  }
+/**
+ * A generic helper to sync active profile ID in the config file with
+ * the database.
+ */
+const syncActiveProfile = async (
+  configKey: keyof AppConfig,
+  getAvailableProfiles: () => Promise<{ id: string }[]>,
+) => {
+  const currentActiveProfileId = getAppConfigProperty(configKey);
+  const availableProfiles = await getAvailableProfiles();
+  const availableProfileIds = availableProfiles.map((p) => p.id);
 
+  if (
+    !currentActiveProfileId ||
+    !availableProfileIds.includes(String(currentActiveProfileId))
+  ) {
+    if (availableProfileIds.length > 0) {
+      await setAppConfigProperty(configKey, availableProfileIds[0]);
+      console.info(
+        `INFO: ${configKey} was out of sync. Resetting to the first available profile.`,
+      );
+    } else {
+      console.warn(`WARN: No available profiles found for ${configKey}.`);
+    }
+  }
+};
+
+/**
+ * Runs database migrations and seeds the database with essential default data
+ * if it's empty.
+ */
+const initializeDatabase = async () => {
+  console.log('INFO: Initializing database...');
   await runMigrations();
 
-  // Check if the default user profile exists, and create it if it doesn't.
-  const [{ value: userProfilesCount }] = await db
+  // Seed Default User Profile
+  const [{ value: userCount }] = await db
     .select({ value: count() })
     .from(userProfiles);
-
-  if (userProfilesCount === 0) {
+  if (userCount === 0) {
     const [{ id }] = await db
       .insert(userProfiles)
       .values({ displayName: 'Default', avatar: null })
       .returning({ id: userProfiles.id });
-
-    // Set current active profile to the newly created user profile
     await setAppConfigProperty('activeProfile', id);
-    console.info(
-      'INFO: Default user profile created and set as current active profile.',
-    );
-  } else {
-    const currentActiveProfile = getAppConfigProperty('activeProfile');
-    // Check available user profiles in database
-    // if current active profile's id is not in database
-    // set to anything that's available in db
-    const availableUserProfiles = await db
-      .select({ id: userProfiles.id })
-      .from(userProfiles);
-
-    const availableUserProfileIds = availableUserProfiles.map(
-      (profile) => profile.id,
-    );
-    if (
-      !currentActiveProfile ||
-      !availableUserProfileIds.includes(currentActiveProfile)
-    ) {
-      await setAppConfigProperty('activeProfile', availableUserProfileIds[0]);
-      console.info(
-        'INFO: Current active profile does not match anything in the database, syncing them now.',
-      );
-    }
+    console.info('INFO: Created default user profile.');
   }
 
-  const currentActiveUserProfileId = getAppConfigProperty('activeProfile');
+  const activeUserId = getAppConfigProperty('activeProfile');
+  if (!activeUserId) {
+    console.error(
+      'FATAL: Could not determine active user profile for seeding.',
+    );
+    return;
+  }
 
-  // Check if there is a default sound
+  // Seed Default Sound
   const [{ value: soundCount }] = await db
     .select({ value: count() })
     .from(userSounds);
-
   if (soundCount === 0) {
     await db
       .insert(userSounds)
       .values({
         name: 'Default',
-        userId: currentActiveUserProfileId,
-        filePath: defaultSoundPath,
+        userId: activeUserId,
+        filePath: defaultSoundFile,
       });
-    console.info(
-      'INFO: Default sound data not found, creating a default sound information.',
-    );
+    console.info('INFO: Created default sound DB entry.');
   }
 
+  // Seed Default Schedule Profile
   const [{ value: scheduleProfileCount }] = await db
     .select({ value: count() })
     .from(scheduleProfiles);
-
   if (scheduleProfileCount === 0) {
     const [{ id }] = await db
       .insert(scheduleProfiles)
-      .values({ name: 'Default', userId: currentActiveUserProfileId })
+      .values({ name: 'Default', userId: activeUserId })
       .returning({ id: scheduleProfiles.id });
-
     await setAppConfigProperty('activeProfileSchedule', id);
-    console.info(
-      'INFO: Default user schedule profile created and set as current active schedule profile.',
-    );
-  } else {
-    const currentActiveProfile = getAppConfigProperty('activeProfileSchedule');
-    // Check available schedule profiles in database
-    // if current active scedule profile's id is not in database
-    // set to anything that's available in db
-    const availableScheduleProfiles = await db
-      .select({ id: scheduleProfiles.id })
-      .from(scheduleProfiles);
-
-    const availableScheduleProfileIds = availableScheduleProfiles.map(
-      (profile) => profile.id,
-    );
-    if (
-      !currentActiveProfile ||
-      !availableScheduleProfileIds.includes(currentActiveProfile)
-    ) {
-      await setAppConfigProperty(
-        'activeProfileSchedule',
-        availableScheduleProfileIds[0],
-      );
-      console.info(
-        'INFO: Current active profile schedule does not match anything in the database, syncing them now.',
-      );
-    }
+    console.info('INFO: Created default schedule profile.');
   }
+
+  // Finally, sync config with DB state
+  await syncActiveProfile('activeProfile', () =>
+    db.select({ id: userProfiles.id }).from(userProfiles),
+  );
+  await syncActiveProfile('activeProfileSchedule', () =>
+    db.select({ id: scheduleProfiles.id }).from(scheduleProfiles),
+  );
 };

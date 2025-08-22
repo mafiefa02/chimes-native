@@ -1,11 +1,11 @@
 {
   "name": "chimes",
   "productName": "Chimes",
-  "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "version": "0.1.0",
+  "description": "An alarm/bell management application",
   "main": "./out/main/index.js",
-  "author": "https://afiefabdurrahman.vercel.app",
-  "homepage": "https://electron-vite.org",
+  "author": "Afief Abdurrahman",
+  "homepage": "https://afiefabdurrahman.vercel.app",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
@@ -25,9 +25,6 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio"
   },
-  "config": {
-    "appId": "com.chimes.app"
-  },
   "dependencies": {
     "@date-fns/tz": "^1.4.1",
     "@electron-toolkit/preload": "^3.0.2",
@@ -38,15 +35,11 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
-    "date-fns-tz": "^3.2.0",
-    "dayjs": "^1.11.13",
     "drizzle-orm": "^0.44.4",
     "electron-updater": "^6.6.2",
     "lucide-react": "^0.539.0",
     "motion": "^12.23.12",
     "next-themes": "^0.4.6",
-    "nuqs": "^2.4.3",
-    "play-sound": "^1.1.6",
     "radix-ui": "latest",
     "react-day-picker": "^9.9.0",
     "react-hook-form": "^7.62.0",

@@ -11,31 +11,6 @@ export const ensureDirExists = (filePath: string) => {
   return filePath;
 };
 
-export const getDataPath = (appDataPath: string) => {
-  const dataPath = isDev
-    ? path.resolve('data')
-    : path.join(appDataPath, 'data');
-  return ensureDirExists(dataPath);
-};
-
-export const getAppConfigPath = (appDataPath: string) => {
-  const configFileName = 'config.json';
-  const appConfigPath = path.join(getDataPath(appDataPath), configFileName);
-  return appConfigPath;
-};
-
-export const getDbPath = (appDataPath: string) => {
-  const dbFileName = 'chimes.db';
-  const dbPath = path.join(getDataPath(appDataPath), dbFileName);
-  return dbPath;
-};
-
-export const getDefaultSoundPath = (appDataPath: string) => {
-  const configFileName = 'bell.mp3';
-  const soundPath = path.join(getDataPath(appDataPath), configFileName);
-  return soundPath;
-};
-
 export const capitalize = (sentence: string) => {
   if (!sentence) return '';
   return sentence

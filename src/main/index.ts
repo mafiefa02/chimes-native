@@ -1,8 +1,5 @@
 import icon from '../../resources/icon.png?asset';
-import { APP_ID, APP_NAME } from '../shared/contants';
-import { ensureDirExists } from '../shared/utils';
-import { initializeConfigAndDatabase } from './lib/bootstrap';
-import { appDataPath } from './lib/constants';
+import { initializeApp } from './lib/bootstrap';
 import * as appConfigServices from './services/appConfig';
 import * as notificationServices from './services/notifications';
 import * as profileServices from './services/profiles';
@@ -24,7 +21,7 @@ function createWindow(): void {
     minHeight: 560,
     show: false,
     autoHideMenuBar: true,
-    title: APP_NAME,
+    title: 'Chimes',
     frame: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -55,11 +52,10 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
-  ensureDirExists(appDataPath);
-  await initializeConfigAndDatabase();
+  await initializeApp();
 
   // Set app user model id for windows
-  electronApp.setAppUserModelId(APP_ID);
+  electronApp.setAppUserModelId('com.chimes.app');
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

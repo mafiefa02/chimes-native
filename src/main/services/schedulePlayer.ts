@@ -1,12 +1,15 @@
-import { defaultSoundPath } from '../lib/constants';
+import { defaultSoundFile } from '../lib/constants';
 import { playAudioFile } from '../lib/utils';
 import { getAppConfigProperty } from './appConfig';
 import * as scheduleServices from './schedules';
 import * as userSoundsServices from './userSounds';
-import { Notification, app } from 'electron';
+import { app, Notification } from 'electron';
 import { join } from 'path';
 
 const EVERY_MINUTE = 60 * 1000;
+const appSoundsPath = app.isPackaged
+  ? join(process.resourcesPath, 'public', 'sounds')
+  : join(app.getAppPath(), 'public', 'sounds');
 
 const checkSchedules = async () => {
   const now = new Date();
@@ -28,8 +31,8 @@ const checkSchedules = async () => {
     );
 
     const soundPath = join(
-      app.getAppPath(),
-      scheduleSound ? scheduleSound.filePath : defaultSoundPath,
+      appSoundsPath,
+      scheduleSound ? scheduleSound.filePath : defaultSoundFile,
     );
 
     if (isToday && isTime) {

@@ -114,15 +114,14 @@
 @font-face {
   font-family: 'plus-jakarta-sans';
   font-style: normal;
-  src: url('../../../../resources/PlusJakartaSans[wght].ttf') format('truetype');
+  src: url('../../assets/PlusJakartaSans[wght].ttf') format('truetype');
   font-smooth: always;
 }
 
 @font-face {
   font-family: 'plus-jakarta-sans';
   font-style: italic;
-  src: url('../../../../resources/PlusJakartaSans-Italic[wght].ttf')
-    format('truetype');
+  src: url('../../assets/PlusJakartaSans-Italic[wght].ttf') format('truetype');
   font-smooth: always;
 }
 

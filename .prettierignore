@@ -1,6 +1,9 @@
 out
 dist
+public
 pnpm-lock.yaml
+build
+resources
 LICENSE.md
 tsconfig.json
 tsconfig.*.json
