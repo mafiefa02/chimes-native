@@ -1,7 +1,7 @@
 import { schedules } from '../../shared/schema';
 import { NewSchedule, Schedule } from '../../shared/types';
 import { db } from '../lib/database';
-import { and, asc, eq } from 'drizzle-orm';
+import { and, asc, eq, sql } from 'drizzle-orm';
 
 export const getAllActiveSchedules = async (
   profileId: Schedule['profileId'],
@@ -17,9 +17,11 @@ export const getAllActiveSchedules = async (
 export const getSchedulesByProfile = async (
   profileId: Schedule['profileId'],
 ): Promise<Schedule[]> => {
+  const offsetInMinutes = -new Date().getTimezoneOffset();
+  const timezoneModifier = `${offsetInMinutes > 0 ? '+' : ''}${offsetInMinutes} minutes`;
   return db.query.schedules.findMany({
     where: eq(schedules.profileId, profileId),
-    orderBy: [asc(schedules.triggerTime)],
+    orderBy: [asc(sql`time(${schedules.triggerTime}, ${timezoneModifier})`)],
   });
 };
 
