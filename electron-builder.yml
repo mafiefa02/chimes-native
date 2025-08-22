@@ -19,7 +19,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: ${productName}
+  executableName: Chimes
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
