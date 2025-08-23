@@ -1,3 +1,4 @@
+import { filterActiveSchedules } from '../../shared/utils';
 import { defaultSoundFile } from '../lib/constants';
 import { playAudioFile } from '../lib/utils';
 import { getAppConfigProperty } from './appConfig';
@@ -22,7 +23,11 @@ const checkSchedules = async () => {
   const activeSchedules =
     await scheduleServices.getAllActiveSchedules(currentProfile);
 
-  for (const schedule of activeSchedules) {
+  const activeSchedulesForToday = activeSchedules.filter((schedule) =>
+    filterActiveSchedules(schedule, now),
+  );
+
+  for (const schedule of activeSchedulesForToday) {
     const isToday = schedule.triggerDays.includes(currentDay);
     const isTime = schedule.triggerTime === currentTime;
     const scheduleSound = await userSoundsServices.getUserSoundById(
