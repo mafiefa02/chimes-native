@@ -4,11 +4,13 @@ import path from 'path';
 
 export const config = {
   schema: './src/shared/schema.ts',
-  out: app.isPackaged
-    ? path.join(process.resourcesPath, 'public', 'drizzle')
-    : path.join(app.getAppPath(), 'public', 'drizzle'),
+  out: app
+    ? path.join(app.getAppPath(), 'public', 'drizzle')
+    : process.resourcesPath
+      ? path.join(process.resourcesPath, 'public', 'drizzle')
+      : path.join('public', 'drizzle'),
   dialect: 'sqlite',
-  dbCredentials: { url: 'data/chimes.db' },
+  dbCredentials: { url: path.join('data', 'chimes.db') },
 } satisfies Config;
 
 export default defineConfig(config);
