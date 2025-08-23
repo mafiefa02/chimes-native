@@ -1,6 +1,8 @@
 import { RouteNode } from './types';
 import { CalendarIcon, HomeIcon, MusicIcon, SettingsIcon } from 'lucide-react';
 
+export const IS_SERVER = typeof window === 'undefined';
+
 export const parentRoutes: RouteNode[] = [
   { icon: HomeIcon, href: '/', label: 'Home' },
   { icon: CalendarIcon, href: '/schedule-profile', label: 'Schedule Profile' },

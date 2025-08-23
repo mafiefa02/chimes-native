@@ -1,3 +1,4 @@
+import { IS_SERVER } from '../lib/constants';
 import { useIsomorphicLayoutEffect } from './use-isomorphic-layout-effect';
 import { useState } from 'react';
 
@@ -5,8 +6,6 @@ type UseMediaQueryOptions = {
   defaultValue?: boolean;
   initializeWithValue?: boolean;
 };
-
-const IS_SERVER = typeof window === 'undefined';
 
 export function useMediaQuery(
   query: string,
@@ -16,16 +15,12 @@ export function useMediaQuery(
   }: UseMediaQueryOptions = {},
 ): boolean {
   const getMatches = (query: string): boolean => {
-    if (IS_SERVER) {
-      return defaultValue;
-    }
+    if (IS_SERVER) return defaultValue;
     return window.matchMedia(query).matches;
   };
 
   const [matches, setMatches] = useState<boolean>(() => {
-    if (initializeWithValue) {
-      return getMatches(query);
-    }
+    if (initializeWithValue) return getMatches(query);
     return defaultValue;
   });
 
