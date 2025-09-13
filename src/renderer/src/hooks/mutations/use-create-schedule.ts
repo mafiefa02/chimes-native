@@ -4,7 +4,7 @@ import { tz } from '@date-fns/tz';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format, parse } from 'date-fns';
 
-export const useCreateSchedule = () => {
+export const useCreateSchedule = (date: Date) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: NewSchedule) =>
@@ -16,9 +16,9 @@ export const useCreateSchedule = () => {
           { in: tz('Etc/UTC') },
         ),
       }),
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.schedules.all(data[0].repeatStart),
+        queryKey: queryKeys.schedules.all(date),
       });
     },
   });

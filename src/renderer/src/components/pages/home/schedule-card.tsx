@@ -9,8 +9,9 @@ import { Badge } from '../../ui/badge';
 import { Button } from '../../ui/button';
 import { Skeleton } from '../../ui/skeleton';
 import { Switch } from '../../ui/switch';
+import { DeleteScheduleDialog } from './delete-schedule-dialog';
 import { EditScheduleDialog } from './edit-schedule-dialog';
-import { EditIcon, MusicIcon, RepeatIcon } from 'lucide-react';
+import { EditIcon, MusicIcon, RepeatIcon, TrashIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useState } from 'react';
 
@@ -32,6 +33,7 @@ export const ScheduleCard = ({
 }: Readonly<ScheduleCardProps>) => {
   const { data: sound, isPending, isError } = useGetSoundById(schedule.soundId);
   const soundDataIsAvailable = sound && !isPending && !isError;
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   return (
@@ -88,7 +90,7 @@ export const ScheduleCard = ({
             )}
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           {!schedule.isPast && schedule.isActive && (
             <>
               <Button
@@ -99,6 +101,19 @@ export const ScheduleCard = ({
               >
                 <EditIcon />
               </Button>
+              <Button
+                className="hidden group-hover:inline-flex"
+                size="icon"
+                variant="ghost"
+                onClick={() => setIsDeleteDialogOpen(true)}
+              >
+                <TrashIcon />
+              </Button>
+              <DeleteScheduleDialog
+                schedule={schedule}
+                isDialogOpen={isDeleteDialogOpen}
+                setIsDialogOpen={setIsDeleteDialogOpen}
+              />
               <EditScheduleDialog
                 schedule={schedule}
                 isDialogOpen={isEditDialogOpen}

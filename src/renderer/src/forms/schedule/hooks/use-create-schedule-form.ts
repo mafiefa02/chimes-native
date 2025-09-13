@@ -18,7 +18,7 @@ export const useCreateScheduleForm = ({
   onSubmitError,
 }: useCreateScheduleFormProps) => {
   const { date } = useScheduleDate();
-  const { mutate } = useCreateSchedule();
+  const { mutate } = useCreateSchedule(date);
   const activeProfileId = getAppConfigProperty('activeProfileSchedule');
   const form = useForm<CreateFormSchemaType>({
     resolver: zodResolver(createFormSchema),
