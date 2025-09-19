@@ -16,7 +16,7 @@ export const ScheduleDatePicker = () => {
           className="data-[empty=true]:text-muted-foreground [&_svg:not([class*='text-'])]:text-muted-foreground justify-start text-left font-normal"
         >
           <CalendarIcon />
-          {date ? format(date, 'PPPP') : <p>Pick a date</p>}
+          {date ? format(date, 'PPP') : <p>Pick a date</p>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

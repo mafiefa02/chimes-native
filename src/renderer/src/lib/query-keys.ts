@@ -3,11 +3,10 @@ import { getAppConfigProperty } from './utils';
 import { format } from 'date-fns';
 
 const activeProfileScheduleId = getAppConfigProperty('activeProfileSchedule');
-const activeProfileId = getAppConfigProperty('activeProfile');
 
 export const queryKeys = {
   profiles: { all: ['profiles'] },
-  profileSchedules: { all: ['profile-schedules', activeProfileId] },
+  profileSchedules: { all: ['profile-schedules'] },
   schedules: {
     all: (date: Date) => [
       'schedule',
