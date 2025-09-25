@@ -1,8 +1,8 @@
-import { Schedule } from '../../../../../../shared/types';
-import { useUpdateSchedule } from '../../../../hooks/mutations/use-update-schedule';
-import { useGetSchedules } from '../../../../hooks/queries/use-get-schedules';
-import { useMinuteTime } from '../../../../hooks/use-minute-time';
-import { parseDateStringAsUTC } from '../../../../lib/utils';
+import { Schedule } from '../../../../shared/types';
+import { useUpdateSchedule } from '../../hooks/mutations/use-update-schedule';
+import { useGetSchedules } from '../../hooks/queries/use-get-schedules';
+import { useMinuteTime } from '../../hooks/use-minute-time';
+import { parseDateStringAsUTC } from '../../lib/utils';
 import { isAfter, isBefore, isFuture, isPast, isToday } from 'date-fns';
 import { useMemo } from 'react';
 

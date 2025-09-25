@@ -1,4 +1,4 @@
-import { ScheduleDateContext } from '../contexts/schedule-date-context';
+import { ScheduleDateContext } from '../_contexts/schedule-date-context';
 import { useContext } from 'react';
 
 export const useScheduleDate = () => {

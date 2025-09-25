@@ -1,4 +1,5 @@
-import { Button } from '../../ui/button';
+import { Schedule } from '../../../../shared/types';
+import { Button } from '../../components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -7,41 +8,43 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from '../../ui/dialog';
-import { AddNewScheduleForm } from './add-new-schedule-form';
-import { PlusIcon } from 'lucide-react';
-import { useState } from 'react';
+} from '../../components/ui/dialog';
+import { EditScheduleForm } from './edit-schedule-form';
 
-export const AddNewScheduleDialog = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+interface EditScheduleDialogProps {
+  schedule: Schedule;
+  isDialogOpen: boolean;
+  setIsDialogOpen: (isOpen: boolean) => void;
+}
+
+export const EditScheduleDialog = ({
+  schedule,
+  isDialogOpen,
+  setIsDialogOpen,
+}: EditScheduleDialogProps) => {
   const closeDialog = () => setIsDialogOpen(false);
+
   return (
     <Dialog
       open={isDialogOpen}
       onOpenChange={setIsDialogOpen}
     >
-      <DialogTrigger asChild>
-        <Button>
-          <PlusIcon />
-          <p className="hidden md:block">Add New</p>
-        </Button>
-      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Schedule</DialogTitle>
+          <DialogTitle>Edit Schedule</DialogTitle>
           <DialogDescription>
-            Create a new schedule to run a profile at a specific time.
+            Edit the schedule details below.
           </DialogDescription>
         </DialogHeader>
-        <AddNewScheduleForm
+        <EditScheduleForm
+          schedule={schedule}
           closeDialog={closeDialog}
           formAction={
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button type="submit">Create</Button>
+              <Button type="submit">Save</Button>
             </DialogFooter>
           }
         />

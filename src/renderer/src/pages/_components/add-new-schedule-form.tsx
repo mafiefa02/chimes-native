@@ -1,8 +1,5 @@
-import { useCreateScheduleForm } from '../../../forms/schedule/hooks/use-create-schedule-form';
-import { useGetSounds } from '../../../hooks/queries/use-get-sounds';
-import { cn } from '../../../lib/utils';
-import { Button } from '../../ui/button';
-import { Calendar } from '../../ui/calendar';
+import { Button } from '../../components/ui/button';
+import { Calendar } from '../../components/ui/calendar';
 import {
   Form,
   FormControl,
@@ -11,9 +8,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../ui/form';
-import { Input } from '../../ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
+} from '../../components/ui/form';
+import { Input } from '../../components/ui/input';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '../../components/ui/popover';
 import {
   Select,
   SelectContent,
@@ -22,8 +23,11 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '../../ui/select';
-import { Switch } from '../../ui/switch';
+} from '../../components/ui/select';
+import { Switch } from '../../components/ui/switch';
+import { useCreateScheduleForm } from '../../forms/schedule/hooks/use-create-schedule-form';
+import { useGetSounds } from '../../hooks/queries/use-get-sounds';
+import { cn } from '../../lib/utils';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { toast } from 'sonner';

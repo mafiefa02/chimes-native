@@ -1,14 +1,14 @@
-import { Schedule } from '../../../../../shared/types';
-import { useGetSoundById } from '../../../hooks/queries/use-get-sound-by-id';
+import { Schedule } from '../../../../shared/types';
+import { Badge } from '../../components/ui/badge';
+import { Button } from '../../components/ui/button';
+import { Skeleton } from '../../components/ui/skeleton';
+import { Switch } from '../../components/ui/switch';
+import { useGetSoundById } from '../../hooks/queries/use-get-sound-by-id';
 import {
   cn,
   formatDateToLocalTimezone,
   parseDateStringAsUTC,
-} from '../../../lib/utils';
-import { Badge } from '../../ui/badge';
-import { Button } from '../../ui/button';
-import { Skeleton } from '../../ui/skeleton';
-import { Switch } from '../../ui/switch';
+} from '../../lib/utils';
 import { DeleteScheduleDialog } from './delete-schedule-dialog';
 import { EditScheduleDialog } from './edit-schedule-dialog';
 import { EditIcon, MusicIcon, RepeatIcon, TrashIcon } from 'lucide-react';

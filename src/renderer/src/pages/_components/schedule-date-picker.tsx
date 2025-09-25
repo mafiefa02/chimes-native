@@ -1,7 +1,11 @@
-import { Button } from '../../ui/button';
-import { Calendar } from '../../ui/calendar';
-import { Popover, PopoverTrigger, PopoverContent } from '../../ui/popover';
-import { useScheduleDate } from './hooks/use-schedule-date';
+import { Button } from '../../components/ui/button';
+import { Calendar } from '../../components/ui/calendar';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '../../components/ui/popover';
+import { useScheduleDate } from '../_hooks/use-schedule-date';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 

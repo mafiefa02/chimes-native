@@ -1,7 +1,5 @@
-import { Schedule } from '../../../../../shared/types';
-import { useDeleteSchedule } from '../../../hooks/mutations/use-delete-schedule';
-import { useUpdateSchedule } from '../../../hooks/mutations/use-update-schedule';
-import { Button } from '../../ui/button';
+import { Schedule } from '../../../../shared/types';
+import { Button } from '../../components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -10,10 +8,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../../ui/dialog';
-import { Label } from '../../ui/label';
-import { RadioGroup, RadioGroupItem } from '../../ui/radio-group';
-import { useScheduleDate } from './hooks/use-schedule-date';
+} from '../../components/ui/dialog';
+import { Label } from '../../components/ui/label';
+import { RadioGroup, RadioGroupItem } from '../../components/ui/radio-group';
+import { useDeleteSchedule } from '../../hooks/mutations/use-delete-schedule';
+import { useUpdateSchedule } from '../../hooks/mutations/use-update-schedule';
+import { useScheduleDate } from '../_hooks/use-schedule-date';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
