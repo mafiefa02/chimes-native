@@ -6,9 +6,8 @@ import { migrate } from 'drizzle-orm/libsql/migrator';
 import { app } from 'electron';
 import path from 'path';
 
-const client = createClient({
-  url: `file:${path.join(app.getPath('userData'), 'chimes.db')}`,
-});
+const dbPath = `file:${path.join(app.getPath('userData'), 'chimes.db')}`;
+const client = createClient({ url: dbPath });
 export const db = drizzle(client, { schema });
 
 export const runMigrations = async () => {
