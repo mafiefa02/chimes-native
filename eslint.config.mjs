@@ -20,6 +20,7 @@ export default tseslint.config(
       '@typescript-eslint/explicit-function-return-type': 'off',
       ...eslintPluginReactHooks.configs.recommended.rules,
       ...eslintPluginReactRefresh.configs.vite.rules,
+      'react/prop-types': 'off',
     },
   },
   eslintConfigPrettier,

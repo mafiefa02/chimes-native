@@ -4,7 +4,7 @@ import { playAudioFile } from '../lib/utils';
 import { getAppConfigProperty } from './appConfig';
 import * as scheduleServices from './schedules';
 import * as userSoundsServices from './userSounds';
-import { app, Notification } from 'electron';
+import { app } from 'electron';
 import { join } from 'path';
 
 const EVERY_MINUTE = 60 * 1000;
@@ -42,10 +42,6 @@ const checkSchedules = async () => {
 
     if (isToday && isTime) {
       playAudioFile(soundPath);
-      new Notification({
-        title: 'Chimes',
-        body: `It's time for your "${schedule.name}" schedule!`,
-      }).show();
     }
   }
 };
