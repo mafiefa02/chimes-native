@@ -1,5 +1,5 @@
 import { Skeleton } from '../../components/ui/skeleton';
-import { useScheduleDate } from '../_hooks/use-schedule-date';
+import { useScheduleDate } from '../../hooks/use-schedule-date';
 import { useSchedules } from '../_hooks/use-schedules';
 import { ScheduleCard } from './schedule-card';
 import { format } from 'date-fns';

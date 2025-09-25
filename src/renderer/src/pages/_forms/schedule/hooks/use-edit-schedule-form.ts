@@ -1,6 +1,6 @@
-import { NewSchedule, Schedule } from '../../../../../shared/types';
-import { useScheduleDate } from '../../../components/pages/home/hooks/use-schedule-date';
-import { useUpdateSchedule } from '../../../hooks/mutations/use-update-schedule';
+import { NewSchedule, Schedule } from '../../../../../../shared/types';
+import { useUpdateSchedule } from '../../../../hooks/mutations/use-update-schedule';
+import { useScheduleDate } from '../../../../hooks/use-schedule-date';
 import { editFormSchema, EditFormSchemaType } from '../schema';
 import { formatTriggerTime, validateTriggerDays } from '../utils';
 import { zodResolver } from '@hookform/resolvers/zod';

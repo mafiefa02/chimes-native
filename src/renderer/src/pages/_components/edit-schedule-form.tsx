@@ -26,9 +26,9 @@ import {
   SelectValue,
 } from '../../components/ui/select';
 import { Switch } from '../../components/ui/switch';
-import { useEditScheduleForm } from '../../forms/schedule/hooks/use-edit-schedule-form';
 import { useGetSounds } from '../../hooks/queries/use-get-sounds';
 import { cn } from '../../lib/utils';
+import { useEditScheduleForm } from '../_forms/schedule/hooks/use-edit-schedule-form';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { toast } from 'sonner';

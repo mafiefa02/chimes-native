@@ -1,7 +1,7 @@
-import { NewSchedule } from '../../../../../shared/types';
-import { useScheduleDate } from '../../../components/pages/home/hooks/use-schedule-date';
-import { useCreateSchedule } from '../../../hooks/mutations/use-create-schedule';
-import { getAppConfigProperty } from '../../../lib/utils';
+import { NewSchedule } from '../../../../../../shared/types';
+import { useCreateSchedule } from '../../../../hooks/mutations/use-create-schedule';
+import { useScheduleDate } from '../../../../hooks/use-schedule-date';
+import { getAppConfigProperty } from '../../../../lib/utils';
 import { createFormSchema, type CreateFormSchemaType } from '../schema';
 import { validateTriggerDays } from '../utils';
 import { zodResolver } from '@hookform/resolvers/zod';
