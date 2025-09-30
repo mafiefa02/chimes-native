@@ -1,10 +1,10 @@
+import { sidebar } from '../../lib/animations';
 import { useSidebar } from './hooks/use-sidebar';
 import { SidebarAction } from './sidebar-action';
 import { SidebarLogo } from './sidebar-logo';
 import { SidebarMenu } from './sidebar-menu';
 import { SidebarToggle } from './sidebar-toggle';
 import { motion } from 'motion/react';
-import { sidebar } from '../../lib/animations';
 
 export const Sidebar = () => {
   const { isSidebarOpen, isSmallScreen } = useSidebar();
