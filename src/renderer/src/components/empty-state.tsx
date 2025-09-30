@@ -15,12 +15,12 @@ export const EmptyState = ({ title, description }: EmptyStateProps) => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="flex flex-1 h-full items-center justify-center flex-col gap-8"
+      className="flex h-fit items-center justify-center flex-col gap-8 shrink-0 pb-12 pt-4 my-auto"
     >
       <img
         alt="Empty"
         src={emptyIllustration}
-        className="size-56"
+        className="w-full max-w-56 h-auto"
       />
       <div className="space-y-1 text-center">
         <h1 className="font-bold text-xl">{title}</h1>
