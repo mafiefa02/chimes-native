@@ -1,4 +1,5 @@
 import emptyIllustration from '../../assets/empty.png';
+import { fadeInOut } from '../lib/animations';
 import { motion } from 'motion/react';
 
 interface EmptyStateProps {
@@ -10,9 +11,10 @@ export const EmptyState = ({ title, description }: EmptyStateProps) => {
   return (
     <motion.div
       key="not-available"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      variants={fadeInOut}
+      initial="initial"
+      animate="animate"
+      exit="exit"
       className="flex flex-1 h-full items-center justify-center flex-col gap-8"
     >
       <img
