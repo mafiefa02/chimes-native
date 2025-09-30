@@ -1,6 +1,8 @@
 import { EmptyState } from '../../components/empty-state';
 import { Skeleton } from '../../components/ui/skeleton';
 import { containerVariants, itemVariantsFromTop } from '../../lib/animations';
+import { useChangeDateShortcut } from '../_hooks/use-change-date-shortcut';
+import { useCreateScheduleShortcut } from '../_hooks/use-create-schedule-shortcut';
 import { useSchedules } from '../_hooks/use-schedules';
 import { ScheduleListItem } from './schedule-list-item';
 import { AnimatePresence, motion } from 'motion/react';
@@ -10,6 +12,9 @@ export const ScheduleList = () => {
   const { schedules, isPending, isError, isSchedulePast, isUpcomingSchedule } =
     useSchedules();
   const schedulesAreAvailable = !isPending && !isError;
+
+  useChangeDateShortcut();
+  useCreateScheduleShortcut();
 
   return (
     <AnimatePresence

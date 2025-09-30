@@ -1,3 +1,4 @@
+import { KbdIndicator } from '../../components/kbd-indicator';
 import { Button } from '../../components/ui/button';
 import {
   Dialog,
@@ -9,24 +10,41 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../../components/ui/dialog';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../../components/ui/tooltip';
+import { useAddScheduleDialog } from '../../contexts/add-schedule-dialog-context';
+import { useIsMac } from '../../hooks/use-is-mac';
 import { AddNewScheduleForm } from './add-new-schedule-form';
 import { PlusIcon } from 'lucide-react';
-import { useState } from 'react';
 
 export const AddNewScheduleDialog = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const closeDialog = () => setIsDialogOpen(false);
+  const { isDialogOpen, openDialog, closeDialog } = useAddScheduleDialog();
+  const isMac = useIsMac();
   return (
     <Dialog
       open={isDialogOpen}
-      onOpenChange={setIsDialogOpen}
+      onOpenChange={(open) => (open ? openDialog() : closeDialog())}
     >
-      <DialogTrigger asChild>
-        <Button>
-          <PlusIcon />
-          <p className="hidden md:block">Add New</p>
-        </Button>
-      </DialogTrigger>
+      <Tooltip delayDuration={500}>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <Button>
+              <PlusIcon />
+              <p className="hidden md:block">Add New</p>
+            </Button>
+          </DialogTrigger>
+        </TooltipTrigger>
+        <TooltipContent className="flex items-center gap-1.5">
+          <p>Use </p>
+          <KbdIndicator className="inline-flex h-fit bg-transparent text-white border-1">
+            {isMac ? '⌘' : 'Ctrl'} + ↵
+          </KbdIndicator>{' '}
+          <p>to quickly create new schedule</p>
+        </TooltipContent>
+      </Tooltip>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create New Schedule</DialogTitle>
