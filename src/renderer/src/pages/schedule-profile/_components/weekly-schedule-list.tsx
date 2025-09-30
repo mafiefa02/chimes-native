@@ -43,37 +43,50 @@ export const WeeklyScheduleList = ({
       {isError && <p key="error">Error!</p>}
       {schedulesAreAvailable && (
         <motion.div
-          key={selectedDay}
+          key="schedules"
           className="space-y-2"
           variants={containerVariants}
           initial="initial"
           animate="animate"
           exit="exit"
         >
-          {schedules && schedules.length > 0 ? (
-            schedules.map((schedule) => (
-              <motion.div
-                key={schedule.id}
-                variants={itemVariantsFromTop}
+          <AnimatePresence mode="wait">
+            {schedules && schedules.length > 0 ? (
+              schedules.map((schedule) => (
+                <motion.div
+                  layout
+                  key={schedule.id}
+                  variants={itemVariantsFromTop}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                >
+                  <ScheduleCard
+                    schedule={schedule}
+                    extras={{
+                      header: (
+                        <ScheduleUpcomingInfo
+                          scheduleIsUpcoming={isScheduleUpcoming(schedule)}
+                        />
+                      ),
+                      subHeader: (
+                        <WeeklyScheduleCardInformations schedule={schedule} />
+                      ),
+                    }}
+                  />
+                </motion.div>
+              ))
+            ) : (
+              <motion.p
+                key="not-available"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
-                <ScheduleCard
-                  schedule={schedule}
-                  extras={{
-                    header: (
-                      <ScheduleUpcomingInfo
-                        scheduleIsUpcoming={isScheduleUpcoming(schedule)}
-                      />
-                    ),
-                    subHeader: (
-                      <WeeklyScheduleCardInformations schedule={schedule} />
-                    ),
-                  }}
-                />
-              </motion.div>
-            ))
-          ) : (
-            <p key="not-available">No data found...</p>
-          )}
+                No data found...
+              </motion.p>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>
