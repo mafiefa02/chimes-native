@@ -10,7 +10,6 @@ export const config = {
       ? path.join(process.resourcesPath, 'public', 'drizzle')
       : path.join('public', 'drizzle'),
   dialect: 'sqlite',
-  dbCredentials: { url: path.join('data', 'chimes.db') },
 } satisfies Config;
 
 export default defineConfig(config);

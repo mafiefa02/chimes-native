@@ -5,7 +5,7 @@ import { getAppConfigProperty } from '../../../../lib/utils';
 import { createFormSchema, type CreateFormSchemaType } from '../schema';
 import { validateTriggerDays } from '../utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getDay } from 'date-fns';
+import { getISODay } from 'date-fns';
 import { useForm } from 'react-hook-form';
 
 interface useCreateScheduleFormProps {
@@ -25,7 +25,7 @@ export const useCreateScheduleForm = ({
     defaultValues: {
       profileId: activeProfileId,
       name: '',
-      triggerDays: [getDay(date ?? new Date())],
+      triggerDays: [getISODay(date ?? new Date())],
       triggerTime: '09:00',
       soundId: undefined,
       repeat: 'once',

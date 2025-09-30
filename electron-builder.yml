@@ -1,21 +1,21 @@
-appId: 'com.electron.chimes'
+appId: "com.electron.chimes"
 productName: Chimes
 directories:
   buildResources: build
 extraResources:
-  - from: './public/drizzle'
-    to: 'public/drizzle'
-  - from: './public/sounds/bell.mp3'
-    to: 'public/sounds/bell.mp3'
+  - from: "./public/drizzle"
+    to: "public/drizzle"
+  - from: "./public/sounds/bell.mp3"
+    to: "public/sounds/bell.mp3"
 files:
-  - '!dist/*'
-  - 'out/**'
-  - '!**/.vscode/*'
-  - '!src/*'
-  - '!vite.config.{js,ts,mjs,cjs}'
-  - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
-  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
-  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  - "!dist/*"
+  - "out/**"
+  - "!**/.vscode/*"
+  - "!src/*"
+  - "!vite.config.{js,ts,mjs,cjs}"
+  - "!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}"
+  - "!{.env,.env.*,.npmrc,pnpm-lock.yaml}"
+  - "!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}"
 asarUnpack:
   - resources/**
 win:

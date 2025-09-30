@@ -1,10 +1,21 @@
+import { Schedule } from '../../../../shared/types';
+import {
+  ScheduleCardActions,
+  ScheduleCardContent,
+  ScheduleCardInfo,
+  ScheduleCardRoot,
+  ScheduleCardTime,
+  ScheduleCardTitle,
+} from '../../components/schedule-card';
+import { ScheduleUpcomingInfo } from '../../components/schedule-upcoming-info';
 import { Skeleton } from '../../components/ui/skeleton';
 import { useScheduleDate } from '../../hooks/use-schedule-date';
+import { cn } from '../../lib/utils';
 import { useSchedules } from '../_hooks/use-schedules';
-import { ScheduleCard } from './schedule-card';
+import { ScheduleActions } from './schedule-actions';
 import { format } from 'date-fns';
 import { AnimatePresence, motion, Variants } from 'motion/react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 const containerAnimation: Variants = {
   animate: { transition: { staggerChildren: 0.08, ease: 'easeIn' } },
@@ -23,9 +34,60 @@ const itemAnimation: Variants = {
   exit: { opacity: 0, y: -20, transition: { duration: 0.15, ease: 'easeIn' } },
 };
 
+interface ScheduleListItemProps {
+  schedule: Schedule;
+  isSchedulePast: (schedule: Schedule) => boolean;
+  isUpcomingSchedule: (schedule: Schedule) => boolean;
+}
+
+const ScheduleListItem = ({
+  schedule,
+  isSchedulePast,
+  isUpcomingSchedule,
+}: ScheduleListItemProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+  return (
+    <motion.div
+      variants={itemAnimation}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <ScheduleCardRoot
+        className={cn(
+          (!schedule.isActive || isSchedulePast(schedule)) &&
+            'bg-card/20 text-card-foreground/20',
+        )}
+      >
+        <ScheduleCardTime time={schedule.triggerTime} />
+        <div className="flex w-full items-center justify-between gap-4">
+          <ScheduleCardContent>
+            <div className="flex w-full items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <ScheduleCardTitle title={schedule.name} />
+                <ScheduleUpcomingInfo
+                  isVisible={isHovered}
+                  scheduleIsUpcoming={isUpcomingSchedule(schedule)}
+                />
+              </div>
+            </div>
+            <ScheduleCardInfo schedule={schedule} />
+          </ScheduleCardContent>
+        </div>
+        <ScheduleCardActions>
+          <ScheduleActions
+            schedule={schedule}
+            isVisible={isHovered}
+          />
+        </ScheduleCardActions>
+      </ScheduleCardRoot>
+    </motion.div>
+  );
+};
+
 export const ScheduleList = () => {
   const { date } = useScheduleDate();
-  const { schedules, isPending, isError, onToggle } = useSchedules(date);
+  const { schedules, isPending, isError, isSchedulePast, isUpcomingSchedule } =
+    useSchedules();
   const schedulesAreAvailable = !isPending && !isError;
 
   return (
@@ -56,15 +118,12 @@ export const ScheduleList = () => {
           exit="exit"
         >
           {schedules.map((schedule) => (
-            <motion.div
+            <ScheduleListItem
               key={schedule.id}
-              variants={itemAnimation}
-            >
-              <ScheduleCard
-                schedule={schedule}
-                onToggleActive={onToggle}
-              />
-            </motion.div>
+              schedule={schedule}
+              isSchedulePast={isSchedulePast}
+              isUpcomingSchedule={isUpcomingSchedule}
+            />
           ))}
         </motion.div>
       )}

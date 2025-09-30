@@ -4,7 +4,6 @@ import * as appConfigServices from './services/appConfig';
 import * as notificationServices from './services/notifications';
 import * as profileServices from './services/profiles';
 import * as scheduleHistoryServices from './services/scheduleHistory';
-import * as schedulePlayer from './services/schedulePlayer';
 import * as scheduleProfileServices from './services/scheduleProfiles';
 import * as scheduleServices from './services/schedules';
 import * as userSoundServices from './services/userSounds';
@@ -15,9 +14,9 @@ import path from 'path';
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1025,
+    width: 1152,
     height: 670,
-    minWidth: 720,
+    minWidth: 1000,
     minHeight: 560,
     show: false,
     autoHideMenuBar: true,
@@ -150,8 +149,6 @@ app.whenReady().then(async () => {
   ipcMain.handle('notifications:delete', (_, id) =>
     notificationServices.deleteNotification(id),
   );
-
-  schedulePlayer.start();
 
   createWindow();
 

@@ -69,14 +69,12 @@ export const schedules = sqliteTable(
     triggerDays: text('trigger_days', { mode: 'json' })
       .notNull()
       .$type<number[]>()
-      .default(sql`(json_array(0, 1, 2, 3, 4, 5, 6))`),
+      .default(sql`(json_array(1, 2, 3, 4, 5, 6, 7))`),
     triggerTime: text('trigger_time').notNull(), // Stores "HH:mm" in UTC
     soundId: integer('sound_id')
       .references(() => userSounds.id, { onDelete: 'restrict' })
       .notNull(),
-    repeat: text('repeat', {
-      enum: ['once', 'daily', 'weekly', 'biweekly', 'monthly', 'yearly'],
-    })
+    repeat: text('repeat', { enum: ['once', 'daily', 'weekly'] })
       .notNull()
       .default('once'),
     repeatStart: integer('repeat_start', { mode: 'timestamp' }).notNull(),

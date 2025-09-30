@@ -6,18 +6,22 @@ import { format, parse } from 'date-fns';
 
 export const useUpdateSchedule = (date: Date) => {
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.schedules.all(date);
+  const queryKey = queryKeys.schedules({ date });
 
   return useMutation({
-    mutationFn: async (data: Partial<NewSchedule> & { id: Schedule['id'] }) =>
-      await window.services.schedules.update(data.id, {
+    mutationFn: async (data: Partial<NewSchedule> & { id: Schedule['id'] }) => {
+      if (!data.triggerTime) {
+        return await window.services.schedules.update(data.id, data);
+      }
+
+      const parsedTime = parse(data.triggerTime, 'HH:mm', new Date());
+      const utcTriggerTime = format(parsedTime, 'HH:mm', { in: tz('Etc/UTC') });
+
+      return await window.services.schedules.update(data.id, {
         ...data,
-        triggerTime: data.triggerTime
-          ? format(parse(data.triggerTime, 'HH:mm', new Date()), 'HH:mm', {
-              in: tz('Etc/UTC'),
-            })
-          : undefined,
-      }),
+        triggerTime: utcTriggerTime,
+      });
+    },
     onMutate: async (schedule) => {
       await queryClient.cancelQueries({ queryKey });
       const previousSchedules = queryClient.getQueryData(queryKey);
@@ -31,8 +35,8 @@ export const useUpdateSchedule = (date: Date) => {
       });
       return { previousSchedules };
     },
-    onError: (_err, _newTodo, context) =>
-      queryClient.setQueryData(queryKey, context?.previousSchedules),
+    onError: (_, __, ctx) =>
+      queryClient.setQueryData(queryKey, ctx?.previousSchedules),
     onSettled: () => queryClient.invalidateQueries({ queryKey: queryKey }),
   });
 };

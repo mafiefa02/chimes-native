@@ -6,7 +6,7 @@ export const useGetProfileSchedules = () => {
   const activeProfileId = getAppConfigProperty('activeProfile');
   return useQuery({
     enabled: !!activeProfileId,
-    queryKey: queryKeys.profileSchedules.all,
+    queryKey: queryKeys.profileSchedules(),
     queryFn: async () =>
       await window.services.scheduleProfiles.getByUser(activeProfileId),
   });

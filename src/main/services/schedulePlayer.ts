@@ -4,6 +4,7 @@ import { playAudioFile } from '../lib/utils';
 import { getAppConfigProperty } from './appConfig';
 import * as scheduleServices from './schedules';
 import * as userSoundsServices from './userSounds';
+import { getISODay } from 'date-fns';
 import { app } from 'electron';
 import { join } from 'path';
 
@@ -14,7 +15,7 @@ const appSoundsPath = app.isPackaged
 
 const checkSchedules = async () => {
   const now = new Date();
-  const currentDay = now.getUTCDay();
+  const currentDay = getISODay(now);
   const currentTime = `${String(now.getUTCHours()).padStart(2, '0')}:${String(
     now.getUTCMinutes(),
   ).padStart(2, '0')}`;
@@ -40,7 +41,8 @@ const checkSchedules = async () => {
       scheduleSound ? scheduleSound.filePath : defaultSoundFile,
     );
 
-    if (isToday && isTime) {
+    if (isToday && isTime && schedule.isActive) {
+      console.log('here');
       playAudioFile(soundPath);
     }
   }

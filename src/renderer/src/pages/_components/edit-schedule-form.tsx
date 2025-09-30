@@ -4,7 +4,6 @@ import { Calendar } from '../../components/ui/calendar';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../components/ui/select';
-import { Switch } from '../../components/ui/switch';
 import { useGetSounds } from '../../hooks/queries/use-get-sounds';
 import { cn } from '../../lib/utils';
 import { useEditScheduleForm } from '../_forms/schedule/hooks/use-edit-schedule-form';
@@ -168,9 +166,6 @@ export const EditScheduleForm = ({
                       <SelectItem value="once">Once</SelectItem>
                       <SelectItem value="daily">Daily</SelectItem>
                       <SelectItem value="weekly">Weekly</SelectItem>
-                      <SelectItem value="biweekly">Bi-weekly</SelectItem>
-                      <SelectItem value="monthly">Monthly</SelectItem>
-                      <SelectItem value="yearly">Yearly</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -265,26 +260,6 @@ export const EditScheduleForm = ({
                 )}
               />
             </div>
-            <FormField
-              control={form.control}
-              name="isActive"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4 mt-4 md:mt-0">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Active</FormLabel>
-                    <FormDescription>
-                      Enable or disable this schedule.
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
           </div>
         </div>
         {formAction}

@@ -8,6 +8,7 @@ import {
   getAppConfigProperty,
   setAppConfigProperty,
 } from '../services/appConfig';
+import { start as startSchedulePlayer } from '../services/schedulePlayer';
 import { defaultSoundFile } from './constants';
 import { db, runMigrations } from './database';
 import { count } from 'drizzle-orm';
@@ -16,6 +17,7 @@ import { app, dialog } from 'electron';
 export const initializeApp = async (): Promise<void> => {
   try {
     await initializeDatabase();
+    startSchedulePlayer();
     console.log('✅ INFO: Application initialization complete.');
   } catch (error: unknown) {
     console.error('❌ FATAL: Failed to initialize the application.', error);

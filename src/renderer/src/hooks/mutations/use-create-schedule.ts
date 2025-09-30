@@ -18,7 +18,7 @@ export const useCreateSchedule = (date: Date) => {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.schedules.all(date),
+        queryKey: queryKeys.schedules({ date }),
       });
     },
   });

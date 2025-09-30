@@ -13,7 +13,7 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <HashRouter>
         <AppRoutes />
-        <Toaster />
+        <Toaster theme="light" />
       </HashRouter>
     </QueryClientProvider>
   </StrictMode>,

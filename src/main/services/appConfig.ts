@@ -18,7 +18,7 @@ const getConfig = (): AppConfig => {
     return config as AppConfig;
   } catch (error: unknown) {
     console.warn(
-      `WARN: Could not read config.json. It might be corrupted or missing. Resetting to default.\nError: ${(error as Error).message}`,
+      `WARN: Could not read or parse config.json. It might be corrupted or missing. Resetting to default. The error was: "${(error as Error).message}".`,
     );
     // If reading or parsing fails, create a new default config
     const defaultConfig = createDefaultConfig();

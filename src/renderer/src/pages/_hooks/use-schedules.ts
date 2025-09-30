@@ -1,13 +1,19 @@
 import { Schedule } from '../../../../shared/types';
 import { useUpdateSchedule } from '../../hooks/mutations/use-update-schedule';
-import { useGetSchedules } from '../../hooks/queries/use-get-schedules';
+import { useGetActiveSchedules } from '../../hooks/queries/use-get-active-schedules';
 import { useMinuteTime } from '../../hooks/use-minute-time';
-import { parseDateStringAsUTC } from '../../lib/utils';
-import { isAfter, isBefore, isFuture, isPast, isToday } from 'date-fns';
+import { useScheduleDate } from '../../hooks/use-schedule-date';
+import { findUpcomingSchedule, parseDateStringAsUTC } from '../../lib/utils';
+import { isBefore, isPast, isToday } from 'date-fns';
 import { useMemo } from 'react';
 
-export const useSchedules = (date: Date) => {
-  const { data: schedules, isPending, isError } = useGetSchedules(date);
+export const useSchedules = () => {
+  const { date } = useScheduleDate();
+  const {
+    data: schedules,
+    isPending,
+    isError,
+  } = useGetActiveSchedules({ date });
   const { mutate: updateSchedule } = useUpdateSchedule(date);
   const { time: now } = useMinuteTime();
 
@@ -15,40 +21,27 @@ export const useSchedules = (date: Date) => {
     updateSchedule({ id, isActive: newIsActive });
   };
 
-  const processedSchedules = useMemo(() => {
-    if (!schedules || !now) return [];
+  const upcomingSchedule = useMemo(
+    () => findUpcomingSchedule(now, schedules),
+    [schedules, now],
+  );
 
-    const upcomingSchedule = schedules.reduce<Schedule | null>(
-      (earliest, current) => {
-        const currentTime = parseDateStringAsUTC(current.triggerTime, 'HH:mm');
+  const isUpcomingSchedule = (schedule: Schedule) =>
+    upcomingSchedule?.id === schedule.id;
 
-        // Skip if the current schedule isn't a candidate
-        if (!current.isActive || !isAfter(currentTime, now)) return earliest;
+  const isSchedulePast = (schedule: Schedule) =>
+    isToday(date)
+      ? isBefore(parseDateStringAsUTC(schedule.triggerTime, 'HH:mm'), now)
+      : isPast(date);
 
-        // If this is the first valid schedule we've found, it's the earliest so far
-        if (!earliest) return current;
+  const availableSchedules = !schedules || !now ? [] : schedules;
 
-        // Otherwise, compare with the earliest found so far
-        const earliestTime = parseDateStringAsUTC(
-          earliest.triggerTime,
-          'HH:mm',
-        );
-
-        return isBefore(currentTime, earliestTime) ? current : earliest;
-      },
-      null,
-    );
-
-    return schedules.map((schedule) => ({
-      ...schedule,
-      isUpcoming: isToday(date)
-        ? upcomingSchedule?.id === schedule.id
-        : isFuture(date),
-      isPast: isToday(date)
-        ? isBefore(parseDateStringAsUTC(schedule.triggerTime, 'HH:mm'), now)
-        : isPast(date),
-    }));
-  }, [schedules, now, date]);
-
-  return { schedules: processedSchedules, isPending, isError, onToggle };
+  return {
+    schedules: availableSchedules,
+    isPending,
+    isError,
+    onToggle,
+    isUpcomingSchedule,
+    isSchedulePast,
+  };
 };

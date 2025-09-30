@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 
 export const useDeleteSchedule = (id: Schedule['id'], date: Date) => {
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.schedules.all(date);
+  const queryKey = queryKeys.schedules({ date });
   return useMutation({
     mutationFn: async () => await window.services.schedules.delete(id),
     onMutate: async () => {
@@ -17,8 +17,8 @@ export const useDeleteSchedule = (id: Schedule['id'], date: Date) => {
       return { previousSchedules };
     },
     onSuccess: () => toast.success('Succesfully deleted the schedule'),
-    onError: (_err, _newTodo, context) =>
-      queryClient.setQueryData(queryKey, context?.previousSchedules),
+    onError: (_, __, ctx) =>
+      queryClient.setQueryData(queryKey, ctx?.previousSchedules),
     onSettled: () => queryClient.invalidateQueries({ queryKey: queryKey }),
   });
 };
