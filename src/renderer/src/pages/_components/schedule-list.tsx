@@ -1,3 +1,4 @@
+import { EmptyState } from '../../components/empty-state';
 import { Skeleton } from '../../components/ui/skeleton';
 import { containerVariants, itemVariantsFromTop } from '../../lib/animations';
 import { useSchedules } from '../_hooks/use-schedules';
@@ -31,7 +32,7 @@ export const ScheduleList = () => {
       {schedulesAreAvailable && (
         <motion.div
           key="schedules"
-          className="space-y-2"
+          className="flex flex-col gap-2 h-full"
           variants={containerVariants}
           initial="initial"
           animate="animate"
@@ -56,14 +57,10 @@ export const ScheduleList = () => {
                 </motion.div>
               ))
             ) : (
-              <motion.p
-                key="not-available"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                No schedules for this day.
-              </motion.p>
+              <EmptyState
+                title="Oops! No data found"
+                description="We couldn't find any schedule for today"
+              />
             )}
           </AnimatePresence>
         </motion.div>

@@ -1,3 +1,4 @@
+import { EmptyState } from '../../../components/empty-state';
 import { ScheduleCard } from '../../../components/schedule-card';
 import { ScheduleUpcomingInfo } from '../../../components/schedule-upcoming-info';
 import { Skeleton } from '../../../components/ui/skeleton';
@@ -7,6 +8,7 @@ import {
 } from '../../../lib/animations';
 import { useWeeklySchedules } from '../_hooks/use-weekly-schedules';
 import { WeeklyScheduleCardInformations } from './weekly-schedule-card-informations';
+import { addDays, format } from 'date-fns';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMemo } from 'react';
 
@@ -22,6 +24,13 @@ export const WeeklyScheduleList = ({
   const { schedules, isScheduleUpcoming, isPending, isError } =
     useWeeklySchedules({ selectedDay, searchQuery });
   const schedulesAreAvailable = !isPending && !isError;
+
+  const dayName = useMemo(() => {
+    const today = new Date();
+    const date = addDays(today, selectedDay - today.getDay());
+
+    return format(date, 'EEEE');
+  }, [selectedDay]);
 
   return (
     <AnimatePresence
@@ -44,7 +53,7 @@ export const WeeklyScheduleList = ({
       {schedulesAreAvailable && (
         <motion.div
           key="schedules"
-          className="space-y-2"
+          className="flex flex-col gap-2 h-full"
           variants={containerVariants}
           initial="initial"
           animate="animate"
@@ -77,14 +86,14 @@ export const WeeklyScheduleList = ({
                 </motion.div>
               ))
             ) : (
-              <motion.p
-                key="not-available"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                No data found...
-              </motion.p>
+              <EmptyState
+                title="Oops! No data found"
+                description={
+                  searchQuery
+                    ? `We can't find the schedule ${searchQuery}`
+                    : `There seems to be no weekly schedule for ${dayName}`
+                }
+              />
             )}
           </AnimatePresence>
         </motion.div>
