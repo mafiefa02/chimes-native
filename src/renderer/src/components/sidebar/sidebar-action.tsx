@@ -1,4 +1,5 @@
 import { useGetProfileSchedules } from '../../hooks/queries/use-get-schedule-profiles';
+import { delayedFadeIn } from '../../lib/animations';
 import { cn, getAppConfigProperty } from '../../lib/utils';
 import {
   Select,
@@ -13,7 +14,6 @@ import { Skeleton } from '../ui/skeleton';
 import { useSidebar } from './hooks/use-sidebar';
 import { CalendarIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { delayedFadeIn } from '../../lib/animations';
 
 /** TODO: polish the sidebar exit animation */
 export const SidebarAction = () => {
