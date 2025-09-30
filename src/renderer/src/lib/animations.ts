@@ -67,7 +67,7 @@ export const delayedFadeIn: Variants = {
 
 export const sidebar: Variants = {
   open: {
-    width: '240px',
+    width: '300px',
     transition: { type: 'spring', stiffness: 300, damping: 30 },
   },
   closed: {

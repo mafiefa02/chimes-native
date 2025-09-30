@@ -1,6 +1,6 @@
 import { EmptyState } from '../../components/empty-state';
 import { LoadingSkeletons } from '../../components/loading-skeletons';
-import { containerVariants } from '../../lib/animations';
+import { containerVariants, fadeInOut } from '../../lib/animations';
 import { useChangeDateShortcut } from '../_hooks/use-change-date-shortcut';
 import { useCreateScheduleShortcut } from '../_hooks/use-create-schedule-shortcut';
 import { useSchedules } from '../_hooks/use-schedules';
@@ -52,7 +52,14 @@ export const ScheduleList = () => {
             />
           </motion.div>
         ) : (
-          <motion.div key="empty-state">
+          <motion.div
+            className="grid h-full"
+            key="empty-state"
+            variants={fadeInOut}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
             <EmptyState
               title="Oops! No data found"
               description="We couldn't find any schedule for today"
