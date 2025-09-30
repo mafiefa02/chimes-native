@@ -1,11 +1,13 @@
 import { Button } from '../../../components/ui/button';
 import { ISO_DAY_OF_WEEKS } from '../../../lib/constants';
 import { cn } from '../../../lib/utils';
+import { useChangeDayShortcut } from '../_hooks/use-change-day-shortcut';
 import { format, parse } from 'date-fns';
+import { Dispatch, SetStateAction } from 'react';
 
 interface WeeklyScheduleDaySelectorProp {
   selectedDay: number;
-  setSelectedDay: (day: number) => void;
+  setSelectedDay: Dispatch<SetStateAction<number>>;
 }
 
 export const WeeklyScheduleDaySelector = ({
@@ -13,6 +15,7 @@ export const WeeklyScheduleDaySelector = ({
   setSelectedDay,
 }: WeeklyScheduleDaySelectorProp) => {
   const dayIsSelected = (day: number) => selectedDay === day;
+  useChangeDayShortcut(setSelectedDay);
   return (
     <div className="@container overflow-x-auto">
       <div className="grid grid-flow-col gap-1">
