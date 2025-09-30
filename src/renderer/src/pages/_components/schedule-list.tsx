@@ -1,89 +1,65 @@
 import { EmptyState } from '../../components/empty-state';
-import { Skeleton } from '../../components/ui/skeleton';
-import { containerVariants, itemVariantsFromTop } from '../../lib/animations';
+import { LoadingSkeletons } from '../../components/loading-skeletons';
+import { containerVariants } from '../../lib/animations';
 import { useChangeDateShortcut } from '../_hooks/use-change-date-shortcut';
 import { useCreateScheduleShortcut } from '../_hooks/use-create-schedule-shortcut';
 import { useSchedules } from '../_hooks/use-schedules';
-import { ScheduleListItem } from './schedule-list-item';
+import { ScheduleListContent } from './schedule-list-content';
+import { ScheduleListError } from './schedule-list-error';
 import { AnimatePresence, motion } from 'motion/react';
-import { useMemo } from 'react';
 
 export const ScheduleList = () => {
   const { schedules, isPending, isError, isSchedulePast, isUpcomingSchedule } =
     useSchedules();
-  const schedulesAreAvailable = !isPending && !isError;
 
   useChangeDateShortcut();
   useCreateScheduleShortcut();
 
   return (
-    <AnimatePresence
-      mode="popLayout"
-      initial={false}
-    >
-      {isPending && (
-        <motion.div
-          key="loading"
-          className="space-y-2"
-          variants={containerVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
-          <LoadingSkeletons />
-        </motion.div>
-      )}
-      {isError && <p key="error">Error!</p>}
-      {schedulesAreAvailable && (
-        <div className="flex flex-col gap-2 h-full">
-          <AnimatePresence mode="popLayout">
-            {schedules.length > 0 ? (
-              <motion.div
-                className="flex flex-col gap-2 h-full"
-                variants={containerVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-              >
-                {schedules.map((schedule) => (
-                  <motion.div
-                    layout
-                    key={schedule.id}
-                    variants={itemVariantsFromTop}
-                  >
-                    <ScheduleListItem
-                      schedule={schedule}
-                      isSchedulePast={isSchedulePast}
-                      isUpcomingSchedule={isUpcomingSchedule}
-                    />
-                  </motion.div>
-                ))}
-              </motion.div>
-            ) : (
-              <EmptyState
-                title="Oops! No data found"
-                description="We couldn't find any schedule for today"
-              />
-            )}
-          </AnimatePresence>
-        </div>
-      )}
-    </AnimatePresence>
+    <div className="flex flex-col gap-2 h-full overflow-hidden">
+      <AnimatePresence
+        mode="popLayout"
+        initial={false}
+      >
+        {isPending ? (
+          <motion.div
+            key="loading"
+            className="space-y-2"
+            variants={containerVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <LoadingSkeletons />
+          </motion.div>
+        ) : isError ? (
+          <motion.div key="error">
+            <ScheduleListError />
+          </motion.div>
+        ) : schedules.length > 0 ? (
+          <motion.div
+            key="schedules-list"
+            className="flex flex-col gap-2 h-full"
+            variants={containerVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <ScheduleListContent
+              schedules={schedules}
+              isSchedulePast={isSchedulePast}
+              isUpcomingSchedule={isUpcomingSchedule}
+            />
+          </motion.div>
+        ) : (
+          <motion.div key="empty-state">
+            <EmptyState
+              title="Oops! No data found"
+              description="We couldn't find any schedule for today"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
-};
-
-const LoadingSkeletons = () => {
-  const RANDOM_NUMBER_OF_DUMMIES = useMemo(
-    () => Math.max(5, Math.floor(Math.random() * 10)),
-    [],
-  );
-
-  return new Array(RANDOM_NUMBER_OF_DUMMIES).fill(0).map((_, idx) => (
-    <motion.div
-      key={`loading-${idx}`}
-      variants={itemVariantsFromTop}
-    >
-      <Skeleton className="w-full h-24 bg-primary/5 rounded-3xl" />
-    </motion.div>
-  ));
 };
