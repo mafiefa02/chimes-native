@@ -13,6 +13,7 @@ import { Skeleton } from '../ui/skeleton';
 import { useSidebar } from './hooks/use-sidebar';
 import { CalendarIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { delayedFadeIn } from '../../lib/animations';
 
 /** TODO: polish the sidebar exit animation */
 export const SidebarAction = () => {
@@ -47,12 +48,10 @@ export const SidebarAction = () => {
                 {isSidebarOpen && (
                   <motion.div
                     key="select-value-text"
-                    initial={{ opacity: 0 }}
-                    animate={{
-                      opacity: 1,
-                      transition: { delay: 0.15, ease: 'easeOut' },
-                    }}
-                    exit={{ opacity: 0 }}
+                    variants={delayedFadeIn}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
                   >
                     <SelectValue />
                   </motion.div>

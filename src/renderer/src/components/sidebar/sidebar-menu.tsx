@@ -3,6 +3,7 @@ import { buttonVariants } from '../ui/button/button-variants';
 import { useSidebar } from './hooks/use-sidebar';
 import { motion, AnimatePresence } from 'motion/react';
 import { NavLink } from 'react-router';
+import { fadeInOut } from '../../lib/animations';
 
 export const SidebarMenu = () => {
   const { isSidebarOpen } = useSidebar();
@@ -25,10 +26,10 @@ export const SidebarMenu = () => {
             {isSidebarOpen && (
               <motion.p
                 key="label"
-                initial={false}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ type: 'spring', duration: 0.4 }}
+                variants={fadeInOut}
+                initial="initial"
+                animate="animate"
+                exit="exit"
                 className="whitespace-nowrap"
               >
                 {route.label}

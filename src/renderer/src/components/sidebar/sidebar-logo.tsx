@@ -1,5 +1,6 @@
 import { useSidebar } from './hooks/use-sidebar';
 import { motion, AnimatePresence } from 'motion/react';
+import { breadcrumbItem } from '../../lib/animations';
 
 export const SidebarLogo = () => {
   const { isSidebarOpen } = useSidebar();
@@ -9,9 +10,10 @@ export const SidebarLogo = () => {
       <AnimatePresence initial={false}>
         {isSidebarOpen && (
           <motion.span
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
+            variants={breadcrumbItem}
+            initial="initial"
+            animate="animate"
+            exit="exit"
           >
             himes
           </motion.span>

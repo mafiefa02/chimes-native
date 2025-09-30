@@ -1,12 +1,6 @@
 import { Badge } from './ui/badge';
-import { AnimatePresence, motion, Transition, Variants } from 'motion/react';
-
-const animationTransition: Transition = { duration: 0.3, ease: 'backInOut' };
-const animation: Variants = {
-  initial: { x: 20, opacity: 0 },
-  animate: { x: 0, opacity: 1 },
-  exit: { x: 0, opacity: 0, transition: { duration: 0.1 } },
-};
+import { AnimatePresence, motion } from 'motion/react';
+import { upcomingBadge } from '../lib/animations';
 
 interface ScheduleUpcomingInfoProps {
   scheduleIsUpcoming: boolean;
@@ -23,8 +17,7 @@ export const ScheduleUpcomingInfo = ({
     >
       {scheduleIsUpcoming && !isVisible && (
         <motion.span
-          transition={animationTransition}
-          variants={animation}
+          variants={upcomingBadge}
           initial="initial"
           animate="animate"
           exit="exit"

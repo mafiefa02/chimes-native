@@ -1,3 +1,4 @@
+import { breadcrumbItem } from '../../lib/animations';
 import { parentRoutes } from '../../lib/constants';
 import { buttonVariants } from '../ui/button/button-variants';
 import { useBreadcrumbs } from './hooks/use-breadcrumbs';
@@ -12,10 +13,10 @@ export const HeaderBreadcrumbs = () => {
         {breadcrumbs.map((crumb, index) => (
           <motion.div
             key={crumb.href}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ ease: 'backOut' }}
+            variants={breadcrumbItem}
+            initial="initial"
+            animate="animate"
+            exit="exit"
           >
             <Link
               to={crumb.href}

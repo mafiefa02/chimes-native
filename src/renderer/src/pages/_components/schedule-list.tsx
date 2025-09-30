@@ -1,88 +1,11 @@
-import { Schedule } from '../../../../shared/types';
-import {
-  ScheduleCardActions,
-  ScheduleCardContent,
-  ScheduleCardInfo,
-  ScheduleCardRoot,
-  ScheduleCardTime,
-  ScheduleCardTitle,
-} from '../../components/schedule-card';
-import { ScheduleUpcomingInfo } from '../../components/schedule-upcoming-info';
 import { Skeleton } from '../../components/ui/skeleton';
 import { useScheduleDate } from '../../hooks/use-schedule-date';
-import { cn } from '../../lib/utils';
+import { containerVariants, itemVariantsFromTop } from '../../lib/animations';
 import { useSchedules } from '../_hooks/use-schedules';
-import { ScheduleActions } from './schedule-actions';
+import { ScheduleListItem } from './schedule-list-item';
 import { format } from 'date-fns';
-import { AnimatePresence, motion, Variants } from 'motion/react';
-import { useMemo, useState } from 'react';
-
-const containerAnimation: Variants = {
-  animate: { transition: { staggerChildren: 0.08, ease: 'easeIn' } },
-  exit: {
-    transition: {
-      staggerChildren: 0.035,
-      staggerDirection: -1,
-      ease: 'easeOut',
-    },
-  },
-};
-
-const itemAnimation: Variants = {
-  initial: { opacity: 0, y: -20 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.2, ease: 'easeOut' } },
-  exit: { opacity: 0, y: -20, transition: { duration: 0.15, ease: 'easeIn' } },
-};
-
-interface ScheduleListItemProps {
-  schedule: Schedule;
-  isSchedulePast: (schedule: Schedule) => boolean;
-  isUpcomingSchedule: (schedule: Schedule) => boolean;
-}
-
-const ScheduleListItem = ({
-  schedule,
-  isSchedulePast,
-  isUpcomingSchedule,
-}: ScheduleListItemProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-  return (
-    <motion.div
-      variants={itemAnimation}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <ScheduleCardRoot
-        className={cn(
-          (!schedule.isActive || isSchedulePast(schedule)) &&
-            'bg-card/20 text-card-foreground/20',
-        )}
-      >
-        <ScheduleCardTime time={schedule.triggerTime} />
-        <div className="flex w-full items-center justify-between gap-4">
-          <ScheduleCardContent>
-            <div className="flex w-full items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <ScheduleCardTitle title={schedule.name} />
-                <ScheduleUpcomingInfo
-                  isVisible={isHovered}
-                  scheduleIsUpcoming={isUpcomingSchedule(schedule)}
-                />
-              </div>
-            </div>
-            <ScheduleCardInfo schedule={schedule} />
-          </ScheduleCardContent>
-        </div>
-        <ScheduleCardActions>
-          <ScheduleActions
-            schedule={schedule}
-            isVisible={isHovered}
-          />
-        </ScheduleCardActions>
-      </ScheduleCardRoot>
-    </motion.div>
-  );
-};
+import { AnimatePresence, motion } from 'motion/react';
+import { useMemo } from 'react';
 
 export const ScheduleList = () => {
   const { date } = useScheduleDate();
@@ -99,7 +22,7 @@ export const ScheduleList = () => {
         <motion.div
           key="loading"
           className="space-y-2"
-          variants={containerAnimation}
+          variants={containerVariants}
           initial="initial"
           animate="animate"
           exit="exit"
@@ -112,7 +35,7 @@ export const ScheduleList = () => {
         <motion.div
           key={format(date, 'dd-MM-yyyy')}
           className="space-y-2"
-          variants={containerAnimation}
+          variants={containerVariants}
           initial="initial"
           animate="animate"
           exit="exit"
@@ -140,7 +63,7 @@ const LoadingSkeletons = () => {
   return new Array(RANDOM_NUMBER_OF_DUMMIES).fill(0).map((_, idx) => (
     <motion.div
       key={`loading-${idx}`}
-      variants={itemAnimation}
+      variants={itemVariantsFromTop}
     >
       <Skeleton className="w-full h-24 bg-primary/5 rounded-3xl" />
     </motion.div>
