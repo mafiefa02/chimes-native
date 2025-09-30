@@ -35,32 +35,30 @@ export const ScheduleList = () => {
       )}
       {isError && <p key="error">Error!</p>}
       {schedulesAreAvailable && (
-        <motion.div
-          key="schedules"
-          className="flex flex-col gap-2 h-full"
-          variants={containerVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
-          <AnimatePresence mode="wait">
+        <div className="flex flex-col gap-2 h-full">
+          <AnimatePresence mode="popLayout">
             {schedules.length > 0 ? (
-              schedules.map((schedule) => (
-                <motion.div
-                  layout
-                  key={schedule.id}
-                  variants={itemVariantsFromTop}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                >
-                  <ScheduleListItem
-                    schedule={schedule}
-                    isSchedulePast={isSchedulePast}
-                    isUpcomingSchedule={isUpcomingSchedule}
-                  />
-                </motion.div>
-              ))
+              <motion.div
+                className="flex flex-col gap-2 h-full"
+                variants={containerVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+              >
+                {schedules.map((schedule) => (
+                  <motion.div
+                    layout
+                    key={schedule.id}
+                    variants={itemVariantsFromTop}
+                  >
+                    <ScheduleListItem
+                      schedule={schedule}
+                      isSchedulePast={isSchedulePast}
+                      isUpcomingSchedule={isUpcomingSchedule}
+                    />
+                  </motion.div>
+                ))}
+              </motion.div>
             ) : (
               <EmptyState
                 title="Oops! No data found"
@@ -68,7 +66,7 @@ export const ScheduleList = () => {
               />
             )}
           </AnimatePresence>
-        </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
