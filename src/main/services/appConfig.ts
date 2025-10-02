@@ -1,6 +1,6 @@
 import { AppConfig } from '../../shared/types';
 import { appConfigFile } from '../lib/constants';
-import { app } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import fs from 'fs-extra';
 import path from 'path';
 
@@ -44,4 +44,7 @@ export const setAppConfigProperty = async <
   const config = getConfig();
   config[key] = value;
   await fs.writeJSON(configFilePath, config, { spaces: 2 });
+  BrowserWindow.getAllWindows().forEach((window) => {
+    window.webContents.send('app-config-changed', key, value);
+  });
 };

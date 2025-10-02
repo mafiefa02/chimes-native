@@ -1,11 +1,11 @@
 import { Schedule } from '../../../../shared/types';
 import { queryKeys } from '../../lib/query-keys';
-import { getAppConfigProperty } from '../../lib/utils';
+import { useAppConfig } from '../use-app-config';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 export const useDeleteSchedule = (id: Schedule['id'], date: Date) => {
-  const activeProfileScheduleId = getAppConfigProperty('activeProfileSchedule');
+  const activeProfileScheduleId = useAppConfig('activeProfileSchedule');
   const queryClient = useQueryClient();
   const queryKey = queryKeys.schedules({
     date,

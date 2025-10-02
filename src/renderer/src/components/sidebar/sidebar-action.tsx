@@ -1,10 +1,7 @@
 import { useGetProfileSchedules } from '../../hooks/queries/use-get-schedule-profiles';
+import { useAppConfig } from '../../hooks/use-app-config';
 import { delayedFadeIn } from '../../lib/animations';
-import {
-  cn,
-  getAppConfigProperty,
-  setAppConfigProperty,
-} from '../../lib/utils';
+import { cn, setAppConfigProperty } from '../../lib/utils';
 import {
   Select,
   SelectContent,
@@ -23,7 +20,7 @@ import { motion, AnimatePresence } from 'motion/react';
 export const SidebarAction = () => {
   const { isSidebarOpen } = useSidebar();
   const { data: profileSchedules, isLoading } = useGetProfileSchedules();
-  const activeProfileSchedule = getAppConfigProperty('activeProfileSchedule');
+  const activeProfileSchedule = useAppConfig('activeProfileSchedule');
 
   /** We can be sure there'd be atleast one schedule profile,
    * so if it is undefined, it is still getting the data. */

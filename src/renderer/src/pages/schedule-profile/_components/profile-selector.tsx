@@ -4,11 +4,8 @@ import { Button } from '../../../components/ui/button';
 import { Checkbox } from '../../../components/ui/checkbox';
 import { Input } from '../../../components/ui/input';
 import { useGetProfileSchedules } from '../../../hooks/queries/use-get-schedule-profiles';
-import {
-  cn,
-  getAppConfigProperty,
-  setAppConfigProperty,
-} from '../../../lib/utils';
+import { useAppConfig } from '../../../hooks/use-app-config';
+import { cn, setAppConfigProperty } from '../../../lib/utils';
 import { usePreviewProfileId } from '../_hooks/use-preview-profile-id';
 import { AddNewScheduleProfileDialog } from './add-new-schedule-profile-dialog';
 import { SearchIcon } from 'lucide-react';
@@ -17,7 +14,7 @@ import { useState } from 'react';
 export const ProfileSelector = () => {
   const [search, setSearch] = useState('');
 
-  const selectedProfileId = getAppConfigProperty('activeProfileSchedule');
+  const selectedProfileId = useAppConfig('activeProfileSchedule');
   const { data: profiles, isPending, isError } = useGetProfileSchedules();
   const { previewProfileId } = usePreviewProfileId();
 

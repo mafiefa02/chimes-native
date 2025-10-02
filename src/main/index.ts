@@ -69,7 +69,6 @@ app.whenReady().then(async () => {
   ipcMain.on('appConfig:getSync', (event, key) => {
     event.returnValue = appConfigServices.getAppConfigProperty(key);
   });
-
   ipcMain.handle('appConfig:set', (_, key, value) => {
     appConfigServices.setAppConfigProperty(key, value);
   });

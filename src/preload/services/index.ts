@@ -1,3 +1,4 @@
+import { AppConfig } from '../../shared/types';
 import { IServices } from '../lib/types';
 import { ipcRenderer } from 'electron/renderer';
 
@@ -5,6 +6,21 @@ export const services: IServices = {
   appConfig: {
     get: (key) => ipcRenderer.sendSync('appConfig:getSync', key),
     set: (key, value) => ipcRenderer.invoke('appConfig:set', key, value),
+    onChange: (key, callback) => {
+      const listener = (
+        _,
+        updatedKey: typeof key,
+        value: AppConfig[typeof key],
+      ) => {
+        if (updatedKey === key) {
+          callback(value);
+        }
+      };
+      ipcRenderer.on('app-config-changed', listener);
+      return () => {
+        ipcRenderer.removeListener('app-config-changed', listener);
+      };
+    },
   },
   profiles: {
     getAll: () => ipcRenderer.invoke('profiles:getAll'),

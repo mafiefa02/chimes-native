@@ -1,7 +1,7 @@
 import { NewSchedule } from '../../../../../../shared/types';
 import { useCreateSchedule } from '../../../../hooks/mutations/use-create-schedule';
+import { useAppConfig } from '../../../../hooks/use-app-config';
 import { useScheduleDate } from '../../../../hooks/use-schedule-date';
-import { getAppConfigProperty } from '../../../../lib/utils';
 import { createFormSchema, type CreateFormSchemaType } from '../schema';
 import { validateTriggerDays } from '../utils';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,7 +19,7 @@ export const useCreateScheduleForm = ({
 }: useCreateScheduleFormProps) => {
   const { date } = useScheduleDate();
   const { mutate } = useCreateSchedule(date);
-  const activeProfileId = getAppConfigProperty('activeProfileSchedule');
+  const activeProfileId = useAppConfig('activeProfileSchedule');
   const form = useForm<CreateFormSchemaType>({
     resolver: zodResolver(createFormSchema),
     defaultValues: {

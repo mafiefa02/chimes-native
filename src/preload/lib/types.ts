@@ -19,6 +19,10 @@ export interface IServices {
       key: K,
       value: V,
     ) => Promise<void>;
+    onChange: <K extends keyof AppConfig>(
+      key: K,
+      callback: (newValue: AppConfig[K]) => void,
+    ) => () => void;
   };
   profiles: {
     getAll: () => Promise<UserProfile[]>;

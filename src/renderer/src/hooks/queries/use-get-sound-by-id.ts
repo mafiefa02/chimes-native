@@ -1,10 +1,10 @@
 import { UserSound } from '../../../../shared/types';
 import { queryKeys } from '../../lib/query-keys';
-import { getAppConfigProperty } from '../../lib/utils';
+import { useAppConfig } from '../use-app-config';
 import { useQuery } from '@tanstack/react-query';
 
 export const useGetSoundById = (id: UserSound['id']) => {
-  const userProfileId = getAppConfigProperty('activeProfile');
+  const userProfileId = useAppConfig('activeProfile');
   return useQuery({
     queryKey: queryKeys.sounds({ id }),
     queryFn: async () =>

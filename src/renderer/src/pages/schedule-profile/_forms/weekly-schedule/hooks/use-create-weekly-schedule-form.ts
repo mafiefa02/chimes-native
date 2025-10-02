@@ -1,6 +1,6 @@
 import { NewSchedule } from '../../../../../../../shared/types';
 import { useCreateSchedule } from '../../../../../hooks/mutations/use-create-schedule';
-import { getAppConfigProperty } from '../../../../../lib/utils';
+import { useAppConfig } from '../../../../../hooks/use-app-config';
 import {
   createWeeklyScheduleFormSchema,
   type CreateWeeklyScheduleFormSchemaType,
@@ -21,10 +21,11 @@ export const useCreateWeeklyScheduleForm = ({
   onSubmitError,
 }: useCreateWeeklyScheduleFormProps) => {
   const { mutate } = useCreateSchedule();
+  const profileId = useAppConfig('activeProfileSchedule');
   const form = useForm<CreateWeeklyScheduleFormSchemaType>({
     resolver: zodResolver(createWeeklyScheduleFormSchema),
     defaultValues: {
-      profileId: getAppConfigProperty('activeProfileSchedule'),
+      profileId,
       name: '',
       triggerDays: [selectedDay],
       triggerTime: '09:00',
@@ -40,7 +41,7 @@ export const useCreateWeeklyScheduleForm = ({
     (values: CreateWeeklyScheduleFormSchemaType) => {
       const newValues = {
         ...values,
-        profileId: getAppConfigProperty('activeProfileSchedule'),
+        profileId,
         repeatStart: startOfDay(values.repeatStart),
         repeatEnd: values.repeatEnd ? endOfDay(values.repeatEnd) : undefined,
       };

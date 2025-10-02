@@ -1,12 +1,12 @@
 import { NewSchedule, Schedule } from '../../../../shared/types';
 import { queryKeys } from '../../lib/query-keys';
-import { getAppConfigProperty } from '../../lib/utils';
+import { useAppConfig } from '../use-app-config';
 import { tz } from '@date-fns/tz';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format, parse } from 'date-fns';
 
 export const useUpdateSchedule = (date: Date = new Date()) => {
-  const activeProfileScheduleId = getAppConfigProperty('activeProfileSchedule');
+  const activeProfileScheduleId = useAppConfig('activeProfileSchedule');
   const queryClient = useQueryClient();
   const queryKey = queryKeys.schedules({
     date,
