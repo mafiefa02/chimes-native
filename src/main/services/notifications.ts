@@ -3,6 +3,7 @@ import { NewNotification, Notification } from '../../shared/types';
 import { db } from '../lib/database';
 import { eq } from 'drizzle-orm';
 
+/** Retrieves all notifications for a specific user from the database. */
 export const getNotificationsByUser = async (
   userId: Notification['userId'],
 ): Promise<Notification[]> => {
@@ -11,12 +12,14 @@ export const getNotificationsByUser = async (
   });
 };
 
+/** Creates a new notification in the database. */
 export const createNotification = async (
   data: NewNotification,
 ): Promise<Notification[]> => {
   return db.insert(notifications).values(data).returning();
 };
 
+/** Updates an existing notification in the database by its ID. */
 export const updateNotification = async (
   id: Notification['id'],
   data: Partial<NewNotification>,
@@ -28,6 +31,7 @@ export const updateNotification = async (
     .returning();
 };
 
+/** Deletes a notification from the database by its ID. */
 export const deleteNotification = async (
   id: Pick<Notification, 'id'>['id'],
 ): Promise<Pick<Notification, 'id'>[]> => {

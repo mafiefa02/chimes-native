@@ -10,7 +10,16 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 
+/**
+ * Creates and configures the main application window.
+ * This function sets up the window's dimensions, title, and web preferences,
+ * including the preload script for bridging the main and renderer processes.
+ * It also handles loading the appropriate content based on the environment
+ * (development URL with HMR or production HTML file) and ensures external
+ * links open in the default system browser.
+ */
 function createWindow(): void {
+  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1152,
     height: 670,
@@ -24,17 +33,18 @@ function createWindow(): void {
     },
   });
 
+  // Show the window gracefully once it's ready.
   mainWindow.on('ready-to-show', () => {
     mainWindow.show();
   });
 
+  // Security measure: open all external links in the user's default browser.
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url);
     return { action: 'deny' };
   });
 
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
+  // Load the renderer content, handling development and production environments.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL']);
   } else {
@@ -42,25 +52,29 @@ function createWindow(): void {
   }
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+/**
+ * This is the main entry point for the application. It waits until Electron is
+ * fully initialized before performing startup tasks. This includes initializing
+ * the application's core services, setting up all IPC listeners to handle
+ * communication from the renderer process, and finally creating the main
+ * application window.
+ */
 app.whenReady().then(async () => {
+  // Run core application setup (database, services, etc.).
   await initializeApp();
 
-  // Set app user model id for windows
+  // Set a unique application ID for Windows notifications and taskbar behavior.
   electronApp.setAppUserModelId('com.chimes.app');
 
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
+  // Automatically handle common keyboard shortcuts like DevTools (F12)
+  // and reloading in development.
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'));
+  // --- IPC Handlers for Renderer-Main Communication ---
 
+  // App Configuration
   ipcMain.on('appConfig:getSync', (event, key) => {
     event.returnValue = appConfigServices.getAppConfigProperty(key);
   });
@@ -68,6 +82,7 @@ app.whenReady().then(async () => {
     appConfigServices.setAppConfigProperty(key, value);
   });
 
+  // User Profiles
   ipcMain.handle('profiles:getAll', () => profileServices.getAllProfiles());
   ipcMain.handle('profiles:getById', (_, id) =>
     profileServices.getProfileById(id),
@@ -82,6 +97,7 @@ app.whenReady().then(async () => {
     profileServices.deleteProfile(id),
   );
 
+  // Schedule Profiles
   ipcMain.handle('scheduleProfiles:getByUser', (_, userId) =>
     scheduleProfileServices.getScheduleProfilesByUser(userId),
   );
@@ -95,6 +111,7 @@ app.whenReady().then(async () => {
     scheduleProfileServices.deleteScheduleProfile(id),
   );
 
+  // User Sounds
   ipcMain.handle('userSounds:getByUser', (_, userId) =>
     userSoundServices.getUserSounds(userId),
   );
@@ -111,6 +128,7 @@ app.whenReady().then(async () => {
     userSoundServices.deleteUserSound(id, userId),
   );
 
+  // Schedules
   ipcMain.handle('schedules:getByProfile', (_, profileId) =>
     scheduleServices.getSchedulesByProfile(profileId),
   );
@@ -124,6 +142,7 @@ app.whenReady().then(async () => {
     scheduleServices.deleteSchedule(id),
   );
 
+  // Schedule History
   ipcMain.handle('scheduleHistory:getBySchedule', (_, scheduleId) =>
     scheduleHistoryServices.getHistoryBySchedule(scheduleId),
   );
@@ -131,6 +150,7 @@ app.whenReady().then(async () => {
     scheduleHistoryServices.createScheduleHistoryEntry(data),
   );
 
+  // Notifications
   ipcMain.handle('notifications:getByUser', (_, userId) =>
     notificationServices.getNotificationsByUser(userId),
   );
@@ -144,23 +164,22 @@ app.whenReady().then(async () => {
     notificationServices.deleteNotification(id),
   );
 
+  // Create the main window after all setup is complete.
   createWindow();
 
+  // Handle macOS-specific behavior for re-creating a window.
   app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+/**
+ * Handles the 'window-all-closed' event. It quits the application on all
+ * platforms except macOS, where it is standard for an application to remain
+ * active until the user explicitly quits.
+ */
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.

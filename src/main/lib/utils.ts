@@ -1,32 +1,41 @@
-// You can either use spawn or exec, the choice is often purely aesthetic,
-// but spawn() doesn't spawn a shell, which is what we want here.
-import { spawn } from 'node:child_process';
+import { ChildProcess, spawn } from 'node:child_process';
 
-// On Windows we can offload the work to PowerShell:
-const winFn = (filePath: string) =>
-  spawn(`powershell`, [
-    `-c`,
-    `(`,
-    `New-Object`,
-    `Media.SoundPlayer`,
-    `"${filePath}"`,
-    `).PlaySync();`,
-  ]);
+/**
+ * A platform-specific function for playing an audio file.
+ *
+ * This function is determined at runtime based on the host operating system,
+ * providing a single, consistent interface for audio playback. It uses the most
+ * appropriate native command-line utility for each platform.
+ *
+ * - **Windows**: Uses PowerShell's `Media.SoundPlayer`.
+ * - **macOS**: Uses the `afplay` utility.
+ * - **Linux/Other**: Uses the `ffplay` utility (requires FFmpeg to be installed).
+ *
+ * @param filePath The absolute path to the audio file to be played.
+ * @returns A `ChildProcess` instance for the spawned command.
+ * @see {@link https://stackoverflow.com/a/79286769}
+ */
+export const playAudioFile = ((): ((filePath: string) => ChildProcess) => {
+  // On Windows, we can offload the work to PowerShell.
+  const winFn = (filePath: string) =>
+    spawn('powershell', [
+      '-c',
+      '(',
+      'New-Object',
+      'Media.SoundPlayer',
+      `"${filePath}"`,
+      ').PlaySync();',
+    ]);
 
-// On MacOS, we have afplay available:
-const macFn = (filePath: string) => spawn(`afplay`, [filePath]);
+  // On macOS, the native `afplay` is available.
+  const macFn = (filePath: string) => spawn('afplay', [filePath]);
 
-// And on everything else, i.e. linux/unix, we can use aplay, which comes
-// preinstalled but doesn't play mp3 files, or we can use ffplay (the audio
-// player that comes with ffmpeg), which does, but requires an install.
-const ffplay = true;
-const nxFn = (filePath: string) =>
-  spawn(ffplay ? `ffplay` : `aplay`, [filePath]);
+  // On Linux/other Unix-like systems, we default to `ffplay` from FFmpeg.
+  const nxFn = (filePath: string) => spawn('ffplay', [filePath]);
 
-// Then, because your OS doesn't change during a script
-// run, we can simply bind the single function we'll need
-// as "play(filePath)":
-const { platform: os } = process;
-const playAudioFile = os === `win32` ? winFn : os === `darwin` ? macFn : nxFn;
-
-export { playAudioFile };
+  // Determine the OS once and return the appropriate function.
+  const os = process.platform;
+  if (os === 'win32') return winFn;
+  if (os === 'darwin') return macFn;
+  return nxFn;
+})();

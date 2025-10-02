@@ -14,6 +14,13 @@ import { db, runMigrations } from './database';
 import { count } from 'drizzle-orm';
 import { app, dialog } from 'electron';
 
+/**
+ * Initializes the entire application. This function orchestrates the setup
+ * process by initializing the database and starting core services like the
+ * schedule player. If any part of the initialization fails, it logs the error,
+ * displays an error dialog to the user, and quits the application to prevent
+ * it from running in an unstable state.
+ */
 export const initializeApp = async (): Promise<void> => {
   try {
     await initializeDatabase();
@@ -27,8 +34,11 @@ export const initializeApp = async (): Promise<void> => {
 };
 
 /**
- * A generic helper to sync active profile ID in the config file with
- * the database.
+ * A generic helper function to synchronize an active profile ID stored in the
+ * application's configuration file with the available profiles in the database.
+ * It ensures the configuration does not point to a deleted or non-existent profile.
+ * If the configured ID is invalid or missing, it resets it to the first available
+ * profile.
  */
 const syncActiveProfile = async (
   configKey: keyof AppConfig,
@@ -54,59 +64,85 @@ const syncActiveProfile = async (
 };
 
 /**
- * Runs database migrations and seeds the database with essential default data
- * if it's empty.
+ * Creates a default user profile in the database with the name "Default".
+ * After creation, it sets this new profile as the 'activeProfile' in the
+ * application's configuration.
+ */
+const seedDefaultUserProfile = async () => {
+  const defaultUserProfile = { displayName: 'Default', avatar: null };
+  const [{ id }] = await db
+    .insert(userProfiles)
+    .values(defaultUserProfile)
+    .returning({ id: userProfiles.id });
+  await setAppConfigProperty('activeProfile', id);
+};
+
+/**
+ * Seeds the database with a default sound entry. It associates this sound,
+ * named "Default", with the currently active user profile and links it to a
+ * predefined default audio file.
+ */
+const seedDefaultSound = async () => {
+  const activeUserId = getAppConfigProperty('activeProfile');
+  await db
+    .insert(userSounds)
+    .values({
+      name: 'Default',
+      userId: activeUserId,
+      filePath: defaultSoundFile,
+    });
+};
+
+/**
+ * Creates a default schedule profile in the database, associating it with the
+ * currently active user. After creation, it sets this new schedule profile as
+ * the 'activeProfileSchedule' in the application's configuration.
+ */
+const seedDefaultScheduleProfile = async () => {
+  const activeUserId = getAppConfigProperty('activeProfile');
+  const [{ id }] = await db
+    .insert(scheduleProfiles)
+    .values({ name: 'Default', userId: activeUserId })
+    .returning({ id: scheduleProfiles.id });
+  await setAppConfigProperty('activeProfileSchedule', id);
+};
+
+/**
+ * Initializes the application database. It first runs any pending database
+ * migrations to ensure the schema is up-to-date. Afterwards, it seeds the
+ * database with essential default data (user profile, sound, and schedule profile)
+ * only if the respective tables are empty. This ensures the application has a
+ * valid default state on first launch. Finally, it syncs the app configuration
+ * to ensure active profile IDs are valid.
  */
 const initializeDatabase = async () => {
   console.log('INFO: Initializing database...');
   await runMigrations();
 
-  // Seed Default User Profile
+  // Seed default user profile if none exist
   const [{ value: userCount }] = await db
     .select({ value: count() })
     .from(userProfiles);
   if (userCount === 0) {
-    const [{ id }] = await db
-      .insert(userProfiles)
-      .values({ displayName: 'Default', avatar: null })
-      .returning({ id: userProfiles.id });
-    await setAppConfigProperty('activeProfile', id);
+    seedDefaultUserProfile();
     console.info('INFO: Created default user profile.');
   }
 
-  const activeUserId = getAppConfigProperty('activeProfile');
-  if (!activeUserId) {
-    console.error(
-      'FATAL: Could not determine active user profile for seeding.',
-    );
-    return;
-  }
-
-  // Seed Default Sound
+  // Seed default sound if none exist
   const [{ value: soundCount }] = await db
     .select({ value: count() })
     .from(userSounds);
   if (soundCount === 0) {
-    await db
-      .insert(userSounds)
-      .values({
-        name: 'Default',
-        userId: activeUserId,
-        filePath: defaultSoundFile,
-      });
+    seedDefaultSound();
     console.info('INFO: Created default sound DB entry.');
   }
 
-  // Seed Default Schedule Profile
+  // Seed default schedule profile
   const [{ value: scheduleProfileCount }] = await db
     .select({ value: count() })
     .from(scheduleProfiles);
   if (scheduleProfileCount === 0) {
-    const [{ id }] = await db
-      .insert(scheduleProfiles)
-      .values({ name: 'Default', userId: activeUserId })
-      .returning({ id: scheduleProfiles.id });
-    await setAppConfigProperty('activeProfileSchedule', id);
+    seedDefaultScheduleProfile();
     console.info('INFO: Created default schedule profile.');
   }
 
