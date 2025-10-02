@@ -1,6 +1,6 @@
 import { ScheduleProfile } from '../../../../../shared/types';
 import { InsetShadowCard } from '../../../components/inset-shadow-card';
-import { Button } from '../../../components/ui/button';
+import { buttonVariants } from '../../../components/ui/button/button-variants';
 import { Checkbox } from '../../../components/ui/checkbox';
 import { Input } from '../../../components/ui/input';
 import { useGetProfileSchedules } from '../../../hooks/queries/use-get-schedule-profiles';
@@ -40,10 +40,10 @@ export const ProfileSelector = () => {
         <AddNewScheduleProfileDialog />
       </div>
       {availableProfiles.map((profile) => (
-        <Button
+        <div
           key={profile.id}
-          variant="outline"
           className={cn(
+            buttonVariants({ variant: 'outline' }),
             'flex items-center w-full justify-start py-6 bg-secondary',
             profileSelectedForPreview(profile) && 'bg-white',
           )}
@@ -56,7 +56,7 @@ export const ProfileSelector = () => {
             }
             checked={selectedProfileId === profile.id}
           />
-        </Button>
+        </div>
       ))}
     </InsetShadowCard>
   );
