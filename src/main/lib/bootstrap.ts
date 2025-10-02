@@ -18,9 +18,9 @@ export const initializeApp = async (): Promise<void> => {
   try {
     await initializeDatabase();
     startSchedulePlayer();
-    console.log('✅ INFO: Application initialization complete.');
+    console.log('INFO: Application initialization complete.');
   } catch (error: unknown) {
-    console.error('❌ FATAL: Failed to initialize the application.', error);
+    console.error('FATAL: Failed to initialize the application.', error);
     dialog.showErrorBox('Initialization Error', (error as Error).message);
     app.quit();
   }

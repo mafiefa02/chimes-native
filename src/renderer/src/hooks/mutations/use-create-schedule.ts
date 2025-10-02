@@ -9,24 +9,15 @@ export const useCreateSchedule = (date: Date = new Date()) => {
   const activeProfileScheduleId = useAppConfig('activeProfileSchedule');
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (data: NewSchedule) => {
-      console.log({
+    mutationFn: async (data: NewSchedule) =>
+      await window.services.schedules.create({
         ...data,
         triggerTime: format(
           parse(data.triggerTime, 'HH:mm', new Date()),
           'HH:mm',
           { in: tz('Etc/UTC') },
         ),
-      });
-      return await window.services.schedules.create({
-        ...data,
-        triggerTime: format(
-          parse(data.triggerTime, 'HH:mm', new Date()),
-          'HH:mm',
-          { in: tz('Etc/UTC') },
-        ),
-      });
-    },
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: queryKeys.schedules({

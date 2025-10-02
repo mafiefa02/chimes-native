@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const weeklyScheduleBaseSchema = z
   .object({
-    profileId: z.uuidv4().optional(),
+    profileId: z.uuidv4(),
     name: z.string().min(1, { message: 'Schedule name cannot be empty.' }),
     triggerDays: z
       .array(z.number().min(1).max(7))

@@ -42,7 +42,6 @@ const checkSchedules = async () => {
     );
 
     if (isToday && isTime && schedule.isActive) {
-      console.log('here');
       playAudioFile(soundPath);
     }
   }
