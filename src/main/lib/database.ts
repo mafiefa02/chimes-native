@@ -1,4 +1,3 @@
-import { config } from '../../../drizzle.config';
 import * as schema from '../../shared/schema';
 import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
@@ -26,6 +25,12 @@ export const db = drizzle(client, { schema });
  */
 export const runMigrations = async () => {
   console.info('INFO: Running database migrations...');
-  await migrate(db, { migrationsFolder: config.out });
+
+  // Determine the base path depending on whether the app is packaged or in development
+  const basePath = app.isPackaged ? process.resourcesPath : app.getAppPath();
+  const migrationsFolder = path.join(basePath, 'public', 'drizzle');
+
+  await migrate(db, { migrationsFolder });
+
   console.info('INFO: Database migrations completed.');
 };
