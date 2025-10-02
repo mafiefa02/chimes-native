@@ -2,8 +2,9 @@ import { NewSchedule, Schedule } from '../../../../../../shared/types';
 import { useUpdateSchedule } from '../../../../hooks/mutations/use-update-schedule';
 import { useScheduleDate } from '../../../../hooks/use-schedule-date';
 import { editFormSchema, EditFormSchemaType } from '../schema';
-import { formatTriggerTime, validateTriggerDays } from '../utils';
+import { formatTriggerTime } from '../utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { endOfDay, startOfDay } from 'date-fns';
 import { useForm } from 'react-hook-form';
 
 interface useEditScheduleFormProps {
@@ -30,10 +31,8 @@ export const useEditScheduleForm = ({
   const onSubmit = form.handleSubmit((values: EditFormSchemaType) => {
     const newValues: typeof values = {
       ...values,
-      triggerDays: validateTriggerDays({
-        repeat: values.repeat,
-        repeatStart: values.repeatStart,
-      }),
+      repeatStart: startOfDay(values.repeatStart),
+      repeatEnd: values.repeatEnd ? endOfDay(values.repeatEnd) : undefined,
     };
 
     mutate(newValues, { onSuccess: onSubmitSuccess, onError: onSubmitError });

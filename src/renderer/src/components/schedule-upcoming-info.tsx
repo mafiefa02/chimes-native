@@ -1,6 +1,6 @@
+import { upcomingBadge } from '../lib/animations';
 import { Badge } from './ui/badge';
 import { AnimatePresence, motion } from 'motion/react';
-import { upcomingBadge } from '../lib/animations';
 
 interface ScheduleUpcomingInfoProps {
   scheduleIsUpcoming: boolean;
@@ -11,10 +11,7 @@ export const ScheduleUpcomingInfo = ({
   isVisible = false,
 }: ScheduleUpcomingInfoProps) => {
   return (
-    <AnimatePresence
-      mode="popLayout"
-      initial={false}
-    >
+    <AnimatePresence>
       {scheduleIsUpcoming && !isVisible && (
         <motion.span
           variants={upcomingBadge}

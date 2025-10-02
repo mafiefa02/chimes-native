@@ -15,13 +15,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '../../components/ui/tooltip';
-import { useAddScheduleDialog } from '../../contexts/add-schedule-dialog-context';
+import { useDialog } from '../../hooks/use-dialog';
 import { useIsMac } from '../../hooks/use-is-mac';
 import { AddNewScheduleForm } from './add-new-schedule-form';
 import { PlusIcon } from 'lucide-react';
 
 export const AddNewScheduleDialog = () => {
-  const { isDialogOpen, openDialog, closeDialog } = useAddScheduleDialog();
+  const { isDialogOpen, openDialog, closeDialog } = useDialog();
   const isMac = useIsMac();
   return (
     <Dialog

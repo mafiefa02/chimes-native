@@ -3,7 +3,7 @@ import { Button } from '../../components/ui/button';
 import { itemVariantsXFromRight } from '../../lib/animations';
 import { EditScheduleDialog } from './edit-schedule-dialog';
 import { EditIcon } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { useState } from 'react';
 
 interface ScheduleEditActionProps {
@@ -17,7 +17,7 @@ export const ScheduleEditAction = ({
 }: ScheduleEditActionProps) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   return (
-    <AnimatePresence mode="wait">
+    <>
       {isVisible && (
         <motion.span
           variants={itemVariantsXFromRight}
@@ -39,6 +39,6 @@ export const ScheduleEditAction = ({
         isDialogOpen={isEditDialogOpen}
         setIsDialogOpen={setIsEditDialogOpen}
       />
-    </AnimatePresence>
+    </>
   );
 };

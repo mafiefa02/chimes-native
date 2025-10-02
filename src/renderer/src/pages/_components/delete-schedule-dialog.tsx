@@ -14,6 +14,8 @@ import { RadioGroup, RadioGroupItem } from '../../components/ui/radio-group';
 import { useDeleteSchedule } from '../../hooks/mutations/use-delete-schedule';
 import { useUpdateSchedule } from '../../hooks/mutations/use-update-schedule';
 import { useScheduleDate } from '../../hooks/use-schedule-date';
+import { countRemainingOccurrences } from '../../lib/utils';
+import { endOfDay, isSameDay, subDays } from 'date-fns';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -37,23 +39,41 @@ export const DeleteScheduleDialog = ({
   const { mutate: deleteEntireSchedule } = useDeleteSchedule(schedule.id, date);
   const { mutate: updateScheduleSeries } = useUpdateSchedule(date);
 
+  const stopFollowingSchedules = () => {
+    const newEndDate = subDays(date, 1);
+    const newScheduleData = { ...schedule, repeatEnd: endOfDay(newEndDate) };
+
+    const remaining = countRemainingOccurrences(newScheduleData, newEndDate);
+
+    const isNowSingleEvent =
+      remaining === 1 ||
+      (remaining === 0 && isSameDay(schedule.repeatStart, newEndDate));
+
+    updateScheduleSeries(
+      {
+        id: schedule.id,
+        repeatEnd: newScheduleData.repeatEnd,
+        repeat: isNowSingleEvent ? 'once' : schedule.repeat,
+      },
+      {
+        onSuccess: () =>
+          toast.success(
+            'Successfully deleted the schedule for today and upcoming days!',
+          ),
+      },
+    );
+  };
+
   const handleDelete = () => {
-    const deleteAll = deleteAction === 'all-schedules';
-    if (isOneTimeEvent || deleteAll) {
+    const shouldDeleteEntirely =
+      isOneTimeEvent || deleteAction === 'all-schedules';
+
+    if (shouldDeleteEntirely) {
       deleteEntireSchedule();
     } else {
-      const previousDate = new Date(date);
-      previousDate.setDate(date.getDate() - 1);
-      updateScheduleSeries(
-        { id: schedule.id, repeatEnd: previousDate },
-        {
-          onSuccess: () =>
-            toast.success(
-              'Succesfully deleted the schedule for today and upcoming days!',
-            ),
-        },
-      );
+      stopFollowingSchedules();
     }
+
     setIsDialogOpen(false);
   };
 

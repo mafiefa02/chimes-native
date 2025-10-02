@@ -1,10 +1,66 @@
+import { ScheduleProfile } from '../../../../../shared/types';
+import { InsetShadowCard } from '../../../components/inset-shadow-card';
+import { Button } from '../../../components/ui/button';
+import { Checkbox } from '../../../components/ui/checkbox';
+import { Input } from '../../../components/ui/input';
 import { useGetProfileSchedules } from '../../../hooks/queries/use-get-schedule-profiles';
+import {
+  cn,
+  getAppConfigProperty,
+  setAppConfigProperty,
+} from '../../../lib/utils';
+import { usePreviewProfileId } from '../_hooks/use-preview-profile-id';
+import { AddNewScheduleProfileDialog } from './add-new-schedule-profile-dialog';
+import { SearchIcon } from 'lucide-react';
+import { useState } from 'react';
 
 export const ProfileSelector = () => {
+  const [search, setSearch] = useState('');
+
+  const selectedProfileId = getAppConfigProperty('activeProfileSchedule');
   const { data: profiles, isPending, isError } = useGetProfileSchedules();
+  const { previewProfileId } = usePreviewProfileId();
 
-  if (isPending) return 'Loading...';
-  if (isError) return 'Error...';
+  if (isPending) return <p className="p-4">Loading...</p>;
+  if (isError) return <p className="p-4">Error loading profiles.</p>;
 
-  return profiles.map((profile) => profile.name);
+  const profileSelectedForPreview = (profile: ScheduleProfile) =>
+    previewProfileId === profile.id;
+
+  const availableProfiles =
+    profiles?.filter((profile) =>
+      profile.name.toLowerCase().includes(search.toLowerCase()),
+    ) ?? [];
+
+  return (
+    <InsetShadowCard className="space-y-2 p-4 size-full">
+      <div className="flex items-center gap-2">
+        <Input
+          leftAdornment={<SearchIcon size={16} />}
+          placeholder="Search profile name..."
+          onChange={({ currentTarget }) => setSearch(currentTarget.value)}
+        />
+        <AddNewScheduleProfileDialog />
+      </div>
+      {availableProfiles.map((profile) => (
+        <Button
+          key={profile.id}
+          variant="outline"
+          className={cn(
+            'flex items-center w-full justify-start py-6 bg-secondary',
+            profileSelectedForPreview(profile) && 'bg-white',
+          )}
+        >
+          <p>{profile.name}</p>
+          <Checkbox
+            className="ml-auto"
+            onCheckedChange={() =>
+              setAppConfigProperty('activeProfileSchedule', profile.id)
+            }
+            checked={selectedProfileId === profile.id}
+          />
+        </Button>
+      ))}
+    </InsetShadowCard>
+  );
 };

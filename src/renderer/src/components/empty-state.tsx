@@ -15,7 +15,9 @@ export const EmptyState = ({ title, description }: EmptyStateProps) => {
       />
       <div className="space-y-1 text-center">
         <h1 className="font-bold text-xl">{title}</h1>
-        <p className="text-gray-500 text-lg">{description}</p>
+        <p className="text-gray-500 text-lg max-w-96 wrap-break-word text-pretty">
+          {description}
+        </p>
       </div>
     </div>
   );

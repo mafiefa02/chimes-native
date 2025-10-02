@@ -2,6 +2,7 @@ import { Schedule } from '../../../../../shared/types';
 import { useGetWeeklySchedules } from '../../../hooks/queries/use-get-weekly-schedules';
 import { useMinuteTime } from '../../../hooks/use-minute-time';
 import { findUpcomingSchedule } from '../../../lib/utils';
+import { getISODay } from 'date-fns';
 import { useMemo } from 'react';
 
 interface useWeeklySchedulesProp {
@@ -21,17 +22,15 @@ export const useWeeklySchedules = ({
 
   const { time: now } = useMinuteTime();
   const upcomingSchedule = useMemo(
-    () => findUpcomingSchedule(now, schedules),
-    [schedules, now],
+    () =>
+      selectedDay === getISODay(now)
+        ? findUpcomingSchedule(now, schedules)
+        : null,
+    [schedules, now, selectedDay],
   );
+
   const isScheduleUpcoming = (schedule: Schedule) =>
     upcomingSchedule ? schedule.id === upcomingSchedule.id : false;
 
-  return {
-    schedules,
-    upcomingSchedule,
-    isScheduleUpcoming,
-    isPending,
-    isError,
-  };
+  return { schedules, isScheduleUpcoming, isPending, isError };
 };

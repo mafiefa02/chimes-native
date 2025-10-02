@@ -22,8 +22,8 @@ export const useSchedules = () => {
   };
 
   const upcomingSchedule = useMemo(
-    () => findUpcomingSchedule(now, schedules),
-    [schedules, now],
+    () => (isToday(date) ? findUpcomingSchedule(now, schedules) : null),
+    [schedules, now, date],
   );
 
   const isUpcomingSchedule = (schedule: Schedule) =>

@@ -5,7 +5,7 @@ import { getAppConfigProperty } from '../../../../lib/utils';
 import { createFormSchema, type CreateFormSchemaType } from '../schema';
 import { validateTriggerDays } from '../utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getISODay } from 'date-fns';
+import { endOfDay, getISODay, startOfDay } from 'date-fns';
 import { useForm } from 'react-hook-form';
 
 interface useCreateScheduleFormProps {
@@ -38,6 +38,8 @@ export const useCreateScheduleForm = ({
   const onSubmit = form.handleSubmit((values: CreateFormSchemaType) => {
     const newValues: typeof values = {
       ...values,
+      repeatStart: startOfDay(values.repeatStart),
+      repeatEnd: values.repeatEnd ? endOfDay(values.repeatEnd) : undefined,
       triggerDays: validateTriggerDays({
         repeat: values.repeat,
         repeatStart: values.repeatStart,

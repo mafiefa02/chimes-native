@@ -1,6 +1,9 @@
-import { createContext } from 'react';
+import { createContext, Dispatch, SetStateAction } from 'react';
 
-type ScheduleDateContextType = { date: Date; setDate: (date?: Date) => void };
+type ScheduleDateContextType = {
+  date: Date;
+  setDate: Dispatch<SetStateAction<Date | undefined>>;
+};
 
 export const ScheduleDateContext =
   createContext<ScheduleDateContextType | null>(null);

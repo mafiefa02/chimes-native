@@ -6,6 +6,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 interface useGetWeeklySchedulesProp {
   selectedDayOfWeek: number;
   searchQuery?: string;
+  profileId?: string | null;
 }
 
 const filterWeeklySchedule = (schedule: Schedule, dayOfWeek: number) =>
@@ -19,7 +20,11 @@ export const useGetWeeklySchedules = ({
   return useQuery({
     enabled: !!activeProfileScheduleId,
     placeholderData: keepPreviousData,
-    queryKey: queryKeys.schedules({ selectedDayOfWeek, searchQuery }),
+    queryKey: queryKeys.schedules({
+      selectedDayOfWeek,
+      searchQuery,
+      profileId: activeProfileScheduleId,
+    }),
     queryFn: async () =>
       await window.services.schedules
         .getByProfile(activeProfileScheduleId)

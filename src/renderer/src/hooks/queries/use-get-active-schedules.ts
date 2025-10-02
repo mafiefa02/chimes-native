@@ -12,7 +12,7 @@ export const useGetActiveSchedules = ({ date }: useGetActiveSchedulesProp) => {
   return useQuery({
     enabled: !!activeProfileScheduleId,
     placeholderData: keepPreviousData,
-    queryKey: queryKeys.schedules({ date }),
+    queryKey: queryKeys.schedules({ date, profileId: activeProfileScheduleId }),
     queryFn: async () =>
       await window.services.schedules
         .getByProfile(activeProfileScheduleId)

@@ -1,6 +1,10 @@
 import { useGetProfileSchedules } from '../../hooks/queries/use-get-schedule-profiles';
 import { delayedFadeIn } from '../../lib/animations';
-import { cn, getAppConfigProperty } from '../../lib/utils';
+import {
+  cn,
+  getAppConfigProperty,
+  setAppConfigProperty,
+} from '../../lib/utils';
 import {
   Select,
   SelectContent,
@@ -30,7 +34,12 @@ export const SidebarAction = () => {
     <div
       className={cn('flex flex-col gap-2', isSidebarOpen ? 'w-full' : 'w-fit')}
     >
-      <Select defaultValue={activeProfileSchedule ?? undefined}>
+      <Select
+        onValueChange={(value) =>
+          setAppConfigProperty('activeProfileSchedule', value)
+        }
+        value={activeProfileSchedule}
+      >
         <motion.div
           layout
           transition={{ type: 'spring', stiffness: 600, damping: 35 }}

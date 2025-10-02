@@ -16,57 +16,52 @@ export const ScheduleList = () => {
   useCreateScheduleShortcut();
 
   return (
-    <div className="flex flex-col gap-2 h-full overflow-hidden">
-      <AnimatePresence
-        mode="popLayout"
-        initial={false}
-      >
-        {isPending ? (
-          <motion.div
-            key="loading"
-            className="space-y-2"
-            variants={containerVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <LoadingSkeletons />
-          </motion.div>
-        ) : isError ? (
-          <motion.div key="error">
-            <ScheduleListError />
-          </motion.div>
-        ) : schedules.length > 0 ? (
-          <motion.div
-            key="schedules-list"
-            className="flex flex-col gap-2 h-full"
-            variants={containerVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <ScheduleListContent
-              schedules={schedules}
-              isSchedulePast={isSchedulePast}
-              isUpcomingSchedule={isUpcomingSchedule}
-            />
-          </motion.div>
-        ) : (
-          <motion.div
-            className="grid h-full"
-            key="empty-state"
-            variants={fadeInOut}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <EmptyState
-              title="Oops! No data found"
-              description="We couldn't find any schedule for today"
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+    <AnimatePresence mode="popLayout">
+      {isPending ? (
+        <motion.div
+          key="loading"
+          className="space-y-2 overflow-y-hidden"
+          variants={containerVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+        >
+          <LoadingSkeletons />
+        </motion.div>
+      ) : isError ? (
+        <motion.div key="error">
+          <ScheduleListError />
+        </motion.div>
+      ) : schedules.length > 0 ? (
+        <motion.div
+          key="schedules-list"
+          className="grid grid-flow-row gap-y-2"
+          variants={containerVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+        >
+          <ScheduleListContent
+            schedules={schedules}
+            isSchedulePast={isSchedulePast}
+            isUpcomingSchedule={isUpcomingSchedule}
+          />
+        </motion.div>
+      ) : (
+        <motion.div
+          className="grid h-full"
+          key="empty-state"
+          variants={fadeInOut}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+        >
+          <EmptyState
+            title="Oops! No data found"
+            description="We couldn't find any schedule for today"
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

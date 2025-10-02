@@ -1,8 +1,8 @@
-import { useAddScheduleDialog } from '../../contexts/add-schedule-dialog-context';
+import { useDialog } from '../../hooks/use-dialog';
 import { useEffect } from 'react';
 
 export const useCreateScheduleShortcut = () => {
-  const { openDialog } = useAddScheduleDialog();
+  const { openDialog } = useDialog();
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement;

@@ -1,7 +1,17 @@
 import { AppConfig, Schedule } from '../../../shared/types';
 import { tz } from '@date-fns/tz';
 import { clsx, type ClassValue } from 'clsx';
-import { format, isAfter, isBefore, parse } from 'date-fns';
+import {
+  addDays,
+  format,
+  getISODay,
+  isAfter,
+  isBefore,
+  isEqual,
+  max,
+  parse,
+  startOfDay,
+} from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
 export const cn = (...inputs: ClassValue[]) => {
@@ -11,11 +21,26 @@ export const cn = (...inputs: ClassValue[]) => {
 export const getAppConfigProperty = <K extends keyof AppConfig>(key: K) =>
   window.services.appConfig.get(key);
 
-export const parseDateStringAsUTC = (dateString: string, dateFormat: string) =>
-  parse(dateString, dateFormat, new Date(), { in: tz('Etc/UTC') });
+export const setAppConfigProperty = <K extends keyof AppConfig>(
+  key: K,
+  value: AppConfig[K],
+) => window.services.appConfig.set(key, value);
+
+export const parseDateStringAsUTC = (
+  dateString: string,
+  dateFormat: string,
+  dateReference: Date = new Date(),
+) => parse(dateString, dateFormat, dateReference, { in: tz('Etc/UTC') });
 
 export const formatDateToLocalTimezone = (date: Date, dateFormat: string) =>
   format(date, dateFormat, { in: tz(getAppConfigProperty('userTimezone')) });
+
+export const getDayName = (dayOfWeek: number, formatDate: string = 'EEEE') => {
+  const today = new Date();
+  const date = addDays(today, dayOfWeek - today.getDay());
+
+  return format(date, formatDate);
+};
 
 export const findUpcomingSchedule = (
   reference: Date,
@@ -32,4 +57,60 @@ export const findUpcomingSchedule = (
 
     return isBefore(currentTime, earliestTime) ? current : earliest;
   }, null);
+};
+
+export const countRemainingOccurrences = (
+  schedule: Schedule,
+  reference: Date,
+): number => {
+  if (schedule.repeat === 'once') {
+    const triggerDateTime = parseDateStringAsUTC(
+      schedule.triggerTime,
+      'HH:mm',
+      schedule.repeatStart,
+    );
+    return isAfter(triggerDateTime, reference) ? 1 : 0;
+  }
+
+  if (!schedule.repeatEnd) {
+    return Infinity;
+  }
+
+  const loopStartDate = max([startOfDay(schedule.repeatStart), reference]);
+
+  const scheduleEndDate = schedule.repeatEnd;
+
+  let remainingOccurrences = 0;
+  let currentDate = loopStartDate;
+
+  while (
+    isBefore(currentDate, scheduleEndDate) ||
+    isEqual(startOfDay(currentDate), startOfDay(scheduleEndDate))
+  ) {
+    const dayOfWeek = getISODay(currentDate);
+
+    if (
+      schedule.repeat === 'daily' ||
+      schedule.triggerDays.includes(dayOfWeek)
+    ) {
+      const triggerDateTime = parseDateStringAsUTC(
+        schedule.triggerTime,
+        'HH:mm',
+        currentDate,
+      );
+
+      const isFutureOccurrence = isAfter(triggerDateTime, reference);
+      const isWithinBounds =
+        isBefore(triggerDateTime, scheduleEndDate) ||
+        isEqual(triggerDateTime, scheduleEndDate);
+
+      if (isFutureOccurrence && isWithinBounds) {
+        remainingOccurrences++;
+      }
+    }
+
+    currentDate = addDays(currentDate, 1);
+  }
+
+  return remainingOccurrences;
 };

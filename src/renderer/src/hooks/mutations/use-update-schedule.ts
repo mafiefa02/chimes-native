@@ -1,12 +1,17 @@
 import { NewSchedule, Schedule } from '../../../../shared/types';
 import { queryKeys } from '../../lib/query-keys';
+import { getAppConfigProperty } from '../../lib/utils';
 import { tz } from '@date-fns/tz';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format, parse } from 'date-fns';
 
-export const useUpdateSchedule = (date: Date) => {
+export const useUpdateSchedule = (date: Date = new Date()) => {
+  const activeProfileScheduleId = getAppConfigProperty('activeProfileSchedule');
   const queryClient = useQueryClient();
-  const queryKey = queryKeys.schedules({ date });
+  const queryKey = queryKeys.schedules({
+    date,
+    profileId: activeProfileScheduleId,
+  });
 
   return useMutation({
     mutationFn: async (data: Partial<NewSchedule> & { id: Schedule['id'] }) => {

@@ -3,7 +3,7 @@ import { Button } from '../../components/ui/button';
 import { itemVariantsXFromRight } from '../../lib/animations';
 import { DeleteScheduleDialog } from './delete-schedule-dialog';
 import { TrashIcon } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { useState } from 'react';
 
 interface ScheduleDeleteActionProps {
@@ -17,7 +17,7 @@ export const ScheduleDeleteAction = ({
 }: ScheduleDeleteActionProps) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   return (
-    <AnimatePresence mode="wait">
+    <>
       {isVisible && (
         <motion.span
           variants={itemVariantsXFromRight}
@@ -39,6 +39,6 @@ export const ScheduleDeleteAction = ({
         isDialogOpen={isDeleteDialogOpen}
         setIsDialogOpen={setIsDeleteDialogOpen}
       />
-    </AnimatePresence>
+    </>
   );
 };
