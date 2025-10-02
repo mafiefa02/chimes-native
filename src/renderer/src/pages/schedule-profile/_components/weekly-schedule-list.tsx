@@ -1,5 +1,6 @@
 import { EmptyState } from '../../../components/empty-state';
 import { LoadingSkeletons } from '../../../components/loading-skeletons';
+import { useAppConfig } from '../../../hooks/use-app-config';
 import { containerVariants, fadeInOut } from '../../../lib/animations';
 import { getDayName } from '../../../lib/utils';
 import { useWeeklySchedules } from '../_hooks/use-weekly-schedules';
@@ -15,6 +16,7 @@ export const WeeklyScheduleList = ({
   selectedDay,
   searchQuery,
 }: WeeklyScheduleListProp) => {
+  const profileId = useAppConfig('activeProfileSchedule');
   const { schedules, isScheduleUpcoming, isPending, isError } =
     useWeeklySchedules({ selectedDay, searchQuery });
 
@@ -24,7 +26,7 @@ export const WeeklyScheduleList = ({
     <AnimatePresence mode="popLayout">
       {isPending ? (
         <motion.div
-          key="loading"
+          key={`loading-${profileId}`}
           className="space-y-2 overflow-y-hidden"
           variants={containerVariants}
           initial="initial"
@@ -34,12 +36,12 @@ export const WeeklyScheduleList = ({
           <LoadingSkeletons />
         </motion.div>
       ) : isError ? (
-        <motion.div key="error">
+        <motion.div key={`error-${profileId}`}>
           <p>Error!</p>
         </motion.div>
       ) : schedules && schedules.length > 0 ? (
         <motion.div
-          key="schedules-list"
+          key={profileId}
           className="grid grid-flow-row gap-y-2"
           variants={containerVariants}
           initial="initial"
@@ -54,7 +56,7 @@ export const WeeklyScheduleList = ({
       ) : (
         <motion.div
           className="grid h-full"
-          key="empty-state"
+          key={`empty-state-${profileId}`}
           variants={fadeInOut}
           initial="initial"
           animate="animate"

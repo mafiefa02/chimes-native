@@ -1,5 +1,6 @@
 import { EmptyState } from '../../components/empty-state';
 import { LoadingSkeletons } from '../../components/loading-skeletons';
+import { useAppConfig } from '../../hooks/use-app-config';
 import { containerVariants, fadeInOut } from '../../lib/animations';
 import { useChangeDateShortcut } from '../_hooks/use-change-date-shortcut';
 import { useCreateScheduleShortcut } from '../_hooks/use-create-schedule-shortcut';
@@ -9,6 +10,7 @@ import { ScheduleListError } from './schedule-list-error';
 import { AnimatePresence, motion } from 'motion/react';
 
 export const ScheduleList = () => {
+  const profileId = useAppConfig('activeProfileSchedule');
   const { schedules, isPending, isError, isSchedulePast, isUpcomingSchedule } =
     useSchedules();
 
@@ -19,7 +21,7 @@ export const ScheduleList = () => {
     <AnimatePresence mode="popLayout">
       {isPending ? (
         <motion.div
-          key="loading"
+          key={`loading-${profileId}`}
           className="space-y-2 overflow-y-hidden"
           variants={containerVariants}
           initial="initial"
@@ -29,12 +31,12 @@ export const ScheduleList = () => {
           <LoadingSkeletons />
         </motion.div>
       ) : isError ? (
-        <motion.div key="error">
+        <motion.div key={`error-${profileId}`}>
           <ScheduleListError />
         </motion.div>
       ) : schedules.length > 0 ? (
         <motion.div
-          key="schedules-list"
+          key={profileId}
           className="grid grid-flow-row gap-y-2"
           variants={containerVariants}
           initial="initial"
@@ -50,7 +52,7 @@ export const ScheduleList = () => {
       ) : (
         <motion.div
           className="grid h-full"
-          key="empty-state"
+          key={`empty-state-${profileId}`}
           variants={fadeInOut}
           initial="initial"
           animate="animate"
