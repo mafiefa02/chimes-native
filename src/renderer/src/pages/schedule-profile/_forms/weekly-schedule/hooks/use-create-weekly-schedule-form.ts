@@ -1,6 +1,7 @@
 import { NewSchedule } from '../../../../../../../shared/types';
 import { useCreateSchedule } from '../../../../../hooks/mutations/use-create-schedule';
 import { useAppConfig } from '../../../../../hooks/use-app-config';
+import { ISO_DAY_OF_WEEKS } from '../../../../../lib/constants';
 import {
   createWeeklyScheduleFormSchema,
   type CreateWeeklyScheduleFormSchemaType,
@@ -39,13 +40,14 @@ export const useCreateWeeklyScheduleForm = ({
 
   const onSubmit = form.handleSubmit(
     (values: CreateWeeklyScheduleFormSchemaType) => {
-      const newValues = {
+      const newValues: typeof values = {
         ...values,
         profileId,
         repeatStart: startOfDay(values.repeatStart),
         repeatEnd: values.repeatEnd ? endOfDay(values.repeatEnd) : undefined,
+        triggerDays:
+          values.repeat === 'daily' ? ISO_DAY_OF_WEEKS : values.triggerDays,
       };
-      console.log(newValues);
       mutate(newValues, { onSuccess: onSubmitSuccess, onError: onSubmitError });
     },
   );

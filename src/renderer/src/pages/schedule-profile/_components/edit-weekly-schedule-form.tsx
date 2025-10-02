@@ -70,7 +70,6 @@ export const EditWeeklyScheduleForm = ({
   useEffect(() => {
     if (triggerDays.length === ISO_DAY_OF_WEEKS.length) {
       setValue('repeat', 'daily', { shouldValidate: true });
-      resetField('triggerDays');
     }
   }, [triggerDays, setValue, resetField]);
 

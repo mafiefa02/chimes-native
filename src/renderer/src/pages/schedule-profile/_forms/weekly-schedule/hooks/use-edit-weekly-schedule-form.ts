@@ -1,5 +1,6 @@
 import { Schedule } from '../../../../../../../shared/types';
 import { useUpdateSchedule } from '../../../../../hooks/mutations/use-update-schedule';
+import { ISO_DAY_OF_WEEKS } from '../../../../../lib/constants';
 import { formatTriggerTime } from '../../../../_forms/schedule/utils';
 import {
   editWeeklyScheduleFormSchema,
@@ -34,10 +35,12 @@ export const useEditWeeklyScheduleForm = ({
 
   const onSubmit = form.handleSubmit(
     (values: EditWeeklyScheduleFormSchemaType) => {
-      const newValues = {
+      const newValues: typeof values = {
         ...values,
         repeatStart: startOfDay(values.repeatStart),
         repeatEnd: values.repeatEnd ? endOfDay(values.repeatEnd) : undefined,
+        triggerDays:
+          values.repeat === 'daily' ? ISO_DAY_OF_WEEKS : values.triggerDays,
       };
       updateSchedule(newValues, {
         onSuccess: () => onSubmitSuccess([newValues]),
