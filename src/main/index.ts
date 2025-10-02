@@ -1,4 +1,3 @@
-import icon from '../../resources/icon.png?asset';
 import { initializeApp } from './lib/bootstrap';
 import * as appConfigServices from './services/appConfig';
 import * as notificationServices from './services/notifications';
@@ -12,17 +11,13 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 
 function createWindow(): void {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1152,
     height: 670,
     minWidth: 1000,
     minHeight: 560,
-    show: false,
     autoHideMenuBar: true,
     title: 'Chimes',
-    frame: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
       sandbox: false,
