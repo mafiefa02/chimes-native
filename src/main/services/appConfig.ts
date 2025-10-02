@@ -5,6 +5,9 @@ import fs from 'fs-extra';
 import path from 'path';
 
 const configFilePath = path.join(app.getPath('userData'), appConfigFile);
+
+let appConfig: AppConfig;
+
 const createDefaultConfig = (): AppConfig => ({
   activeProfile: '',
   activeProfileSchedule: '',
@@ -12,25 +15,25 @@ const createDefaultConfig = (): AppConfig => ({
   userTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 });
 
-const getConfig = (): AppConfig => {
-  try {
-    const config = fs.readJSONSync(configFilePath, { encoding: 'utf-8' });
-    return config as AppConfig;
-  } catch (error: unknown) {
-    console.warn(
-      `WARN: Could not read or parse config.json. It might be corrupted or missing. Resetting to default. The error was: "${(error as Error).message}".`,
-    );
-    // If reading or parsing fails, create a new default config
-    const defaultConfig = createDefaultConfig();
-    fs.writeJSONSync(configFilePath, defaultConfig, { spaces: 2 });
-    return defaultConfig;
-  }
-};
+try {
+  appConfig = fs.readJSONSync(configFilePath, {
+    encoding: 'utf-8',
+  }) as AppConfig;
+} catch (error: unknown) {
+  console.warn(
+    `WARN: Could not read or parse config.json. Resetting to default. The error was: "${(error as Error).message}".`,
+  );
+  // If reading or parsing fails, create a new default config
+  appConfig = createDefaultConfig();
+  fs.writeJSONSync(configFilePath, appConfig, { spaces: 2 });
+}
+
+export const getAppConfig = (): AppConfig => appConfig;
 
 export const getAppConfigProperty = <K extends keyof AppConfig>(
   key: K,
 ): AppConfig[K] => {
-  const config = getConfig();
+  const config = getAppConfig();
   return config[key];
 };
 
@@ -41,9 +44,14 @@ export const setAppConfigProperty = async <
   key: K,
   value: V,
 ): Promise<void> => {
-  const config = getConfig();
-  config[key] = value;
-  await fs.writeJSON(configFilePath, config, { spaces: 2 });
+  appConfig[key] = value;
+
+  try {
+    await fs.writeJSON(configFilePath, appConfig, { spaces: 2 });
+  } catch (error) {
+    console.error('Failed to write app config to disk:', error);
+  }
+
   BrowserWindow.getAllWindows().forEach((window) => {
     window.webContents.send('app-config-changed', key, value);
   });
