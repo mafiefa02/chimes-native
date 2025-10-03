@@ -21,9 +21,7 @@ export const initializeApp = async (): Promise<void> => {
   try {
     await initializeDatabase();
     services.schedulePlayer.start();
-    console.log('INFO: Application initialization complete.');
   } catch (error: unknown) {
-    console.error('FATAL: Failed to initialize the application.', error);
     dialog.showErrorBox('Initialization Error', (error as Error).message);
     app.quit();
   }
@@ -50,9 +48,6 @@ const syncActiveProfile = async (
   ) {
     if (availableProfileIds.length > 0) {
       await services.appConfig.setProperty(configKey, availableProfileIds[0]);
-      console.info(
-        `INFO: ${configKey} was out of sync. Resetting to the first available profile.`,
-      );
     } else {
       console.warn(`WARN: No available profiles found for ${configKey}.`);
     }
@@ -112,7 +107,6 @@ const seedDefaultScheduleProfile = async () => {
  * to ensure active profile IDs are valid.
  */
 const initializeDatabase = async () => {
-  console.log('INFO: Initializing database...');
   await runMigrations();
 
   // Seed default user profile if none exist
@@ -121,7 +115,6 @@ const initializeDatabase = async () => {
     .from(userProfiles);
   if (userCount === 0) {
     seedDefaultUserProfile();
-    console.info('INFO: Created default user profile.');
   }
 
   // Seed default sound if none exist
@@ -130,7 +123,6 @@ const initializeDatabase = async () => {
     .from(userSounds);
   if (soundCount === 0) {
     seedDefaultSound();
-    console.info('INFO: Created default sound DB entry.');
   }
 
   // Seed default schedule profile
@@ -139,7 +131,6 @@ const initializeDatabase = async () => {
     .from(scheduleProfiles);
   if (scheduleProfileCount === 0) {
     seedDefaultScheduleProfile();
-    console.info('INFO: Created default schedule profile.');
   }
 
   // Finally, sync config with DB state

@@ -24,13 +24,9 @@ export const db = drizzle(client, { schema });
  * during application startup to ensure the database structure is up-to-date.
  */
 export const runMigrations = async () => {
-  console.info('INFO: Running database migrations...');
-
   // Determine the base path depending on whether the app is packaged or in development
   const basePath = app.isPackaged ? process.resourcesPath : app.getAppPath();
   const migrationsFolder = path.join(basePath, 'public', 'drizzle');
 
   await migrate(db, { migrationsFolder });
-
-  console.info('INFO: Database migrations completed.');
 };

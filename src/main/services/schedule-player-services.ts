@@ -85,7 +85,6 @@ export class SchedulePlayerService {
     const delay = (60 - seconds) * 1000 - milliseconds;
 
     setTimeout(() => {
-      console.log('Clock synced. Running first schedule check.');
       this.checkSchedules();
       setInterval(() => this.checkSchedules(), EVERY_MINUTE);
     }, delay);
