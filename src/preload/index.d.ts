@@ -1,4 +1,4 @@
-import { IServices } from './lib/types';
+import { IServices } from './types';
 import { ElectronAPI } from '@electron-toolkit/preload';
 import EventEmitter from 'events';
 
