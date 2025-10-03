@@ -1,10 +1,10 @@
 import { NewScheduleHistory, ScheduleHistory } from '../../shared/types';
 
-export type GetScheduleHistoryBySchedule = (
+type GetScheduleHistoryBySchedule = (
   scheduleId: ScheduleHistory['scheduleId'],
 ) => Promise<ScheduleHistory[]>;
 
-export type CreateScheduleHistory = (
+type CreateScheduleHistory = (
   data: NewScheduleHistory,
 ) => Promise<ScheduleHistory[]>;
 

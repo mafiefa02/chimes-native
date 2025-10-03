@@ -1,19 +1,17 @@
 import { NewSchedule, Schedule } from '../../shared/types';
 
-export type GetSchedulesByProfile = (
+type GetSchedulesByProfile = (
   profileId: Schedule['profileId'],
 ) => Promise<Schedule[]>;
 
-export type CreateSchedule = (data: NewSchedule) => Promise<Schedule[]>;
+type CreateSchedule = (data: NewSchedule) => Promise<Schedule[]>;
 
-export type UpdateSchedule = (
+type UpdateSchedule = (
   id: Schedule['id'],
   data: Partial<NewSchedule>,
 ) => Promise<Schedule[]>;
 
-export type DeleteSchedule = (
-  id: Schedule['id'],
-) => Promise<{ id: Schedule['id'] }[]>;
+type DeleteSchedule = (id: Schedule['id']) => Promise<{ id: Schedule['id'] }[]>;
 
 export interface SchedulesServices {
   getByProfile: GetSchedulesByProfile;

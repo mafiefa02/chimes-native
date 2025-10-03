@@ -1,23 +1,23 @@
 import { NewUserSound, UserSound } from '../../shared/types';
 
-export type GetUserSoundsByUser = (
+type GetUserSoundsByUser = (
   userId: UserSound['userId'],
 ) => Promise<UserSound[]>;
 
-export type GetUserSoundBySoundId = (
+type GetUserSoundBySoundId = (
   userId: UserSound['userId'],
   soundId: UserSound['id'],
 ) => Promise<UserSound | undefined>;
 
-export type CreateUserSound = (data: NewUserSound) => Promise<UserSound[]>;
+type CreateUserSound = (data: NewUserSound) => Promise<UserSound[]>;
 
-export type UpdateUserSound = (
+type UpdateUserSound = (
   id: UserSound['id'],
   userId: UserSound['userId'],
   data: Partial<NewUserSound>,
 ) => Promise<UserSound[]>;
 
-export type DeleteUserSound = (
+type DeleteUserSound = (
   id: UserSound['id'],
   userId: UserSound['userId'],
 ) => Promise<{ id: UserSound['id'] }[]>;

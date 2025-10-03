@@ -1,19 +1,19 @@
 import { NewUserProfile, UserProfile } from '../../shared/types';
 
-export type GetAllProfiles = () => Promise<UserProfile[]>;
+type GetAllProfiles = () => Promise<UserProfile[]>;
 
-export type GetProfileById = (
+type GetProfileById = (
   id: UserProfile['id'],
 ) => Promise<UserProfile | undefined>;
 
-export type CreateProfile = (data: NewUserProfile) => Promise<UserProfile[]>;
+type CreateProfile = (data: NewUserProfile) => Promise<UserProfile[]>;
 
-export type UpdateProfile = (
+type UpdateProfile = (
   id: UserProfile['id'],
   data: Partial<NewUserProfile>,
 ) => Promise<UserProfile[]>;
 
-export type DeleteProfile = (
+type DeleteProfile = (
   id: UserProfile['id'],
 ) => Promise<{ id: UserProfile['id'] }[]>;
 
