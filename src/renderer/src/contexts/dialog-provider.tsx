@@ -1,5 +1,5 @@
 import { DialogContext } from './dialog-context';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 
 export const DialogProvider = ({ children }: { children: React.ReactNode }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -7,12 +7,9 @@ export const DialogProvider = ({ children }: { children: React.ReactNode }) => {
   const openDialog = () => setIsDialogOpen(true);
   const closeDialog = () => setIsDialogOpen(false);
 
-  const value = useMemo(
-    () => ({ isDialogOpen, openDialog, closeDialog }),
-    [isDialogOpen],
-  );
-
   return (
-    <DialogContext.Provider value={value}>{children}</DialogContext.Provider>
+    <DialogContext.Provider value={{ isDialogOpen, openDialog, closeDialog }}>
+      {children}
+    </DialogContext.Provider>
   );
 };
