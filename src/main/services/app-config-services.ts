@@ -28,8 +28,6 @@ export class AppConfigServices {
   private _createDefaultConfig = (): AppConfig => ({
     activeProfile: '',
     activeProfileSchedule: '',
-    firstDayOfweek: 0,
-    userTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   });
 
   /**

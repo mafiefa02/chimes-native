@@ -33,7 +33,9 @@ export const parseDateStringAsUTC = (
 ) => parse(dateString, dateFormat, dateReference, { in: tz('Etc/UTC') });
 
 export const formatDateToLocalTimezone = (date: Date, dateFormat: string) =>
-  format(date, dateFormat, { in: tz(getAppConfigProperty('userTimezone')) });
+  format(date, dateFormat, {
+    in: tz(Intl.DateTimeFormat().resolvedOptions().timeZone),
+  });
 
 export const getDayName = (dayOfWeek: number, formatDate: string = 'EEEE') => {
   const today = new Date();

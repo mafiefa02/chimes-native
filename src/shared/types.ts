@@ -28,6 +28,4 @@ export type NewNotification = typeof notifications.$inferInsert;
 export type AppConfig = {
   activeProfile: UserProfile['id'];
   activeProfileSchedule: ScheduleProfile['id'];
-  userTimezone: string;
-  firstDayOfweek: number;
 };
