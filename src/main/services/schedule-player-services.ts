@@ -2,7 +2,8 @@ import { filterActiveSchedules } from '../../shared/utils';
 import { defaultSoundFile } from '../lib/constants';
 import { playAudioFile } from '../lib/utils';
 import { services } from './index';
-import { getISODay } from 'date-fns';
+import { tz } from '@date-fns/tz';
+import { format, getISODay } from 'date-fns';
 import { app } from 'electron';
 import { join } from 'path';
 
@@ -36,10 +37,7 @@ export class SchedulePlayerService {
     const now = new Date();
     const currentDay = getISODay(now);
     // Compare time in UTC to ensure consistency across different timezones
-    const currentTime = `${String(now.getUTCHours()).padStart(
-      2,
-      '0',
-    )}:${String(now.getUTCMinutes()).padStart(2, '0')}`;
+    const currentTime = format(now, 'HH:mm', { in: tz('Etc/UTC') });
     const currentProfile = services.appConfig.getProperty(
       'activeProfileSchedule',
     );
