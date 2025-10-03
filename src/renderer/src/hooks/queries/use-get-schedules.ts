@@ -9,6 +9,6 @@ export const useGetSchedules = () => {
     placeholderData: keepPreviousData,
     queryKey: queryKeys.schedules({ profileId: activeProfileScheduleId }),
     queryFn: async () =>
-      await window.services.schedules.getByProfile(activeProfileScheduleId),
+      await window.services.schedule.getByProfile(activeProfileScheduleId),
   });
 };

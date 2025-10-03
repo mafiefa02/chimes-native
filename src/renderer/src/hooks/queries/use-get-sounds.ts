@@ -7,6 +7,6 @@ export const useGetSounds = () => {
   return useQuery({
     queryKey: queryKeys.sounds({}),
     queryFn: async () =>
-      await window.services.userSounds.getByUser(userProfileId),
+      await window.services.userSound.getByUser(userProfileId),
   });
 };

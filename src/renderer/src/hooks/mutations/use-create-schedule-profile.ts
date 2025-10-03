@@ -8,7 +8,7 @@ export const useCreateScheduleProfile = () => {
   const userId = useAppConfig('activeProfile');
   return useMutation({
     mutationFn: async (newProfile: Pick<NewScheduleProfile, 'name'>) => {
-      const result = await window.services.scheduleProfiles.create({
+      const result = await window.services.scheduleProfile.create({
         ...newProfile,
         userId,
       });

@@ -12,7 +12,7 @@ export const useDeleteSchedule = (id: Schedule['id'], date: Date) => {
     profileId: activeProfileScheduleId,
   });
   return useMutation({
-    mutationFn: async () => await window.services.schedules.delete(id),
+    mutationFn: async () => await window.services.schedule.delete(id),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey });
       const previousSchedules = queryClient.getQueryData(queryKey);

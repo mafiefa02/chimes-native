@@ -26,7 +26,7 @@ export const useGetWeeklySchedules = ({
       profileId: activeProfileScheduleId,
     }),
     queryFn: async () =>
-      await window.services.schedules
+      await window.services.schedule
         .getByProfile(activeProfileScheduleId)
         .then((schedules) =>
           schedules

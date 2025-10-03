@@ -8,6 +8,6 @@ export const useGetSoundById = (id: UserSound['id']) => {
   return useQuery({
     queryKey: queryKeys.sounds({ id }),
     queryFn: async () =>
-      await window.services.userSounds.getBySoundId(userProfileId, id),
+      await window.services.userSound.getBySoundId(userProfileId, id),
   });
 };

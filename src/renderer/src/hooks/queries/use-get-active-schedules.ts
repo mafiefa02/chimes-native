@@ -14,7 +14,7 @@ export const useGetActiveSchedules = ({ date }: useGetActiveSchedulesProp) => {
     placeholderData: keepPreviousData,
     queryKey: queryKeys.schedules({ date, profileId: activeProfileScheduleId }),
     queryFn: async () =>
-      await window.services.schedules
+      await window.services.schedule
         .getByProfile(activeProfileScheduleId)
         .then((schedules) =>
           schedules.filter((schedule) => filterActiveSchedules(schedule, date)),

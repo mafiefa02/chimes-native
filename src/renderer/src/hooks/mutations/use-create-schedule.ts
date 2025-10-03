@@ -10,7 +10,7 @@ export const useCreateSchedule = (date: Date = new Date()) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: NewSchedule) =>
-      await window.services.schedules.create({
+      await window.services.schedule.create({
         ...data,
         triggerTime: format(
           parse(data.triggerTime, 'HH:mm', new Date()),

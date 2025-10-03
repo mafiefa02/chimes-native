@@ -1,11 +1,5 @@
 import { initializeApp } from './lib/bootstrap';
-import * as appConfigServices from './services/appConfig';
-import * as notificationServices from './services/notifications';
-import * as profileServices from './services/profiles';
-import * as scheduleHistoryServices from './services/scheduleHistory';
-import * as scheduleProfileServices from './services/scheduleProfiles';
-import * as scheduleServices from './services/schedules';
-import * as userSoundServices from './services/userSounds';
+import { services } from './services';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
@@ -73,95 +67,86 @@ app.whenReady().then(async () => {
   });
 
   // --- IPC Handlers for Renderer-Main Communication ---
-
   // App Configuration
   ipcMain.on('appConfig:getSync', (event, key) => {
-    event.returnValue = appConfigServices.getAppConfigProperty(key);
+    event.returnValue = services.appConfig.getProperty(key);
   });
   ipcMain.handle('appConfig:set', (_, key, value) => {
-    appConfigServices.setAppConfigProperty(key, value);
+    services.appConfig.setProperty(key, value);
   });
 
   // User Profiles
-  ipcMain.handle('profiles:getAll', () => profileServices.getAllProfiles());
-  ipcMain.handle('profiles:getById', (_, id) =>
-    profileServices.getProfileById(id),
-  );
-  ipcMain.handle('profiles:create', (_, data) =>
-    profileServices.createProfile(data),
-  );
+  ipcMain.handle('profiles:getAll', () => services.profile.getAll());
+  ipcMain.handle('profiles:getById', (_, id) => services.profile.getById(id));
+  ipcMain.handle('profiles:create', (_, data) => services.profile.create(data));
   ipcMain.handle('profiles:update', (_, id, data) =>
-    profileServices.updateProfile(id, data),
+    services.profile.update(id, data),
   );
-  ipcMain.handle('profiles:delete', (_, id) =>
-    profileServices.deleteProfile(id),
-  );
+  ipcMain.handle('profiles:delete', (_, id) => services.profile.delete(id));
 
   // Schedule Profiles
   ipcMain.handle('scheduleProfiles:getByUser', (_, userId) =>
-    scheduleProfileServices.getScheduleProfilesByUser(userId),
+    services.scheduleProfile.getByUser(userId),
   );
   ipcMain.handle('scheduleProfiles:create', (_, data) =>
-    scheduleProfileServices.createScheduleProfile(data),
+    services.scheduleProfile.create(data),
   );
   ipcMain.handle('scheduleProfiles:update', (_, id, data) =>
-    scheduleProfileServices.updateScheduleProfile(id, data),
+    services.scheduleProfile.update(id, data),
   );
   ipcMain.handle('scheduleProfiles:delete', (_, id) =>
-    scheduleProfileServices.deleteScheduleProfile(id),
+    services.scheduleProfile.delete(id),
   );
 
   // User Sounds
   ipcMain.handle('userSounds:getByUser', (_, userId) =>
-    userSoundServices.getUserSounds(userId),
+    services.userSound.getAllByUser(userId),
   );
   ipcMain.handle('userSounds:getBySoundId', (_, userId, soundId) =>
-    userSoundServices.getUserSoundById(userId, soundId),
+    services.userSound.getById(userId, soundId),
   );
   ipcMain.handle('userSounds:create', (_, data) =>
-    userSoundServices.createUserSound(data),
+    services.userSound.create(data),
   );
   ipcMain.handle('userSounds:update', (_, id, userId, data) =>
-    userSoundServices.updateUserSound(id, userId, data),
+    services.userSound.update(id, userId, data),
   );
   ipcMain.handle('userSounds:delete', (_, id, userId) =>
-    userSoundServices.deleteUserSound(id, userId),
+    services.userSound.delete(id, userId),
   );
 
   // Schedules
   ipcMain.handle('schedules:getByProfile', (_, profileId) =>
-    scheduleServices.getSchedulesByProfile(profileId),
+    services.schedule.getByProfile(profileId),
   );
   ipcMain.handle('schedules:create', (_, data) =>
-    scheduleServices.createSchedule(data),
+    services.schedule.create(data),
   );
   ipcMain.handle('schedules:update', (_, id, data) =>
-    scheduleServices.updateSchedule(id, data),
+    services.schedule.update(id, data),
   );
-  ipcMain.handle('schedules:delete', (_, id) =>
-    scheduleServices.deleteSchedule(id),
-  );
+  ipcMain.handle('schedules:delete', (_, id) => services.schedule.delete(id));
 
   // Schedule History
   ipcMain.handle('scheduleHistory:getBySchedule', (_, scheduleId) =>
-    scheduleHistoryServices.getHistoryBySchedule(scheduleId),
+    services.scheduleHistory.getBySchedule(scheduleId),
   );
   ipcMain.handle('scheduleHistory:create', (_, data) =>
-    scheduleHistoryServices.createScheduleHistoryEntry(data),
+    services.scheduleHistory.create(data),
   );
 
   // Notifications
   ipcMain.handle('notifications:getByUser', (_, userId) =>
-    notificationServices.getNotificationsByUser(userId),
+    services.notification.getByUser(userId),
   );
   ipcMain.handle('notifications:create', (_, data) =>
-    notificationServices.createNotification(data),
+    services.notification.create(data),
   );
   ipcMain.handle('notifications:update', (_, id, data) =>
-    notificationServices.updateNotification(id, data),
+    services.notification.update(id, data),
   );
   ipcMain.handle('notifications:delete', (_, id) =>
-    notificationServices.deleteNotification(id),
+    services.notification.delete(id),
   );
 
   // Create the main window after all setup is complete.

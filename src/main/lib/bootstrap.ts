@@ -4,11 +4,7 @@ import {
   userSounds,
 } from '../../shared/schema';
 import { AppConfig } from '../../shared/types';
-import {
-  getAppConfigProperty,
-  setAppConfigProperty,
-} from '../services/appConfig';
-import { start as startSchedulePlayer } from '../services/schedulePlayer';
+import { services } from '../services';
 import { defaultSoundFile } from './constants';
 import { db, runMigrations } from './database';
 import { count } from 'drizzle-orm';
@@ -24,7 +20,7 @@ import { app, dialog } from 'electron';
 export const initializeApp = async (): Promise<void> => {
   try {
     await initializeDatabase();
-    startSchedulePlayer();
+    services.schedulePlayer.start();
     console.log('INFO: Application initialization complete.');
   } catch (error: unknown) {
     console.error('FATAL: Failed to initialize the application.', error);
@@ -44,7 +40,7 @@ const syncActiveProfile = async (
   configKey: keyof AppConfig,
   getAvailableProfiles: () => Promise<{ id: string }[]>,
 ) => {
-  const currentActiveProfileId = getAppConfigProperty(configKey);
+  const currentActiveProfileId = services.appConfig.getProperty(configKey);
   const availableProfiles = await getAvailableProfiles();
   const availableProfileIds = availableProfiles.map((p) => p.id);
 
@@ -53,7 +49,7 @@ const syncActiveProfile = async (
     !availableProfileIds.includes(String(currentActiveProfileId))
   ) {
     if (availableProfileIds.length > 0) {
-      await setAppConfigProperty(configKey, availableProfileIds[0]);
+      await services.appConfig.setProperty(configKey, availableProfileIds[0]);
       console.info(
         `INFO: ${configKey} was out of sync. Resetting to the first available profile.`,
       );
@@ -74,7 +70,7 @@ const seedDefaultUserProfile = async () => {
     .insert(userProfiles)
     .values(defaultUserProfile)
     .returning({ id: userProfiles.id });
-  await setAppConfigProperty('activeProfile', id);
+  await services.appConfig.setProperty('activeProfile', id);
 };
 
 /**
@@ -83,7 +79,7 @@ const seedDefaultUserProfile = async () => {
  * predefined default audio file.
  */
 const seedDefaultSound = async () => {
-  const activeUserId = getAppConfigProperty('activeProfile');
+  const activeUserId = services.appConfig.getProperty('activeProfile');
   await db
     .insert(userSounds)
     .values({
@@ -99,12 +95,12 @@ const seedDefaultSound = async () => {
  * the 'activeProfileSchedule' in the application's configuration.
  */
 const seedDefaultScheduleProfile = async () => {
-  const activeUserId = getAppConfigProperty('activeProfile');
+  const activeUserId = services.appConfig.getProperty('activeProfile');
   const [{ id }] = await db
     .insert(scheduleProfiles)
     .values({ name: 'Default', userId: activeUserId })
     .returning({ id: scheduleProfiles.id });
-  await setAppConfigProperty('activeProfileSchedule', id);
+  await services.appConfig.setProperty('activeProfileSchedule', id);
 };
 
 /**

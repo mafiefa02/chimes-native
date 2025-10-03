@@ -8,6 +8,6 @@ export const useGetProfileSchedules = () => {
     enabled: !!activeProfileId,
     queryKey: queryKeys.profileSchedules(),
     queryFn: async () =>
-      await window.services.scheduleProfiles.getByUser(activeProfileId),
+      await window.services.scheduleProfile.getByUser(activeProfileId),
   });
 };

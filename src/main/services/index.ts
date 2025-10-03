@@ -1,16 +1,19 @@
-import { IServices } from '../types';
 import { appConfigServices } from './app-config-services';
+import { notificationServices } from './notification-services';
 import { profileServices } from './profile-services';
 import { scheduleHistoryServices } from './schedule-history-services';
+import { schedulePlayerService } from './schedule-player-services';
 import { scheduleProfileServices } from './schedule-profile-services';
 import { scheduleServices } from './schedule-services';
-import { userSoundServices } from './user-sound-services';
+import { userSoundsServices } from './user-sound-services';
 
-export const services: IServices = {
+export const services = {
   appConfig: appConfigServices,
+  notification: notificationServices,
   profile: profileServices,
-  scheduleProfile: scheduleProfileServices,
-  userSound: userSoundServices,
-  schedule: scheduleServices,
   scheduleHistory: scheduleHistoryServices,
+  schedulePlayer: schedulePlayerService,
+  scheduleProfile: scheduleProfileServices,
+  schedule: scheduleServices,
+  userSound: userSoundsServices,
 };

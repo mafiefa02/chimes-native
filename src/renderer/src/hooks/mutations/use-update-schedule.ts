@@ -16,13 +16,13 @@ export const useUpdateSchedule = (date: Date = new Date()) => {
   return useMutation({
     mutationFn: async (data: Partial<NewSchedule> & { id: Schedule['id'] }) => {
       if (!data.triggerTime) {
-        return await window.services.schedules.update(data.id, data);
+        return await window.services.schedule.update(data.id, data);
       }
 
       const parsedTime = parse(data.triggerTime, 'HH:mm', new Date());
       const utcTriggerTime = format(parsedTime, 'HH:mm', { in: tz('Etc/UTC') });
 
-      return await window.services.schedules.update(data.id, {
+      return await window.services.schedule.update(data.id, {
         ...data,
         triggerTime: utcTriggerTime,
       });
