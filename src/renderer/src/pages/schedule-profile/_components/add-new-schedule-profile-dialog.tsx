@@ -21,8 +21,12 @@ export const AddNewScheduleProfileDialog = () => {
       onOpenChange={setIsDialogOpen}
     >
       <DialogTrigger asChild>
-        <Button size="icon">
+        <Button
+          className="w-full bg-transparent border-dashed py-6"
+          variant="outline"
+        >
           <PlusIcon />
+          <p>Add New</p>
         </Button>
       </DialogTrigger>
       <DialogContent>
