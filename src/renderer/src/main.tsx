@@ -16,7 +16,10 @@ createRoot(root).render(
     <QueryClientProvider client={queryClient}>
       <HashRouter>
         <AppRoutes />
-        <Toaster theme="light" />
+        <Toaster
+          richColors
+          theme="light"
+        />
       </HashRouter>
     </QueryClientProvider>
   </StrictMode>,
