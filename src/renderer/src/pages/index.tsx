@@ -1,5 +1,7 @@
 import { InsetShadowCard } from '../components/inset-shadow-card';
 import { PageHeader } from '../components/page-header';
+import { PageHeaderLeft } from '../components/page-header/page-header-left';
+import { PageHeaderRight } from '../components/page-header/page-header-right';
 import { PageLayout } from '../components/page-layout';
 import { DialogProvider } from '../contexts/dialog-provider';
 import { ScheduleDateProvider } from '../contexts/schedule-date-provider';
@@ -14,11 +16,13 @@ export const HomePage = () => {
       <DialogProvider>
         <PageLayout>
           <PageHeader>
-            <NameOfDayTitle />
-            <div className="flex items-center gap-4">
+            <PageHeaderLeft asChild>
+              <NameOfDayTitle />
+            </PageHeaderLeft>
+            <PageHeaderRight className="flex items-center gap-4">
               <ScheduleDatePicker />
               <AddNewScheduleDialog />
-            </div>
+            </PageHeaderRight>
           </PageHeader>
           <InsetShadowCard className="overflow-y-auto no-scrollbar">
             <ScheduleList />

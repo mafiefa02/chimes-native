@@ -1,4 +1,5 @@
 import { PageHeader } from '../../components/page-header';
+import { PageHeaderLeft } from '../../components/page-header/page-header-left';
 import { PageLayout } from '../../components/page-layout';
 import { PageTitle } from '../../components/page-title';
 import { PageTitleDescription } from '../../components/page-title/page-title-description';
@@ -15,12 +16,14 @@ export const ScheduleProfilePage = () => {
   return (
     <PageLayout>
       <PageHeader>
-        <PageTitle>
-          <PageTitleTitle>Schedule Profile</PageTitleTitle>
-          <PageTitleDescription>
-            Create a schedule to be applied weekly
-          </PageTitleDescription>
-        </PageTitle>
+        <PageHeaderLeft asChild>
+          <PageTitle>
+            <PageTitleTitle>Schedule Profile</PageTitleTitle>
+            <PageTitleDescription>
+              Create a schedule to be applied weekly
+            </PageTitleDescription>
+          </PageTitle>
+        </PageHeaderLeft>
       </PageHeader>
       <ResizablePanelGroup
         className="size-full"
