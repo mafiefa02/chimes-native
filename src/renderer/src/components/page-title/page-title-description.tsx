@@ -9,8 +9,8 @@ export const PageTitleDescription = (props: PageTitleDescriptionProps) => {
   const Comp = props.asChild ? SlotPrimitive.Slot : 'p';
   return (
     <Comp
-      className={cn('text-sm', props.className)}
       {...props}
+      className={cn('text-sm', props.className)}
     />
   );
 };
