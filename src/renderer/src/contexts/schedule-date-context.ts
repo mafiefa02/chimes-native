@@ -2,7 +2,7 @@ import { createContext, Dispatch, SetStateAction } from 'react';
 
 type ScheduleDateContextType = {
   date: Date;
-  setDate: Dispatch<SetStateAction<Date | undefined>>;
+  setDate: Dispatch<SetStateAction<Date>>;
 };
 
 export const ScheduleDateContext =
