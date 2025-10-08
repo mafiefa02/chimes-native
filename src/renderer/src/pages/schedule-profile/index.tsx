@@ -1,6 +1,8 @@
 import { PageHeader } from '../../components/page-header';
 import { PageLayout } from '../../components/page-layout';
 import { PageTitle } from '../../components/page-title';
+import { PageTitleDescription } from '../../components/page-title/page-title-description';
+import { PageTitleTitle } from '../../components/page-title/page-title-title';
 import {
   ResizableHandle,
   ResizablePanel,
@@ -15,10 +17,12 @@ export const ScheduleProfilePage = () => {
     <PreviewProfileIdProvider>
       <PageLayout>
         <PageHeader>
-          <PageTitle
-            title="Schedule Profile"
-            description="Create a schedule to be applied weekly"
-          />
+          <PageTitle>
+            <PageTitleTitle>Schedule Profile</PageTitleTitle>
+            <PageTitleDescription>
+              Create a schedule to be applied weekly
+            </PageTitleDescription>
+          </PageTitle>
         </PageHeader>
         <ResizablePanelGroup
           className="size-full"
