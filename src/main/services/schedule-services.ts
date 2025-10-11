@@ -28,9 +28,9 @@ export class ScheduleServices {
     profileId: Schedule['profileId'],
   ): Promise<Schedule[]> {
     const offsetInMinutes = -new Date().getTimezoneOffset();
-    const timezoneModifier = `${
-      offsetInMinutes > 0 ? '+' : ''
-    }${offsetInMinutes} minutes`;
+    const offsetSign = offsetInMinutes > 0 ? '+' : '';
+    const timezoneModifier = `${offsetSign}${offsetInMinutes} minutes`;
+
     return db.query.schedules.findMany({
       where: eq(schedules.profileId, profileId),
       orderBy: [asc(sql`time(${schedules.triggerTime}, ${timezoneModifier})`)],
