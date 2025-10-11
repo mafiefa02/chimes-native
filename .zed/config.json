@@ -1,0 +1,9 @@
+{
+  "formatter": "prettier",
+  "prettier": {
+    "plugins": [
+      "prettier-plugin-tailwindcss",
+      "@trivago/prettier-plugin-sort-imports"
+    ]
+  }
+}
