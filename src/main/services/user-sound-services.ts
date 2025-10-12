@@ -60,7 +60,4 @@ export class UserSoundsServices {
   }
 }
 
-/**
- * A singleton instance of the UserSoundsServices class.
- */
 export const userSoundsServices = new UserSoundsServices();

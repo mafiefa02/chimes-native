@@ -25,7 +25,4 @@ export class ScheduleHistoryServices {
   }
 }
 
-/**
- * A singleton instance of the ScheduleHistoryServices class.
- */
 export const scheduleHistoryServices = new ScheduleHistoryServices();

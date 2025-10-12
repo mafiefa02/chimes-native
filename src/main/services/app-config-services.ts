@@ -105,8 +105,4 @@ export class AppConfigServices {
   };
 }
 
-/**
- * A singleton instance of the AppConfigServices class.
- * This should be used throughout the application to access and manage configuration.
- */
 export const appConfigServices = new AppConfigServices();

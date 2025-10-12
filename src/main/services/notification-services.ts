@@ -45,8 +45,4 @@ export class NotificationServices {
   }
 }
 
-/**
- * A singleton instance of the NotificationServices class.
- * This should be used throughout the application to manage notifications.
- */
 export const notificationServices = new NotificationServices();

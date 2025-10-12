@@ -44,7 +44,4 @@ export class ScheduleProfileServices {
   }
 }
 
-/**
- * A singleton instance of the ScheduleProfileServices class.
- */
 export const scheduleProfileServices = new ScheduleProfileServices();

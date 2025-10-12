@@ -63,7 +63,4 @@ export class ScheduleServices {
   }
 }
 
-/**
- * A singleton instance of the ScheduleServices class.
- */
 export const scheduleServices = new ScheduleServices();

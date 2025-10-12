@@ -89,7 +89,4 @@ export class SchedulePlayerServices {
   }
 }
 
-/**
- * A singleton instance of the SchedulePlayerServices class.
- */
 export const schedulePlayerServices = new SchedulePlayerServices();

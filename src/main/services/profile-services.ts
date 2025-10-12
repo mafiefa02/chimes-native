@@ -47,7 +47,4 @@ export class ProfileServices {
   }
 }
 
-/**
- * A singleton instance of the ProfileServices class.
- */
 export const profileServices = new ProfileServices();
