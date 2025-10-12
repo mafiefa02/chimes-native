@@ -1,5 +1,5 @@
 import { AppConfig } from '../../shared/types';
-import { IServices } from '../types';
+import { Services } from '../types';
 import { ipcRenderer } from 'electron/renderer';
 
 export const appConfigServices = {
@@ -12,4 +12,4 @@ export const appConfigServices = {
     // @ts-ignore (define in dts)
     return () => window.appConfigEmitter.removeListener(key, listener);
   },
-} satisfies IServices['appConfig'];
+} satisfies Services['appConfig'];

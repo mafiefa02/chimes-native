@@ -1,4 +1,4 @@
-import { IServices } from '../types';
+import { Services } from '../types';
 import { ipcRenderer } from 'electron/renderer';
 
 export const profileServices = {
@@ -7,4 +7,4 @@ export const profileServices = {
   create: (data) => ipcRenderer.invoke('profiles:create', data),
   update: (id, data) => ipcRenderer.invoke('profiles:update', id, data),
   delete: (id) => ipcRenderer.invoke('profiles:delete', id),
-} satisfies IServices['profile'];
+} satisfies Services['profile'];

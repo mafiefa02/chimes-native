@@ -1,4 +1,4 @@
-import { IServices } from '../types';
+import { Services } from '../types';
 import { ipcRenderer } from 'electron/renderer';
 
 export const userSoundServices = {
@@ -9,4 +9,4 @@ export const userSoundServices = {
   update: (id, userId, data) =>
     ipcRenderer.invoke('userSounds:update', id, userId, data),
   delete: (id, userId) => ipcRenderer.invoke('userSounds:delete', id, userId),
-} satisfies IServices['userSound'];
+} satisfies Services['userSound'];

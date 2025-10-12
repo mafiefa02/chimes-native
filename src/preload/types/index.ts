@@ -5,7 +5,7 @@ import { ScheduleProfilesServices } from './schedule-profiles-services.types';
 import { SchedulesServices } from './schedules-services.types';
 import { UserSoundsServices } from './user-sounds-services.types';
 
-export interface IServices {
+export interface Services {
   appConfig: AppConfigServices;
   profile: ProfilesServices;
   scheduleProfile: ScheduleProfilesServices;
