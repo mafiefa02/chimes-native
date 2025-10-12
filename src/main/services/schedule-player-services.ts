@@ -13,7 +13,7 @@ const EVERY_MINUTE = 60 * 1000;
  * Provides the core scheduling functionality, checking for and triggering
  * scheduled events at regular intervals.
  */
-export class SchedulePlayerService {
+export class SchedulePlayerServices {
   /**
    * The absolute path to the application's packaged sound files. It dynamically
    * resolves the path based on whether the app is running in a packaged
@@ -90,6 +90,6 @@ export class SchedulePlayerService {
 }
 
 /**
- * A singleton instance of the SchedulePlayerService class.
+ * A singleton instance of the SchedulePlayerServices class.
  */
-export const schedulePlayerService = new SchedulePlayerService();
+export const schedulePlayerServices = new SchedulePlayerServices();
