@@ -44,7 +44,7 @@ const syncActiveProfile = async (
 
   if (
     !currentActiveProfileId ||
-    !availableProfileIds.includes(String(currentActiveProfileId))
+    !availableProfileIds.includes(currentActiveProfileId)
   ) {
     if (availableProfileIds.length > 0) {
       await services.appConfig.setProperty(configKey, availableProfileIds[0]);
