@@ -6,7 +6,7 @@ export const PageHeader = (props: PageHeaderProps) => {
   return (
     <div
       {...props}
-      className={cn('flex gap-4 w-full', props.className)}
+      className={cn('flex gap-4 w-full items-center', props.className)}
     />
   );
 };
