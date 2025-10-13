@@ -12,7 +12,7 @@ export const WeeklySchedule = () => {
   const [search, setSearch] = useState('');
 
   return (
-    <div className="grid grid-rows-[auto_auto_1fr] gap-4 size-full">
+    <div className="grid grid-rows-[auto_auto_1fr] gap-4 size-full overflow-hidden">
       <WeeklyScheduleDaySelector
         selectedDay={selectedDay}
         setSelectedDay={setSelectedDay}
