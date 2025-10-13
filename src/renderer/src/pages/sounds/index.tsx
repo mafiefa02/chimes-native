@@ -9,7 +9,7 @@ export const SoundsPage = () => {
   return (
     <PageLayout>
       <PageHeader>
-        <PageHeaderLeft asChild>
+        <PageHeaderLeft>
           <PageTitle>
             <PageTitleTitle>Sounds</PageTitleTitle>
           </PageTitle>
