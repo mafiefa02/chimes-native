@@ -3,7 +3,7 @@ import { Button } from '../../../components/ui/button';
 import { itemVariantsXFromRight } from '../../../lib/animations';
 import { DeleteWeeklyScheduleDialog } from './delete-weekly-schedule-dialog';
 import { TrashIcon } from 'lucide-react';
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
 interface WeeklyScheduleDeleteActionProps {
@@ -18,22 +18,24 @@ export const WeeklyScheduleDeleteAction = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   return (
     <>
-      {isVisible && (
-        <motion.span
-          variants={itemVariantsXFromRight}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => setIsDeleteDialogOpen(true)}
+      <AnimatePresence>
+        {isVisible && (
+          <motion.span
+            variants={itemVariantsXFromRight}
+            initial="initial"
+            animate="animate"
+            exit="exit"
           >
-            <TrashIcon />
-          </Button>
-        </motion.span>
-      )}
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setIsDeleteDialogOpen(true)}
+            >
+              <TrashIcon />
+            </Button>
+          </motion.span>
+        )}
+      </AnimatePresence>
       <DeleteWeeklyScheduleDialog
         schedule={schedule}
         isDialogOpen={isDeleteDialogOpen}

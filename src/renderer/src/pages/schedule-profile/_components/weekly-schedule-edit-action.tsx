@@ -3,7 +3,7 @@ import { Button } from '../../../components/ui/button';
 import { itemVariantsXFromRight } from '../../../lib/animations';
 import { EditWeeklyScheduleDialog } from './edit-weekly-schedule-dialog';
 import { EditIcon } from 'lucide-react';
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
 interface WeeklyScheduleEditActionProps {
@@ -18,22 +18,24 @@ export const WeeklyScheduleEditAction = ({
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   return (
     <>
-      {isVisible && (
-        <motion.span
-          variants={itemVariantsXFromRight}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-        >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => setIsEditDialogOpen(true)}
+      <AnimatePresence>
+        {isVisible && (
+          <motion.span
+            variants={itemVariantsXFromRight}
+            initial="initial"
+            animate="animate"
+            exit="exit"
           >
-            <EditIcon />
-          </Button>
-        </motion.span>
-      )}
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setIsEditDialogOpen(true)}
+            >
+              <EditIcon />
+            </Button>
+          </motion.span>
+        )}
+      </AnimatePresence>
       <EditWeeklyScheduleDialog
         schedule={schedule}
         isDialogOpen={isEditDialogOpen}
