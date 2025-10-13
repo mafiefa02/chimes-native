@@ -9,15 +9,19 @@ type GetAppConfig = <K extends AppConfigKey>(key: K) => AppConfigValue<K>;
 type SetAppConfig = <K extends AppConfigKey>(
   key: K,
   value: AppConfigValue<K>,
-) => Promise<void>;
+) => void;
 
-type OnChangeAppConfig = <K extends AppConfigKey>(
+type OnChangeCallback<K extends AppConfigKey> = (
+  newValue: AppConfigValue<K>,
+) => void;
+
+type OnChange = <K extends AppConfigKey>(
   key: K,
-  callback: (newValue: AppConfigValue<K>) => void,
+  callback: OnChangeCallback<K>,
 ) => () => void;
 
 export interface AppConfigServices {
   get: GetAppConfig;
   set: SetAppConfig;
-  onChange: OnChangeAppConfig;
+  onChange: OnChange;
 }

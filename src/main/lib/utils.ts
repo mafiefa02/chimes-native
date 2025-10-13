@@ -1,3 +1,4 @@
+import { BrowserWindow } from 'electron';
 import { ChildProcess, spawn } from 'node:child_process';
 
 /**
@@ -39,3 +40,15 @@ export const playAudioFile = ((): ((filePath: string) => ChildProcess) => {
   if (os === 'darwin') return macFn;
   return nxFn;
 })();
+
+/**
+ * Sends a message to all active browser windows.
+ * This utility function iterates over all created windows and sends the
+ * specified IPC message to their renderer processes.
+ */
+export const sendToAllWindows = (channel: string, ...args: unknown[]): void => {
+  const allWindows = BrowserWindow.getAllWindows();
+  allWindows.forEach((window) => {
+    window.webContents.send(channel, ...args);
+  });
+};

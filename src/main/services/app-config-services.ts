@@ -1,6 +1,7 @@
 import { AppConfig } from '../../shared/types';
 import { appConfigFile } from '../lib/constants';
-import { app, BrowserWindow } from 'electron';
+import { app } from 'electron';
+import { EventEmitter } from 'events';
 import fs from 'fs-extra';
 import path from 'path';
 
@@ -9,7 +10,7 @@ import path from 'path';
  * the user's data directory. This class follows a singleton pattern, with a
  * single instance exported for application-wide use.
  */
-export class AppConfigServices {
+export class AppConfigServices extends EventEmitter {
   /** The absolute path to the application's JSON configuration file. */
   private readonly configFilePath: string;
 
@@ -17,6 +18,7 @@ export class AppConfigServices {
   private appConfig: AppConfig;
 
   constructor() {
+    super();
     this.configFilePath = path.join(app.getPath('userData'), appConfigFile);
     this.appConfig = this._loadConfig();
   }
@@ -38,9 +40,7 @@ export class AppConfigServices {
     let config: AppConfig;
 
     try {
-      config = fs.readJSONSync(this.configFilePath, {
-        encoding: 'utf-8',
-      }) as AppConfig;
+      config = fs.readJSONSync(this.configFilePath, { encoding: 'utf-8' });
     } catch (error: unknown) {
       console.warn(
         `WARN: Could not read or parse config.json. Resetting to default. The error was: "${
@@ -94,14 +94,10 @@ export class AppConfigServices {
   ): Promise<void> => {
     // Update the in-memory cache
     this.appConfig[key] = value;
-
     // Persist the changes to disk
     await this._saveConfig();
-
-    // Notify all windows of the change
-    BrowserWindow.getAllWindows().forEach((window) => {
-      window.webContents.send('app-config-changed', key, value);
-    });
+    // Notify listeners of the change
+    this.emit('change', key, value);
   };
 }
 

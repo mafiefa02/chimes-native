@@ -1,4 +1,5 @@
 import { initializeApp } from './lib/bootstrap';
+import { sendToAllWindows } from './lib/utils';
 import { services } from './services';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
@@ -71,8 +72,11 @@ app.whenReady().then(async () => {
   ipcMain.on('appConfig:getSync', (event, key) => {
     event.returnValue = services.appConfig.getProperty(key);
   });
-  ipcMain.handle('appConfig:set', (_, key, value) => {
+  ipcMain.on('appConfig:set', (_, key, value) => {
     services.appConfig.setProperty(key, value);
+  });
+  services.appConfig.on('change', (key, value) => {
+    sendToAllWindows('appConfig:changed', key, value);
   });
 
   // User Profiles
