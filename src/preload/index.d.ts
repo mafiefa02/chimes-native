@@ -1,11 +1,11 @@
-import { IServices } from './types';
+import { Services } from './types';
 import { ElectronAPI } from '@electron-toolkit/preload';
 import EventEmitter from 'events';
 
 declare global {
   interface Window {
     electron: ElectronAPI;
-    services: IServices;
+    services: Services;
     appConfigEmitter: EventEmitter;
   }
 }
