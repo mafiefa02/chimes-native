@@ -18,7 +18,7 @@ function createWindow(): void {
   const mainWindow = new BrowserWindow({
     width: 1152,
     height: 670,
-    minWidth: 1000,
+    minWidth: 800,
     minHeight: 560,
     autoHideMenuBar: true,
     title: 'Chimes',
