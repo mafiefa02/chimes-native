@@ -25,7 +25,7 @@ export const WeeklySchedule = () => {
         />
         <AddNewWeeklySchedule selectedDay={selectedDay} />
       </div>
-      <InsetShadowCard className="overflow-y-auto space-y-2 no-scrollbar">
+      <InsetShadowCard className="overflow-y-auto space-y-2 no-scrollbar max-h-full">
         <WeeklyScheduleList
           selectedDay={selectedDay}
           searchQuery={search}

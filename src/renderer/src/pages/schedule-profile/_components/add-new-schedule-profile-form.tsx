@@ -1,3 +1,4 @@
+import { ScheduleProfile } from '../../../../../shared/types';
 import {
   Form,
   FormControl,
@@ -23,12 +24,12 @@ type AddNewScheduleProfileFormValues = z.infer<
 >;
 
 interface AddNewScheduleProfileFormProps {
-  closeDialog: () => void;
+  onSuccess: (profile: ScheduleProfile) => void;
   formAction: ReactNode;
 }
 
 export const AddNewScheduleProfileForm = ({
-  closeDialog,
+  onSuccess,
   formAction,
 }: AddNewScheduleProfileFormProps) => {
   const { mutateAsync: createProfile } = useCreateScheduleProfile();
@@ -43,9 +44,9 @@ export const AddNewScheduleProfileForm = ({
       await createProfile(
         { name: values.name },
         {
-          onSuccess: () => {
+          onSuccess: (profile) => {
             toast.success('New schedule profile created');
-            closeDialog();
+            onSuccess(profile[0]);
           },
           onError: (error) => {
             toast.error(error.message);
