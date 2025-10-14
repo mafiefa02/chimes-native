@@ -77,9 +77,7 @@ export const ProfileSelectorDropdown = () => {
           {profileSchedules.map((profile) => (
             <DropdownMenuItem
               key={profile.id}
-              onClick={() =>
-                setAppConfigProperty('activeProfileSchedule', profile.id)
-              }
+              onClick={() => handleProfileCreated(profile)}
               className="flex items-center justify-between"
             >
               {profile.name}
