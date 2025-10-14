@@ -1,7 +1,7 @@
 {
   "name": "chimes",
   "productName": "Chimes",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "An alarm/bell management application",
   "main": "./out/main/index.js",
   "author": "Afief Abdurrahman",
