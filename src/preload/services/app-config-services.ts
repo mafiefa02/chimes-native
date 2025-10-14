@@ -1,7 +1,11 @@
+import { AppConfig } from '../../shared/types';
 import { Services } from '../types';
 import { ipcRenderer } from 'electron/renderer';
 
-const listeners = new Map<string, Set<(newValue: any) => void>>();
+const listeners = new Map<
+  keyof AppConfig,
+  Set<(newValue: AppConfig[keyof AppConfig]) => void>
+>();
 
 /**
  * Listen for configuration changes from the main process.
